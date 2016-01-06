@@ -15,8 +15,8 @@
 #include <cstdlib>    // for rand()
 
 
-//#define LINUX
-#define MAC_XCODE
+#define LINUX
+//#define MAC_XCODE
 //define WIN_VISUAL_STUDIO
 
 #ifdef MAC_XCODE
@@ -93,11 +93,11 @@ void drawCallback()
    // Prepare the background buffer for drawing
    glClear(GL_COLOR_BUFFER_BIT); //clear the screen
    glColor3f(1,1,1);
-   
+
    //calls the client's display function
    assert(ui.callBack != NULL);
    ui.callBack(&ui, ui.p);
-   
+
    //loop until the timer runs out
    if (!ui.isTimeToDraw())
       sleep((unsigned long)((ui.getNextTick() - clock()) / 1000));
@@ -273,7 +273,7 @@ void Interface::initialize(int argc, char ** argv, const char * title)
 {
    if (initialized)
       return;
-   
+
    // set up the random number generator
    srand((long)(argv));
 
@@ -281,14 +281,14 @@ void Interface::initialize(int argc, char ** argv, const char * title)
    glutInit(&argc, argv);
    Point point;
    glutInitWindowSize(                             // size of the window
-      (int)(point.getXMax() - point.getXMin()),    
+      (int)(point.getXMax() - point.getXMin()),
       (int)(point.getYMax() - point.getYMin()));
-            
-   glutInitWindowPosition( 10, 10);                // initial position 
+
+   glutInitWindowPosition( 10, 10);                // initial position
    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);    // double buffering
    glutCreateWindow(title);                        // text on titlebar
    glutIgnoreKeyRepeat(true);
-   
+
    // set up the drawing style: B/W and 2D
    glClearColor(0, 0, 0, 0);          // Black is the background color
    gluOrtho2D((int)point.getXMin(), (int)point.getXMax(),
@@ -301,7 +301,7 @@ void Interface::initialize(int argc, char ** argv, const char * title)
    glutSpecialFunc(   keyDownCallback );
    glutSpecialUpFunc( keyUpCallback   );
    initialized = true;
-   
+
    // done
    return;
 }

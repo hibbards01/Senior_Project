@@ -15,8 +15,8 @@
 #include <cassert>    // I feel the need... the need for asserts
 #include <time.h>     // for clock
 
-//define LINUX
-#define MAC_XCODE
+#define LINUX
+//#define MAC_XCODE
 //#define WIN_VISUAL_STUDIO
 
 #ifdef MAC_XCODE
@@ -32,7 +32,7 @@
 #ifdef WIN_VISUAL_STUDIO
 #include <stdio.h>
 #include <stdlib.h>
-#include <glut.h>         // OpenGL library we copied 
+#include <glut.h>         // OpenGL library we copied
 #define _USE_MATH_DEFINES
 #include <math.h>
 #endif // WIN_VISUAL_STUDIO
@@ -101,7 +101,7 @@ void drawDigit(const Point & topLeft, char digit)
       Point end;
       end.setX(topLeft.getX() + NUMBER_OUTLINES[r][c + 2]);
       end.setY(topLeft.getY() - NUMBER_OUTLINES[r][c + 3]);
-         
+
       drawLine(start, end);
    }
 }
@@ -137,14 +137,14 @@ void drawNumber(const Point & topLeft, unsigned int number)
  ************************************************************************/
 void drawText(const Point & topLeft, const char * text)
 {
-   void *pFont = GLUT_BITMAP_HELVETICA_18;  // also try _18
+   // void *pFont = GLUT_BITMAP_HELVETICA_18;  // also try _18
 
-   // prepare to draw the text from the top-left corner
-   glRasterPos2f(topLeft.getX(), topLeft.getY());
+   // // prepare to draw the text from the top-left corner
+   // glRasterPos2f(topLeft.getX(), topLeft.getY());
 
-   // loop through the text
-   for (const char *p = text; *p; p++)
-      glutBitmapCharacter(pFont, *p);
+   // // loop through the text
+   // for (const char *p = text; *p; p++)
+   //    glutBitmapCharacter(pFont, *p);
 }
 
 /************************************************************************
@@ -188,7 +188,7 @@ void rotate(Point & point, const Point & origin, int rotation)
 void drawRect(const Point & center, char width, char height, int rotation)
 {
    Point tl(false /*check*/); // top left
-   Point tr(false /*check*/); // top right 
+   Point tr(false /*check*/); // top right
    Point bl(false /*check*/); // bottom left
    Point br(false /*check*/); // bottom right
 
@@ -249,7 +249,7 @@ void drawCircle(const Point & center, char radius, int points, int rotation)
       rotate(temp, center, rotation);
       glVertex2f(temp.getX(), temp.getY());
    }
-   
+
    // complete drawing
    glEnd();
 
@@ -324,7 +324,7 @@ void drawCoolShip(const Point & center, int rotation)
     Point p20(center);
     Point p21(center);
     Point p22(center);
-    
+
     //1st lap!
     p.addXY(-8, 18);
     p1.addXY(-16, 24);
@@ -353,7 +353,7 @@ void drawCoolShip(const Point & center, int rotation)
     p20.addXY(22, 7);
     p21.addXY(16, 16);
     p22.addXY(12, 16);
-    
+
     //2nd lap!
    //Rotate all points the given degrees
    rotate(p, center, rotation);
@@ -392,26 +392,26 @@ void drawCoolShip(const Point & center, int rotation)
     glVertex2f(p6.getX(), p6.getY());
     // Done!  OK, that was a bit too dramatic
     glEnd();
-    
+
     glBegin(GL_LINE_STRIP);
     glVertex2f(p2.getX(), p2.getY());
     glVertex2f(p5.getX(), p5.getY());
     glEnd();
-    
+
     glBegin(GL_LINE_STRIP);
     glVertex2f(p7.getX(), p7.getY());
     glVertex2f(p8.getX(), p8.getY());
     glVertex2f(p9.getX(), p9.getY());
     glVertex2f(p10.getX(), p10.getY());
     glEnd();
-    
+
     glBegin(GL_LINE_STRIP);
     glVertex2f(p13.getX(), p13.getY());
     glVertex2f(p14.getX(), p14.getY());
     glVertex2f(p15.getX(), p15.getY());
     glVertex2f(p16.getX(), p16.getY());
     glEnd();
-    
+
     glBegin(GL_LINE_STRIP);
     glVertex2f(p17.getX(), p17.getY());
     glVertex2f(p18.getX(), p18.getY());
@@ -420,14 +420,14 @@ void drawCoolShip(const Point & center, int rotation)
     glVertex2f(p21.getX(), p21.getY());
     glVertex2f(p22.getX(), p22.getY());
     glEnd();
-    
+
     glBegin(GL_LINE_STRIP);
     glVertex2f(p11.getX(), p11.getY());
     glVertex2f(p12.getX(), p12.getY());
     glEnd();
-    
+
     drawCircle(pCenter, 20/*radius*/, 16/*sides*/, rotation);
-    
+
     glBegin(GL_LINE_STRIP);
     glColor3f (1.0, 1.0, 1.0);  // reset to white
     glEnd();
@@ -435,7 +435,7 @@ void drawCoolShip(const Point & center, int rotation)
 
 /******************************************************************
  * RANDOM
- * This function generates a random number.  
+ * This function generates a random number.
  *
  *    INPUT:   min, max : The number of values (min <= num <= max)
  *    OUTPUT   <return> : Return the integer
@@ -451,7 +451,7 @@ int random(int min, int max)
 
 /******************************************************************
  * RANDOM
- * This function generates a random number.  
+ * This function generates a random number.
  *
  *    INPUT:   min, max : The number of values (min <= num <= max)
  *    OUTPUT   <return> : Return the double
@@ -460,7 +460,7 @@ double random(double min, double max)
 {
    assert(min <= max);
    double num = min + ((double)rand() / (double)RAND_MAX * (max - min));
-   
+
    assert(min <= num && num <= max);
 
    return num;
@@ -471,16 +471,16 @@ double random(double min, double max)
  ********************************/
 void drawTextColor(const Point & topLeft, const char * text)
 {
-    void *pFont = GLUT_BITMAP_HELVETICA_12;  // also try _18
+    // void *pFont = GLUT_BITMAP_HELVETICA_12;  // also try _18
 
-    // prepare to draw the text from the top-left corner
-    glRasterPos2f(topLeft.getX(), topLeft.getY());
-    
-    // loop through the text
-    for (const char *p = text; *p; p++)
-    {
-        glutBitmapCharacter(pFont, *p);
-    }
+    // // prepare to draw the text from the top-left corner
+    // glRasterPos2f(topLeft.getX(), topLeft.getY());
+
+    // // loop through the text
+    // for (const char *p = text; *p; p++)
+    // {
+    //     glutBitmapCharacter(pFont, *p);
+    // }
 }
 
 /************************************************************************
@@ -496,23 +496,23 @@ void drawShip(const Point & center, int rotation)
     Point stern(    center); // back
     Point starboard(center); // right
     Point port(     center); // left
-    
+
     bow.addX(-6);
-    
+
     stern.addX(2);
-    
+
     starboard.addY(3);
     starboard.addX(3);
-    
+
     port.addY(-3);
     port.addX( 3);
-    
+
     //Rotate all points the given degrees
     rotate(bow,       center, rotation);
     rotate(stern,     center, rotation);
     rotate(starboard, center, rotation);
     rotate(port,      center, rotation);
-    
+
     //Finally draw the rectangle
     glBegin(GL_LINE_STRIP);
     glColor3f(0.8515625 /*%red*/, 0.64453125 /*%green*/, 0.125 /*%blue*/);
@@ -522,7 +522,7 @@ void drawShip(const Point & center, int rotation)
     glVertex2f(     port.getX(),      port.getY());
     glVertex2f(      bow.getX(),       bow.getY());
     glColor3f (1.0, 1.0, 1.0);  // reset to white
-    
+
     // Done!  OK, that was a bit too dramatic
     glEnd();
 }
@@ -534,23 +534,23 @@ void drawBigShip(const Point & center, int rotation)
     Point stern(    center); // back
     Point starboard(center); // right
     Point port(     center); // left
-    
+
     bow.addX(-12);
-    
+
     stern.addX(4);
-    
+
     starboard.addY(6);
     starboard.addX(6);
-    
+
     port.addY(-6);
     port.addX( 6);
-    
+
     //Rotate all points the given degrees
     rotate(bow,       center, rotation);
     rotate(stern,     center, rotation);
     rotate(starboard, center, rotation);
     rotate(port,      center, rotation);
-    
+
     //Finally draw the rectangle
     glBegin(GL_LINE_STRIP);
     glColor3f(0.8515625 /*%red*/, 0.64453125 /*%green*/, 0.125 /*%blue*/);
@@ -560,7 +560,7 @@ void drawBigShip(const Point & center, int rotation)
     glVertex2f(     port.getX(),      port.getY());
     glVertex2f(      bow.getX(),       bow.getY());
     glColor3f (1.0, 1.0, 1.0);  // reset to white
-    
+
     // Done!  OK, that was a bit too dramatic
     glEnd();
 }
@@ -625,7 +625,7 @@ void drawLesserShip(const Point & center, int rotation)
     drawCircle(center, 10, 20, rotation);
     glColor3f(1.0, 1.0, 1.0);
     glEnd();
-    
+
     glBegin(GL_LINE_STRIP);
     glColor3f(0.466667, 0.533333, 0.6);  //color?
     glVertex2f(pt.getX(), pt.getY());
@@ -637,7 +637,7 @@ void drawLesserShip(const Point & center, int rotation)
     glVertex2f(pt6.getX(), pt6.getY());
     glVertex2f(pt7.getX(), pt7.getY());
     glEnd();
-    
+
     glBegin(GL_LINE_STRIP);
     glVertex2f(pt8.getX(), pt8.getY());
     glVertex2f(pt9.getX(), pt9.getY());
@@ -647,9 +647,9 @@ void drawLesserShip(const Point & center, int rotation)
     glVertex2f(pt13.getX(), pt13.getY());
     glVertex2f(pt14.getX(), pt14.getY());
     glVertex2f(pt15.getX(), pt15.getY());
-    
+
     glColor3f(1.0, 1.0, 1.0);  //reset to white
     glEnd();
-    
+
     return;
 }

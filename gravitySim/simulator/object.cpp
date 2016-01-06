@@ -39,10 +39,10 @@ void Planet::draw()
 {
     // Rotate the planet
 //    getVector().rotate(rotationSpeed);
-    
+
     // Draw the planet!
-    drawCircle(getPoint(), radius, 8, getVector().getAngle());
-    
+    drawCircle(getPoint(), radius, 20, getVector().getAngle());
+
     return;
 }
 

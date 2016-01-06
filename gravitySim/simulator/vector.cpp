@@ -29,14 +29,14 @@ Vector & Vector::operator = (const Vector & v)
     this->dy = v.dy;
     this->position = v.position;
     this->angle = v.angle;
-    
+
     // Finally return this
     return *this;
 }
 
 /*********************************
  * changePosition
- *  This will add the vector to 
+ *  This will add the vector to
  *      the point.
  ********************************/
 void Vector::changePosition()
