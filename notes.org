@@ -5,4 +5,9 @@
 * Summary
   Notes will be used for all my research. This will also be the place that I 
   will do my write up for the requirments of this Senior Project.
-* 
+* Research
+** [[http://www.doc.ic.ac.uk/~nd/surprise_96/journal/vol1/hmw/article1.html][Genetic Algorithms]]
+
+
+
+
