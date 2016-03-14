@@ -52,7 +52,7 @@ public:
    //This is where it was changed.
    //wrap around!
    void wrapAround();
-   void addXY(float x, float y);
+    void addXY(float x, float y);
 
 private:
    float x;           // horizontal position

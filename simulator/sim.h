@@ -4,18 +4,21 @@
 * Author:
 *   Samuel Hibbard
 * Summary:
-*   This will hold the class Simulator.
+*   This will hold the class Simulator. This class will do the
+*       main interaction with the gUI and the objects.
 ***************************************************************/
 
-#include "gravity.h"
-#include <list>
+#ifndef SIM_H
+#define SIM_H
 
-/**********************************
+#include <list>
+#include "object.h"
+
+/*********************************************************
  * Simulator
- *  This class will be the one that
- *      that will tell the objects
- *      when to do what.
- *********************************/
+ *  This class will be the one that that will tell the
+ *      objects when to do draw, interact, and move.
+ ********************************************************/
 class Simulator
 {
 public:
@@ -23,12 +26,28 @@ public:
     // Constructors
     //
     Simulator();
-    Simulator(std::list<Object *> & objects) : gravity(objects) {}
-    
+
     //
     // Methods
     //
-    void run();
+    void move();
+    void draw();
+    void interact(const Interface * pUI);
+    void run(const Interface * pUI);
+
+    //
+    // Getters
+    //
+    std::list<Object *> & getObjects()          { return objects; }
+
+    //
+    // Setters
+    //
+    void setObjects(std::list<Object *> & objs) { objects = objs; }
 private:
-    Gravity gravity; // We need gravity!
+    void calculateAccerlation();         // This will calculate the force for all
+                                         // the objects using physics to determine it.
+    std::list<Object *> objects;         // This will hold all the objects in the simulator.
 };
+
+#endif // SIM_H

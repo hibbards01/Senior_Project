@@ -132,17 +132,12 @@ void Point::wrapAround()
         y += (yMax - yMin);
     }
     
-//    assert(x <= xMax);  //everything should be now correct!
-//    assert(x >= xMin);
-//    assert(y <= yMax);
-//    assert(y > yMin);
+    assert(x <= xMax);  //everything should be now correct!
+    assert(x >= xMin);
+    assert(y <= yMax);
+    assert(y > yMin);
 }
 
-/************************************
- * addXY
- *  This will add the two varibles 
- *      with the points.
- ***********************************/
 void Point::addXY(float x, float y)
 {
     setX(getX() + x);

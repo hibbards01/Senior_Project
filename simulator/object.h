@@ -8,7 +8,11 @@
 *     all the other classes that inherit from Objects.
 *************************************************************/
 
+#ifndef OBJECTS_H
+#define OBJECTS_H
+
 #include "vector.h"
+#include "uiInteract.h"
 
 /**********************************
  * Objects
@@ -23,14 +27,14 @@ public:
     //
     Object() : vector(), mass(0.0) {}
     Object(float x, float y, float dx, float dy, double m) : vector(x, y, dx, dy), mass(m) {}
-    
+
     //
     // Methods
     //
     virtual void move();         // Virtual function
     virtual void draw() = 0;     // Pure virtual function
     void addVectors(Vector & v); // Add two vectors together
-    
+
     //
     // Getters
     //
@@ -38,16 +42,19 @@ public:
     float getMass()    const { return mass;              }
     Point getPoint()   const { return vector.getPoint(); }
     Vector & getVector()     { return vector;            }
-    
+    int getAngle()     const { return angle;             }
+
     //
     // Setters
     //
     void setVector(Vector & v) { vector = v;           }
     void setMass(float m)      { mass = m;             }
     void setWrap(bool wrap)    { vector.setWrap(wrap); }
+    void setAngle(int angle)   { this->angle = angle;  }
 private:
     Vector vector; // This will allow the object to move!
-    double mass;    // This will hold the mass of the object!
+    double mass;   // This will hold the mass of the object!
+    int angle;     // The angle of the object.
 };
 
 /*********************************
@@ -62,13 +69,13 @@ public:
     // Constructors
     //
     Planet(float x, float y, float dx, float dy, double m, int r, int s) : radius(r), Object(x, y, dx, dy, m), rotationSpeed(s) {}
-    
+
     //
     // Methods
     //
     void draw();
     void rotate();
-    
+
     //
     // Setters
     //
@@ -89,11 +96,19 @@ public:
     //
     // Constructors
     //
-    Ship(float x, float y, float dx, float dy, double m, int r) : Object(x, y, dx, dy, m) {}
-    
+    Ship(float x, float y, double m, int r) : Object(x, y, 0, 0, m)
+    {
+        setAngle(0);
+    }
+
     //
     // Methods
     //
     void draw();
+    void moveShip(const Interface * pUI);
+    // void moveship(int angle, float dx, float dy);
 private:
+    int fuel; // How much fuel the ship has.
 };
+
+#endif // OBJECTS_H

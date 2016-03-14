@@ -12,7 +12,7 @@
 #include "uiInteract.h"
 using namespace std;
 
-// Define the window
+// Define the window size of the opengl
 float Point::xMin = -700.0;
 float Point::xMax = 700.0;
 float Point::yMin = -400.0;
@@ -28,11 +28,12 @@ void callBack(const Interface *pUI, void *p)
     Simulator *sim = (Simulator *) p;
 
     // Now run the simulation!
-    sim->run();
+    sim->run(pUI);
 }
 
 /****************************************
  * main
+ *  Main driver of the program.
  ***************************************/
 int main(int argc, char ** argv)
 {

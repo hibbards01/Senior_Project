@@ -11,6 +11,8 @@
 #include "uiDraw.h"
 using namespace std;
 
+#define deg2rad(value) ((M_PI / 180) * (value))
+
 /***********************************************************
  ************************* Object **************************
  **********************************************************/
@@ -61,3 +63,28 @@ void Ship::draw()
     return;
 }
 
+/*******************************************
+ * moveShip
+ *    This will move the ship based on the
+ *      interactions of the keyboard.
+ ******************************************/
+void Ship::moveShip(const Interface * pUI)
+{
+    // Grab the angle of the ship and change it
+    int angle = getAngle();
+    setAngle(angle - (pUI->isLeft() * -3) + (pUI->isRight() * 3));
+
+    // Thrust forward the ship if the user pressed the up key.
+    if (pUI->isUp())
+    {
+        // Create the thrust
+        Vector thrust;
+        thrust.setDx(cos(deg2rad(180 - angle)) * .2);
+        thrust.setDy(-sin(deg2rad(180 - angle)) * .2);
+
+        // Add the thrusts together.
+        getVector() += thrust;
+    }
+
+    return;
+}

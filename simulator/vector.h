@@ -7,14 +7,14 @@
 *   This will hold the vector class.
 ***************************************************/
 
-#ifndef vector_h
-#define vector_h
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #include "point.h"
 
 /***************************
  * Vector
- *  This will help the 
+ *  This will help the
  *      objects to move where
  *      they need to.
  **************************/
@@ -28,7 +28,7 @@ public:
     Vector(float x, float y, float dx, float dy) : position(x, y), dx(dx), dy(dy), angle(0.0) {}
     Vector(float x, float y, float dx, float dy, float a) : position(x, y), dx(dx), dy(dy), angle(a) {}
     Vector(const Vector & v);
-    
+
     //
     // Methods
     //
@@ -36,8 +36,9 @@ public:
     void addVectors(const Vector & v);               // This will add two vectors
     void addVectors(const float dx, const float dy);
     Vector & operator = (const Vector & v);          // Assingment operator
-    void rotate(int rotate)                  { angle += rotate; }
-    
+    Vector & operator += (const Vector & rhs);       // += operator
+    void rotate(int rotate) { angle += rotate; }
+
     //
     // Getters
     //
@@ -45,7 +46,7 @@ public:
     float getDy()    const { return dy;       }
     int   getAngle() const { return angle;    }
     Point getPoint() const { return position; }
-    
+
     //
     // Setters
     //
@@ -61,4 +62,4 @@ private:
     Point position;
 };
 
-#endif /* vector_h */
+#endif /* VECTOR_H */

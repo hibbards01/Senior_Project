@@ -57,3 +57,16 @@ void Vector::addVectors(const float dx, const float dy)
     this->dy += dy;
     return;
 }
+
+/*******************************************
+ * += Operator
+ *  Add the two vectors together.
+ ******************************************/
+Vector & Vector::operator += (const Vector & rhs)
+{
+    // The vectors together
+    this->dx += rhs.dx;
+    this->dy += rhs.dy;
+
+    return *this;
+}
