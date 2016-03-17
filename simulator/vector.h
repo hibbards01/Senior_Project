@@ -32,7 +32,7 @@ public:
     //
     // Methods
     //
-    void changePosition();                           // This will change the point
+    void move();                                     // This will change the point
     void addVectors(const Vector & v);               // This will add two vectors
     void addVectors(const float dx, const float dy);
     Vector & operator = (const Vector & v);          // Assingment operator
@@ -61,5 +61,7 @@ private:
     int angle;
     Point position;
 };
+
+std::ostream & operator << (std::ostream & out, const Vector & rhs);
 
 #endif /* VECTOR_H */

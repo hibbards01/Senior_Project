@@ -30,9 +30,8 @@ public:
     //
     // Methods
     //
-    void move();
+    void move(const Interface * pUI);
     void draw();
-    void interact(const Interface * pUI);
     void run(const Interface * pUI);
 
     //
@@ -48,6 +47,7 @@ private:
     void calculateAccerlation();         // This will calculate the force for all
                                          // the objects using physics to determine it.
     std::list<Object *> objects;         // This will hold all the objects in the simulator.
+    double distance;                     // The distance for each pixel.
 };
 
 #endif // SIM_H

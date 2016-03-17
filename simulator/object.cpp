@@ -22,10 +22,11 @@ using namespace std;
  *  This will add the vector to the
  *      point.
  ********************************/
-void Object::move()
+void Object::move(const Interface * pUI)
 {
     // Move the object
-    vector.changePosition();
+    vector.move();
+
     return;
 }
 
@@ -43,7 +44,7 @@ void Planet::draw()
 //    getVector().rotate(rotationSpeed);
 
     // Draw the planet!
-    drawCircle(getPoint(), radius, 20, getVector().getAngle());
+    drawCircle(getPoint(), radius, 20, getAngle());
 
     return;
 }
@@ -59,7 +60,8 @@ void Planet::draw()
 void Ship::draw()
 {
     // Draw the ship!
-    drawShip(getPoint(), getVector().getAngle());
+    drawShip(getPoint(), getAngle());
+
     return;
 }
 
@@ -68,11 +70,11 @@ void Ship::draw()
  *    This will move the ship based on the
  *      interactions of the keyboard.
  ******************************************/
-void Ship::moveShip(const Interface * pUI)
+void Ship::move(const Interface * pUI)
 {
     // Grab the angle of the ship and change it
     int angle = getAngle();
-    setAngle(angle - (pUI->isLeft() * -3) + (pUI->isRight() * 3));
+    setAngle(angle + (pUI->isLeft() * 3) + (pUI->isRight() * -3));
 
     // Thrust forward the ship if the user pressed the up key.
     if (pUI->isUp())
@@ -85,6 +87,9 @@ void Ship::moveShip(const Interface * pUI)
         // Add the thrusts together.
         getVector() += thrust;
     }
+
+    // Move the ship
+    getVector().move();
 
     return;
 }

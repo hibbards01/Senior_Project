@@ -49,4 +49,4 @@ simDebug.o : sim.cpp sim.h defines.h
 # Useful commands
 ####################################
 clean :
-	rm sim *.o *~ simDebug
+	rm sim *.o simDebug

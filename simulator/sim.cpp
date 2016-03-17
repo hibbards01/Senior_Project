@@ -25,15 +25,24 @@ using namespace std;
  *******************************/
 Simulator::Simulator()
 {
-//    objects.push_back(new Planet(200, 0, random(-5, 5), random(-5, 5), 5000, 20, 5));
-//    objects.push_back(new Planet(-200, 0, random(-10, 10), random(-10, 10), 500, 10, -10));
-    objects.push_back(new Planet(0, 0, 0, 0, EARTH, 20, 5));
-    objects.push_back(new Planet(0, 280, 1.2, 0, MOON, 10, -10));
-    objects.push_back(new Ship(0, 100, SHIP, 10));
-    // objects.push_back(new Planet(-300, 0, 0, 0, MOON, 10, -10));
-//    objects.push_back(new Planet(-200, 0, 0, 0, 50, 10, -10));
-//    objects.push_back(new Planet(-200, 0, 0, 0, 50, 10, -10));
-//    objects.push_back(new Planet(-200, 0, 0, 0, 50, 10, -10));
+    // Set the distance for each pixel
+    // distance = CUSTOM;
+    // distance = MILLMETERS;
+    distance = METERS4;
+
+    // Standard earth and moon
+    // objects.push_back(new Planet(0, 0, 0, 0, EARTH, 30, 5));
+    // objects.push_back(new Planet(0, 280, 1.2, 0, MOON, 15, -10));
+
+    // Two earths
+    objects.push_back(new Planet(-250, 0, 0, 0.5, EARTH, 30, 5));
+    objects.push_back(new Planet(250, 0, 0, -0.5, EARTH, 30, 5));
+
+    // Sun
+    // objects.push_back(new Planet(0, 0, 0, 0, SUN, 50, 0));
+
+    // Create the ship
+    objects.push_back(new Ship(-650, 0, SHIP, 10));
 }
 
 /**************************************************
@@ -55,7 +64,7 @@ void Simulator::calculateAccerlation()
             // Find the displacement between the objects
             double xDistance = (*obj2)->getPoint().getX() - (*obj1)->getPoint().getX();
             double yDistance = (*obj2)->getPoint().getY() - (*obj1)->getPoint().getY();
-            double d =  sqrt((xDistance * xDistance) + (yDistance * yDistance)) * METERS4;
+            double d =  sqrt((xDistance * xDistance) + (yDistance * yDistance)) * distance;
 
             // Hurry and find their angle
             // This is in radians
@@ -90,8 +99,8 @@ void Simulator::calculateAccerlation()
             //      F
             // a = ---
             //      m
-            double a1 = (f / (*obj1)->getMass()) / METERS4;
-            double a2 = (f / (*obj2)->getMass()) / METERS4;
+            double a1 = (f / (*obj1)->getMass()) / distance;
+            double a2 = (f / (*obj2)->getMass()) / distance;
 
 #ifdef DEBUG
             cout << "--------DEBUG CODE FOR sim.cpp #3--------\n";
@@ -137,7 +146,7 @@ void Simulator::calculateAccerlation()
  *  This will first run all the calculations of the
  *      objects and will then move them.
  *************************************************/
-void Simulator::move()
+void Simulator::move(const Interface * pUI)
 {
     // Calculate gravity!
     calculateAccerlation();
@@ -145,7 +154,7 @@ void Simulator::move()
     // Loop through all the objects and move them!
     for (list<Object *> :: iterator i = objects.begin(); i != objects.end(); ++i)
     {
-        (*i)->move();
+        (*i)->move(pUI);
     }
 
     return;
@@ -166,17 +175,6 @@ void Simulator::draw()
     return;
 }
 
-/*******************************************
- * interact
- *  This will take the interactions of the
- *      keyboard and tell the objects what
- *      to do.
- ******************************************/
-void Simulator::interact(const Interface * pUI)
-{
-    return;
-}
-
 /********************************
  * run
  *  This will run the Simulator
@@ -184,10 +182,7 @@ void Simulator::interact(const Interface * pUI)
 void Simulator::run(const Interface * pUI)
 {
     // First move the objects.
-    move();
-
-    // Handle the user's input
-    interact(pUI);
+    move(pUI);
 
     // Now draw them.
     draw();

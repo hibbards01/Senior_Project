@@ -8,6 +8,7 @@
 ***************************************************/
 
 #include "vector.h"
+#include <iostream>
 using namespace std;
 
 /*********************************
@@ -35,11 +36,11 @@ Vector & Vector::operator = (const Vector & v)
 }
 
 /*********************************
- * changePosition
+ * move
  *  This will add the vector to
  *      the point.
  ********************************/
-void Vector::changePosition()
+void Vector::move()
 {
     // Add the vector to the position
     position.addXY(dx, dy);
@@ -69,4 +70,18 @@ Vector & Vector::operator += (const Vector & rhs)
     this->dy += rhs.dy;
 
     return *this;
+}
+
+/*******************************************
+ * Insertion Operator
+ *  Output the member variables of the Vector.
+ ******************************************/
+ostream & operator << (ostream & out, const Vector & rhs)
+{
+    out << "*************Vector variables*****************\n"
+        << "Point " << rhs.getPoint() << endl
+        << "Vector (" << rhs.getDx() << ", " << rhs.getDy() << ")\n"
+        << "Angle = " << rhs.getAngle() << endl
+        << "******************END*************************\n";
+    return out;
 }

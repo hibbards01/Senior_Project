@@ -31,9 +31,9 @@ public:
     //
     // Methods
     //
-    virtual void move();         // Virtual function
-    virtual void draw() = 0;     // Pure virtual function
-    void addVectors(Vector & v); // Add two vectors together
+    virtual void move(const Interface * pUI);   // Virtual function
+    virtual void draw() = 0;                    // Pure virtual function
+    void addVectors(Vector & v);                // Add two vectors together
 
     //
     // Getters
@@ -42,19 +42,18 @@ public:
     float getMass()    const { return mass;              }
     Point getPoint()   const { return vector.getPoint(); }
     Vector & getVector()     { return vector;            }
-    int getAngle()     const { return angle;             }
+    int getAngle()     const { return vector.getAngle(); }
 
     //
     // Setters
     //
-    void setVector(Vector & v) { vector = v;           }
-    void setMass(float m)      { mass = m;             }
-    void setWrap(bool wrap)    { vector.setWrap(wrap); }
-    void setAngle(int angle)   { this->angle = angle;  }
+    void setVector(Vector & v) { vector = v;             }
+    void setMass(float m)      { mass = m;               }
+    void setWrap(bool wrap)    { vector.setWrap(wrap);   }
+    void setAngle(int angle)   { vector.setAngle(angle); }
 private:
     Vector vector; // This will allow the object to move!
     double mass;   // This will hold the mass of the object!
-    int angle;     // The angle of the object.
 };
 
 /*********************************
@@ -105,7 +104,7 @@ public:
     // Methods
     //
     void draw();
-    void moveShip(const Interface * pUI);
+    void move(const Interface * pUI);
     // void moveship(int angle, float dx, float dy);
 private:
     int fuel; // How much fuel the ship has.
