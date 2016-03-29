@@ -67,7 +67,7 @@ void drawShip(const Point & point, int rotation);
 /******************************************************************
  * RANDOM
  * This function generates a random number.  The user specifies
- * The parameters 
+ * The parameters
  *    INPUT:   min, max : The number of values (min <= num <= max)
  *    OUTPUT   <return> : Return the integer
  ****************************************************************/
@@ -79,5 +79,6 @@ void drawTextColor(const Point & topLeft, const char * text);
 void drawCoolShip(const Point & center, int rotation);
 void drawBigShip(const Point & center, int rotation);
 void drawLesserShip(const Point & center, int rotation);
+void drawAsteroid(const Point & center, int points[][2], int size, int rotation);
 
 #endif // UI_DRAW_H

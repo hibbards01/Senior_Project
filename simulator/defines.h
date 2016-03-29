@@ -15,10 +15,13 @@
 
 // All the weights for the objects. Particularly with
 //  the planets of the solar system.
-#define SUN   (1.989 * pow(10, 30))
-#define EARTH (5.98  * pow(10, 24))
-#define MOON  (7.34  * pow(10, 22))
-#define SHIP  25000
+#define SUN       (1.989 * pow(10, 30))
+#define EARTH     (5.98  * pow(10, 24))
+#define MOON      (7.34  * pow(10, 22))
+#define JUPITER   (1.898 * pow(10, 27))
+#define SATURN    (5.683 * pow(10, 26))
+#define SHIPW     25000
+#define ASTEROIDW 63503
 
 // The gravitational constant. This is used for part of
 //  of the physics calculation for F = ma
@@ -27,7 +30,7 @@
 // These are the distances for between the points on the
 //  the gUI screen.
 #define MILLMETERS 1000000
-#define CUSTOM     200000
+#define CUSTOM     375000
 #define METERS5    100000
 #define METERS4    10000
 #define KILOMETERS 1000

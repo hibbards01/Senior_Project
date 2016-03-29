@@ -22,7 +22,7 @@ point.o : point.cpp point.h
 driver.o : driver.cpp sim.h uiInteract.h
 	g++ -c driver.cpp
 
-sim.o : sim.cpp sim.h defines.h
+sim.o : sim.cpp sim.h defines.h uiDraw.h
 	g++ -c sim.cpp
 
 uiDraw.o : uiDraw.cpp uiDraw.h point.h

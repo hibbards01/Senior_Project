@@ -10,6 +10,8 @@
 #include "sim.h"
 #include "defines.h"
 #include <math.h>
+#include <cassert>
+#include "uiDraw.h"
 using namespace std;
 
 // For debugging purposes.
@@ -26,23 +28,67 @@ using namespace std;
 Simulator::Simulator()
 {
     // Set the distance for each pixel
-    // distance = CUSTOM;
+    distance = CUSTOM;
     // distance = MILLMETERS;
-    distance = METERS4;
+    // distance = METERS4;
 
     // Standard earth and moon
-    // objects.push_back(new Planet(0, 0, 0, 0, EARTH, 30, 5));
-    // objects.push_back(new Planet(0, 280, 1.2, 0, MOON, 15, -10));
+    // objects.push_back(new Rock(0, 0, 0, 0, EARTH, 30, 5));
+    // objects.push_back(new Rock(0, 280, 1.2, 0, MOON, 15, -10));
 
     // Two earths
-    objects.push_back(new Planet(-250, 0, 0, 0.5, EARTH, 30, 5));
-    objects.push_back(new Planet(250, 0, 0, -0.5, EARTH, 30, 5));
+    // objects.push_back(new Rock(-250, 0, 0, 0.5, EARTH, 30, 5));
+    // objects.push_back(new Rock(250, 0, 0, -0.5, EARTH, 30, 5));
 
-    // Sun
-    // objects.push_back(new Planet(0, 0, 0, 0, SUN, 50, 0));
+    // Create the ship. The ship will always be the first object
+    // The collision function will use that assumption.
+    // ************ WARNING ************
+    // If changed then the logic will break.
+    objects.push_back(new Ship(650, -350, SHIPW, 4));
 
-    // Create the ship
-    objects.push_back(new Ship(-650, 0, SHIP, 10));
+    // Sun and Jupiter
+    objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
+    objects.push_back(new Rock(200, 0, 0, 3.5, JUPITER, 40, 0, PLANET));
+    objects.push_back(new Rock(300, 0, 0, 2.5, SATURN, 30, 0, PLANET));
+    objects.push_back(new Rock(-375, 0, 0, 2.5, EARTH, 20, 0, PLANET));
+    objects.push_back(new Rock(-390, 0, 0, 2.0, MOON, 15, 0, PLANET));
+
+    // Create some asteroids!
+    objects.push_back(new Rock(0, -350, 1.7, 0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(-350, -350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(-350, 350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(350, 350, 0.0, -1.7, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(350, -350, 0.0, 1.8, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(100, 50, -4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(-100, 50, 4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(100, -50, -4.0, -4.0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(-100, -50, -4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(200, 200, -3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(200, -200, 0.0, 3.0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(-200, 200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(-200, -200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
+
+    for (int i = 0; i < 20; ++i)
+    {
+        objects.push_back(new Rock(random(-700, 700),
+                                    random(-400, 400),
+                                    random(-3.0, 3.0),
+                                    random(-3.0, 3.0), ASTEROIDW, 10, 5, ASTEROID));
+    }
+}
+
+/*******************************************
+ * Destructor
+ ******************************************/
+Simulator::~Simulator()
+{
+    // Delete all the pointers in the object list
+    list<Object *> :: iterator i = objects.begin();
+    while (i != objects.end())
+    {
+        delete *i;
+        i = objects.erase(i);
+    }
 }
 
 /**************************************************
@@ -141,6 +187,44 @@ void Simulator::calculateAccerlation()
     return;
 }
 
+/*******************************************
+ * checkCollision
+ *  This will loop through all the objects
+ *      and check to see if any of the objects
+ *      have hit the ship. If so then we need
+ *      to kill the ship. This will use the
+ *      difference operator in the vector
+ *      class to see if the object has hit
+ *      the ship.
+ ******************************************/
+void Simulator::checkCollision()
+{
+    // Grab the ship object and check if it is alive
+    list<Object*> :: iterator ship = objects.begin();
+
+    if ((*ship)->getIsAlive())
+    {
+        // Make sure it is a SHIP
+        assert((*ship)->getType() == SHIP);
+
+        // Loop through all the objects to see if any have hit
+        // the ship. If so then kill the ship.
+        list<Object*> :: iterator o = objects.begin();
+
+        // Increment once to skip the ship.
+        ++o;
+        for (; o != objects.end(); ++o)
+        {
+            if (((*ship)->getVector() - (*o)->getVector()) < ((*ship)->getSize() + (*o)->getSize()))
+            {
+                (*ship)->kill();
+            }
+        }
+    }
+
+    return;
+}
+
 /**************************************************
  * move
  *  This will first run all the calculations of the
@@ -183,6 +267,9 @@ void Simulator::run(const Interface * pUI)
 {
     // First move the objects.
     move(pUI);
+
+    // Check if a collision has happened
+    checkCollision();
 
     // Now draw them.
     draw();

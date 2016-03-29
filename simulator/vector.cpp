@@ -1,3 +1,4 @@
+
 /***************************************************
 * Program:
 *   vector.cpp
@@ -9,6 +10,9 @@
 
 #include "vector.h"
 #include <iostream>
+#include <math.h>       // sqrtf
+#include <limits>       // numeric_limits
+#include <algorithm>    // max
 using namespace std;
 
 /*********************************
@@ -70,6 +74,50 @@ Vector & Vector::operator += (const Vector & rhs)
     this->dy += rhs.dy;
 
     return *this;
+}
+
+/*******************************************
+ * findMax
+ *  This is only needed for the function
+ *      below this one. Find the number
+ *      that is the max.
+ ******************************************/
+float findMax(float a, float b, float c, float d)
+{
+    // Loop through each of the values
+    float maxDist = abs((long)max(a, b));
+    maxDist = abs((long)max(maxDist, c));
+    maxDist = abs((long)max(maxDist, d));
+
+    return maxDist;
+}
+
+/*******************************************
+ * - operator
+ *  This will take two vectors and find the
+ *      shortest distance between them and return
+ *      a number.
+ ******************************************/
+float Vector::operator - (const Vector & rhs)
+{
+    float max = findMax(this->dx, this->dy, rhs.dx, rhs.dy);
+
+    float slice = 1.0 / max;
+
+    float minDist = numeric_limits<float>::max();
+
+    for (float percent = 0.0; percent <= 1.0; percent += slice)
+    {
+        float x = (this->position.getX() + this->dx * percent) - (rhs.position.getX() + rhs.dx * percent);
+        float y = (this->position.getY()  + this->dy * percent) - (rhs.position.getY() + rhs.dy * percent);
+
+        //              c^2   =   a^2   +   b^2
+        float distanceSquared = (x * x) + (y * y);
+
+        minDist = min(distanceSquared, minDist);
+    }
+
+    return sqrtf(minDist);
 }
 
 /*******************************************

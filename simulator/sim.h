@@ -26,6 +26,7 @@ public:
     // Constructors
     //
     Simulator();
+    ~Simulator();
 
     //
     // Methods
@@ -33,6 +34,7 @@ public:
     void move(const Interface * pUI);
     void draw();
     void run(const Interface * pUI);
+    void checkCollision();
 
     //
     // Getters

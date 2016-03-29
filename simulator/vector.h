@@ -37,7 +37,9 @@ public:
     void addVectors(const float dx, const float dy);
     Vector & operator = (const Vector & v);          // Assingment operator
     Vector & operator += (const Vector & rhs);       // += operator
-    void rotate(int rotate) { angle += rotate; }
+    void rotate(int rotate) { angle += rotate; }     // Rotate the object
+    float operator - (const Vector & rhs);           // Difference operator. This will find
+                                                     // the shortest distance between to vectors.
 
     //
     // Getters

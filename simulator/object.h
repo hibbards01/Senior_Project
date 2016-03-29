@@ -14,6 +14,10 @@
 #include "vector.h"
 #include "uiInteract.h"
 
+// ENUM for the type of objects
+enum {NOTHING, SHIP, PLANET, ASTEROID};
+#define POINTS_FOR_ROCK 20
+
 /**********************************
  * Objects
  *  This will contain all the base
@@ -25,15 +29,18 @@ public:
     //
     // Constructors
     //
-    Object() : vector(), mass(0.0) {}
-    Object(float x, float y, float dx, float dy, double m) : vector(x, y, dx, dy), mass(m) {}
+    Object() : vector(), mass(0.0), alive(true) {}
+    Object(float x, float y, float dx, float dy, double m, int r) :
+        vector(x, y, dx, dy), mass(m), alive(true), radius(r) {}
 
     //
     // Methods
     //
-    virtual void move(const Interface * pUI);   // Virtual function
-    virtual void draw() = 0;                    // Pure virtual function
-    void addVectors(Vector & v);                // Add two vectors together
+    virtual void move(const Interface * pUI);        // Virtual function
+    virtual void draw() = 0;                         // Pure virtual function
+    void addVectors(Vector & v);                     // Add two vectors together
+    void kill()            { alive = false;        } // Kill the object!
+    void rotate(int speed) { vector.rotate(speed); } // Rotate the object
 
     //
     // Getters
@@ -43,6 +50,10 @@ public:
     Point getPoint()   const { return vector.getPoint(); }
     Vector & getVector()     { return vector;            }
     int getAngle()     const { return vector.getAngle(); }
+    bool getIsAlive()  const { return alive;             }
+    int getType()      const { return type;              }
+    int getSize()      const { return radius;            }
+    int getRadius()    const { return radius;            }
 
     //
     // Setters
@@ -51,37 +62,53 @@ public:
     void setMass(float m)      { mass = m;               }
     void setWrap(bool wrap)    { vector.setWrap(wrap);   }
     void setAngle(int angle)   { vector.setAngle(angle); }
+    void setIsAlive(bool a)    { alive = a;              }
+    void setType(int t)        { type = t;               }
+    void setRadius(int r)      { radius = r;             }
 private:
     Vector vector; // This will allow the object to move!
     double mass;   // This will hold the mass of the object!
+    bool alive;    // This will keep track of whether it is alive
+                   // or not.
+    int type;      // What type of object is it?
+    int radius;    // Radius for the objects.
 };
 
 /*********************************
- * Planet
+ * Rock
  *  This will hold the values for
- *      for a given planet.
+ *      for a given rock.
  ********************************/
-class Planet : public Object
+class Rock : public Object
 {
 public:
     //
     // Constructors
     //
-    Planet(float x, float y, float dx, float dy, double m, int r, int s) : radius(r), Object(x, y, dx, dy, m), rotationSpeed(s) {}
+    Rock(float x, float y, float dx, float dy, double m, int r, int s, int type) : Object(x, y, dx, dy, m, r), rotationSpeed(s)
+    {
+        setType(type);
+
+        if (type == ASTEROID)
+        {
+            createRock();
+        }
+    }
 
     //
     // Methods
     //
     void draw();
-    void rotate();
 
     //
     // Setters
     //
     void setRotationSpeed(int s) { rotationSpeed = s; }
 private:
-    int radius;        // This is the radius of the planet.
-    int rotationSpeed; // This will rotate the planet.
+    void createRock();              // This will create the points for the rock
+    int rotationSpeed;              // This will rotate the Rock.
+    int points[POINTS_FOR_ROCK][2]; // This will hold the length of each of the sides
+                                    // this allows the asteroids to look jagged.
 };
 
 /*********************************
@@ -95,9 +122,10 @@ public:
     //
     // Constructors
     //
-    Ship(float x, float y, double m, int r) : Object(x, y, 0, 0, m)
+    Ship(float x, float y, double m, int r) : Object(x, y, 0, 0, m, r)
     {
         setAngle(0);
+        setType(SHIP);
     }
 
     //

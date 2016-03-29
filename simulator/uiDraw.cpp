@@ -255,6 +255,33 @@ void drawCircle(const Point & center, char radius, int points, int rotation)
 
 }
 
+/**************************************************
+ * drawAsteroid
+ *  Draw an asteroid based off the center of the
+ *    point and radius that is given.
+ *************************************************/
+void drawAsteroid(const Point & center, int points[][2], int size, int rotation)
+{
+   // Begin drawing the Asteroid
+   glBegin(GL_LINE_LOOP);
+
+   // Run through all the points to draw the rocks
+   for (int i = 0; i < size; ++i)
+   {
+      // Create a point for the one position
+      Point temp(false /* check */);
+      temp.setX(center.getX() + points[i][0]);
+      temp.setY(center.getY() + points[i][1]);
+      rotate(temp, center, rotation);
+      glVertex2f(temp.getX(), temp.getY());
+   }
+
+   // Finally complete the drawing
+   glEnd();
+
+   return;
+}
+
 /************************************************************************
  * DRAW LINE
  * Draw a line on the screen from the beginning to the end.
