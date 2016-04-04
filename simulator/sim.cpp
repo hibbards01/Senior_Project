@@ -68,7 +68,7 @@ Simulator::Simulator()
     objects.push_back(new Rock(-200, 200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
     objects.push_back(new Rock(-200, -200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
 
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 40; ++i)
     {
         objects.push_back(new Rock(random(-700, 700),
                                     random(-400, 400),
@@ -93,7 +93,7 @@ Simulator::~Simulator()
 
 /**************************************************
  * cacluateAcceleration
- *  This will first calulate the force for all the
+ *  This will first calculate the force for all the
  *      objects and then calculate the acceleration
  *      those objects have on each other.
  *************************************************/
@@ -102,7 +102,7 @@ void Simulator::calculateAccerlation()
     // First calculate the force between each of the objects
     for (list<Object *> :: iterator obj1 = objects.begin(); obj1 != objects.end(); ++obj1)
     {
-        // Make the secound for loop start one before the other object
+        // Make the second for loop start one before the other object
         list<Object *> :: iterator obj2 = obj1;
         ++obj2;
         for (; obj2 != objects.end(); ++obj2)
@@ -169,7 +169,7 @@ void Simulator::calculateAccerlation()
             cout << "--------END OF DEBUG--------\n";
 #endif
 
-            // Check if we need to minus or plus 180 for the secound object
+            // Check if we need to minus or plus 180 for the second object
             if (angle < 0)
             {
                 angle = PI + angle;

@@ -32,6 +32,7 @@ public:
     Object() : vector(), mass(0.0), alive(true) {}
     Object(float x, float y, float dx, float dy, double m, int r) :
         vector(x, y, dx, dy), mass(m), alive(true), radius(r) {}
+    virtual ~Object() {}
 
     //
     // Methods
@@ -94,6 +95,7 @@ public:
             createRock();
         }
     }
+    ~Rock() {}
 
     //
     // Methods
@@ -127,6 +129,7 @@ public:
         setAngle(0);
         setType(SHIP);
     }
+    ~Ship() {}
 
     //
     // Methods
@@ -135,7 +138,8 @@ public:
     void move(const Interface * pUI);
     // void moveship(int angle, float dx, float dy);
 private:
-    int fuel; // How much fuel the ship has.
+    int fuel;       // How much fuel the ship has.
+    float odometer; // The distance the ship as traveled.
 };
 
 #endif // OBJECTS_H

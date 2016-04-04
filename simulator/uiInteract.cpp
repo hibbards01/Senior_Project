@@ -15,12 +15,12 @@
 #include <cstdlib>    // for rand()
 
 
-#define LINUX
-//#define MAC_XCODE
-//define WIN_VISUAL_STUDIO
+// #define LINUX
+#define MAC_XCODE
+// #define WIN_VISUAL_STUDIO
 
 #ifdef MAC_XCODE
-#include <openGL/gl.h>    // Main OpenGL library
+#include <OpenGL/gl.h>    // Main OpenGL library
 #include <GLUT/glut.h>    // Second OpenGL library
 #endif // MAC_XCODE
 
