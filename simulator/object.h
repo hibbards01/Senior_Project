@@ -144,7 +144,7 @@ public:
     // Getters
     //
     float getDistance() const { return odometer; }
-    int getFuel() const       { return fuel;     }
+    int getFuel()       const { return fuel;     }
 
     //
     // Setters
