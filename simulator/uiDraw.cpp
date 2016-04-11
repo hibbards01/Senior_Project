@@ -125,7 +125,7 @@ void drawNumber(const Point & topLeft, unsigned int number)
    {
       assert(isdigit(*p));
       drawDigit(point, *p);
-      point.addX(11);
+      point.addX(18);
    }
 }
 
@@ -137,14 +137,14 @@ void drawNumber(const Point & topLeft, unsigned int number)
  ************************************************************************/
 void drawText(const Point & topLeft, const char * text)
 {
-   // void *pFont = GLUT_BITMAP_HELVETICA_18;  // also try _18
+   void *pFont = GLUT_BITMAP_HELVETICA_18;  // also try _18
 
-   // // prepare to draw the text from the top-left corner
-   // glRasterPos2f(topLeft.getX(), topLeft.getY());
+   // prepare to draw the text from the top-left corner
+   glRasterPos2f(topLeft.getX(), topLeft.getY());
 
-   // // loop through the text
-   // for (const char *p = text; *p; p++)
-   //    glutBitmapCharacter(pFont, *p);
+   // loop through the text
+   for (const char *p = text; *p; p++)
+      glutBitmapCharacter(pFont, *p);
 }
 
 /************************************************************************

@@ -31,20 +31,8 @@ public:
     //
     // Methods
     //
-    void draw() const; // Draw all the graphics
-
-    //
-    // Getters
-    //
-    bool getDraw() const { return draw; }
-
-    //
-    // Setters
-    //
-    void setDraw(bool d) { draw = d;    }
+    void draw(int fuel, int dist, int time) const; // Draw all the graphics
 private:
-    bool draw;      // This will tell it when to draw
-                    // or not.
     Point fuelText; // The fuel display of the text.
     Point fuelNum;  // This will show how much fuel you have.
     Point distText; // Where to display the distance text.

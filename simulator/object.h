@@ -128,6 +128,8 @@ public:
     {
         setAngle(0);
         setType(SHIP);
+        fuel = 150;
+        odometer = 0;
     }
     ~Ship() {}
 
@@ -137,6 +139,18 @@ public:
     void draw();
     void move(const Interface * pUI);
     // void moveship(int angle, float dx, float dy);
+
+    //
+    // Getters
+    //
+    float getDistance() const { return odometer; }
+    int getFuel() const       { return fuel;     }
+
+    //
+    // Setters
+    //
+    void setDistance(float d) { odometer = d;    }
+    void setFuel(int f)       { fuel = f;        }
 private:
     int fuel;       // How much fuel the ship has.
     float odometer; // The distance the ship as traveled.

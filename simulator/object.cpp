@@ -109,21 +109,30 @@ void Ship::move(const Interface * pUI)
 {
     if (getIsAlive())
     {
-        // Grab the angle of the ship and change it
-        int angle = getAngle();
-        setAngle(angle + (pUI->isLeft() * 3) + (pUI->isRight() * -3));
-
-        // Thrust forward the ship if the user pressed the up key.
-        if (pUI->isUp())
+        if (fuel > 0)
         {
-            // Create the thrust
-            Vector thrust;
-            thrust.setDx(cos(deg2rad(180 - angle)) * .2);
-            thrust.setDy(-sin(deg2rad(180 - angle)) * .2);
+            // Grab the angle of the ship and change it
+            int angle = getAngle();
+            setAngle(angle + (pUI->isLeft() * 3) + (pUI->isRight() * -3));
 
-            // Add the thrusts together.
-            getVector() += thrust;
+            // Thrust forward the ship if the user pressed the up key.
+            if (pUI->isUp())
+            {
+                // Create the thrust
+                Vector thrust;
+                thrust.setDx(cos(deg2rad(180 - angle)) * .2);
+                thrust.setDy(-sin(deg2rad(180 - angle)) * .2);
+
+                // Add the thrusts together.
+                getVector() += thrust;
+
+                // Minus off some fuel
+                --fuel;
+            }
         }
+
+        // Grab the distance that will be traveled
+        odometer += abs(tan(getVector().getDy() / getVector().getDx()));
 
         // Move the ship
         getVector().move();

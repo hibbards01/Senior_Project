@@ -13,6 +13,7 @@
 
 #include <list>
 #include "object.h"
+#include "graphics.h"
 
 /*********************************************************
  * Simulator
@@ -50,6 +51,9 @@ private:
                                          // the objects using physics to determine it.
     std::list<Object *> objects;         // This will hold all the objects in the simulator.
     double distance;                     // The distance for each pixel.
+    Graphics graphics;                   // The graphics class
+    int time;                            // How much time is left for the user.
+    int timer;                           // This will count how many frames have passed.
 };
 
 #endif // SIM_H

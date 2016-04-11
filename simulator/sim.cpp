@@ -25,7 +25,7 @@ using namespace std;
 /********************************
  * Constructor
  *******************************/
-Simulator::Simulator()
+Simulator::Simulator() : objects(), graphics(), time(100), timer(30)
 {
     // Set the distance for each pixel
     distance = CUSTOM;
@@ -254,6 +254,21 @@ void Simulator::draw()
     for (list<Object *> :: iterator i = objects.begin(); i != objects.end(); ++i)
     {
         (*i)->draw();
+    }
+
+    // Now draw the graphics
+    Ship * ship = (Ship *) objects.front();
+
+    // Make sure it is a SHIP
+    assert(ship->getType() == SHIP);
+
+    // Now grab the fuel and the distance of the ship
+    graphics.draw(ship->getFuel(), ship->getDistance(), time);
+
+    if (--timer == 0)
+    {
+        --time;
+        timer = 30;
     }
 
     return;

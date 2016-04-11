@@ -26,7 +26,7 @@ sim.o: sim.cpp sim.h defines.h uiDraw.h
 	g++ -c sim.cpp
 
 uiDraw.o: uiDraw.cpp uiDraw.h point.h
-	g++ -c uiDraw.cpp
+	g++ -c uiDraw.cpp -Wno-deprecated
 
 uiInteract.o: uiInteract.cpp uiInteract.h point.h
 	g++ -c uiInteract.cpp -Wno-deprecated
@@ -34,7 +34,7 @@ uiInteract.o: uiInteract.cpp uiInteract.h point.h
 vector.o: vector.cpp vector.h point.h
 	g++ -c vector.cpp
 
-graphics.o: graphics.cpp graphics.h point.h
+graphics.o: graphics.cpp graphics.h point.h uiDraw.h
 	g++ -c graphics.cpp
 
 ###################################################
