@@ -26,7 +26,7 @@ using namespace std;
 /********************************
  * Constructor
  *******************************/
-Simulator::Simulator() : objects(), time(50), timer(30), graphics(), done(0)
+Simulator::Simulator() : objects(), time(60), timer(30), graphics(), done(0)
 {
     // Set where the finish line is...
     finishLine.setPosition(graphics.getFinishCircle());
@@ -254,6 +254,13 @@ void Simulator::move(const Interface * pUI)
         (*i)->move(pUI);
     }
 
+    // Check how much fuel is left
+    Ship * ship = (Ship *) objects.front();
+    if (ship->getFuel() == 0 && done == 0)
+    {
+        done = -1;
+    }
+
     return;
 }
 
@@ -278,8 +285,15 @@ void Simulator::draw()
 
     if (--timer == 0 && done == 0)
     {
-        --time;
-        timer = 30;
+        if (time > 0)
+        {
+            --time;
+            timer = 30;
+        }
+        else
+        {
+            done = -1;
+        }
     }
 
     // Now grab the fuel and the distance of the ship
@@ -295,9 +309,29 @@ void Simulator::draw()
 
 /********************************
  * run
- *  This will run the Simulator
+ *  This will run the Simulator.
+ *      It will also return if it
+ *      is done or not.
  *******************************/
-void Simulator::run(const Interface * pUI)
+int Simulator::run()
+{
+    if (done == 0)
+    {
+        // First move the objects.
+        move();
+
+        // Check if a collision has happened
+        checkCollision();
+    }
+
+    return done;
+}
+
+/****************************************************
+* runSim
+*   This will draw and run the simulation.
+****************************************************/
+void Simulator::runSim(const Interface * pUI)
 {
     if (done == 0)
     {
@@ -315,11 +349,11 @@ void Simulator::run(const Interface * pUI)
 }
 
 /****************************************************
-* drawScore
+* getScore
 *   This will calculate the score that the person gets
 *       when being killed or crosses the finish line.
 ****************************************************/
-void Simulator::drawScore()
+float Simulator::getScore()
 {
     // Grab the distance, and fuel from the ship
     Ship * ship = (Ship *) objects.front();
@@ -343,6 +377,17 @@ void Simulator::drawScore()
 
     // Take off points if the person dies...
     score += (done == -1) ? -1000 : 1000;
+
+    return score;
+}
+
+/****************************************************
+* drawScore
+*   This will draw what the score is.
+****************************************************/
+void Simulator::drawScore()
+{
+    float score = getScore();
 
     // Show the score
     Point pt1(-22, 0);

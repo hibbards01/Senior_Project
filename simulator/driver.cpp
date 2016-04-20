@@ -28,7 +28,7 @@ void callBack(const Interface *pUI, void *p)
     Simulator *sim = (Simulator *) p;
 
     // Now run the simulation!
-    sim->run(pUI);
+    sim->runSim(pUI);
 }
 
 /****************************************

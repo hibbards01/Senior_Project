@@ -33,10 +33,13 @@ public:
     // Methods
     //
     void move(const Interface * pUI);
+    void move(){}
     void draw();
-    void run(const Interface * pUI);
+    int run();
     void checkCollision();
     void drawScore();
+    float getScore();
+    void runSim(const Interface * pUI);
 
     //
     // Getters
