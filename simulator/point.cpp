@@ -9,7 +9,9 @@
  ************************************************************************/
 
 #include "point.h"
+#include <math.h>
 #include <cassert>
+using namespace std;
 
 /******************************************
  * POINT : CONSTRUCTOR WITH X,Y
@@ -28,7 +30,7 @@ Point::Point(float x, float y) : x(0.0), y(0.0), check(false), dead(false), wrap
 void Point::setX(float x)
 {
    assert(xMin < xMax);
-    
+
     //HERE is where I changed it.
    if (getWrap())
    {
@@ -63,7 +65,7 @@ const Point & Point :: operator = (const Point & rhs)
 void Point::setY(float y)
 {
    assert(yMin < yMax);
-    
+
     //HERE is where I changed it.
    if (getWrap())
    {
@@ -114,7 +116,7 @@ void Point::wrapAround()
 {
     assert(xMin < xMax); //these better be this way!
     assert(yMin < yMax);
-    
+
     if (x > xMax)
     {
         x -= (xMax - xMin);
@@ -131,7 +133,7 @@ void Point::wrapAround()
     {
         y += (yMax - yMin);
     }
-    
+
     assert(x <= xMax);  //everything should be now correct!
     assert(x >= xMin);
     assert(y <= yMax);
@@ -142,4 +144,15 @@ void Point::addXY(float x, float y)
 {
     setX(getX() + x);
     setY(getY() + y);
+}
+
+/****************************************************
+* grabDistance
+*   This will grab the distance between two points.
+****************************************************/
+float Point::grabDistance(const Point & rhs)
+{
+    float newX = rhs.x - this->x;
+    float newY = rhs.y - this->y;
+    return sqrtf((newX * newX) + (newY * newY));
 }

@@ -48,6 +48,9 @@ debug: object.o point.o driver.o simDebug.o uiDraw.o uiInteract.o vector.o graph
 simDebug.o: sim.cpp sim.h defines.h
 	g++ -c -DDEBUG -o simDebug.o sim.cpp
 
+gdb: object.cpp point.cpp driver.cpp uiDraw.cpp uiInteract.cpp vector.cpp graphics.cpp sim.cpp
+	g++ -g -o simDebug -Wno-deprecated object.cpp point.cpp driver.cpp uiDraw.cpp uiInteract.cpp vector.cpp graphics.cpp sim.cpp -framework OpenGL -framework GLUT
+
 ####################################
 # Useful commands
 ####################################

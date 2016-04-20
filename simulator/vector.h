@@ -40,7 +40,6 @@ public:
     void rotate(int rotate) { angle += rotate; }     // Rotate the object
     float operator - (const Vector & rhs);           // Difference operator. This will find
                                                      // the shortest distance between to vectors.
-
     //
     // Getters
     //

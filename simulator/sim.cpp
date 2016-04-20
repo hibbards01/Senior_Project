@@ -12,6 +12,7 @@
 #include <math.h>
 #include <cassert>
 #include "uiDraw.h"
+#include <stdlib.h>
 using namespace std;
 
 // For debugging purposes.
@@ -25,7 +26,7 @@ using namespace std;
 /********************************
  * Constructor
  *******************************/
-Simulator::Simulator() : objects(), time(100), timer(30), graphics()
+Simulator::Simulator() : objects(), time(50), timer(30), graphics(), done(0)
 {
     // Set where the finish line is...
     finishLine.setPosition(graphics.getFinishCircle());
@@ -46,8 +47,9 @@ Simulator::Simulator() : objects(), time(100), timer(30), graphics()
     // Create the ship. The ship will always be the first object
     // The collision function will use that assumption.
     // ************ WARNING ************
-    // If changed then the logic will break.
+    // If changed then the logic will break if not changed in other positions
     objects.push_back(new Ship(650, -350, SHIPW, 4));
+    startingPosition.setPoint(650, -350);
 
     // Sun and Jupiter
     objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
@@ -221,6 +223,7 @@ void Simulator::checkCollision()
             if (((*ship)->getVector() - (*o)->getVector()) < ((*ship)->getSize() + (*o)->getSize()))
             {
                 (*ship)->kill();
+                done = -1;
             }
         }
 
@@ -228,6 +231,7 @@ void Simulator::checkCollision()
         if (((*ship)->getVector() - finishLine) < ((*ship)->getSize() + graphics.getFinishSize()))
         {
             (*ship)->kill();
+            done = 1;
         }
     }
 
@@ -260,7 +264,7 @@ void Simulator::move(const Interface * pUI)
 void Simulator::draw()
 {
     // Loop through all the objects
-    for (list<Object *> :: iterator i = objects.begin(); i != objects.end(); ++i)
+    for (list<Object *> :: iterator i = objects.begin(); i != objects.end() && done <= 0; ++i)
     {
         (*i)->draw();
     }
@@ -271,13 +275,19 @@ void Simulator::draw()
     // Make sure it is a SHIP
     assert(ship->getType() == SHIP);
 
-    // Now grab the fuel and the distance of the ship
-    graphics.draw(ship->getFuel(), ship->getDistance(), time);
 
-    if (--timer == 0)
+    if (--timer == 0 && done == 0)
     {
         --time;
         timer = 30;
+    }
+
+    // Now grab the fuel and the distance of the ship
+    graphics.draw(ship->getFuel(), ship->getDistance(), time);
+
+    if (done != 0)
+    {
+        drawScore();
     }
 
     return;
@@ -289,14 +299,64 @@ void Simulator::draw()
  *******************************/
 void Simulator::run(const Interface * pUI)
 {
-    // First move the objects.
-    move(pUI);
+    if (done == 0)
+    {
+        // First move the objects.
+        move(pUI);
 
-    // Check if a collision has happened
-    checkCollision();
+        // Check if a collision has happened
+        checkCollision();
+    }
 
     // Now draw them.
     draw();
+
+    return;
+}
+
+/****************************************************
+* drawScore
+*   This will calculate the score that the person gets
+*       when being killed or crosses the finish line.
+****************************************************/
+void Simulator::drawScore()
+{
+    // Grab the distance, and fuel from the ship
+    Ship * ship = (Ship *) objects.front();
+    int fuel = ship->getFuel();
+    float dist = ship->getDistance();
+
+    // Now calculate the score
+    // Fuel score: total fuel minus current fuel
+    float score = 0;
+    score += fuel * 2;
+
+    // Distance score: Grab the shortest distance from start to finish
+    float shortestDistance = finishLine.getPoint().grabDistance(startingPosition) - 30;
+
+    // The shorter the distance you got the less is taken off for the points
+    score -= abs(dist - shortestDistance);
+
+    // Now do the score for time.
+    // The faster that you complete it the more points you get.
+    score += (done == -1) ? 0 : time * 10;
+
+    // Take off points if the person dies...
+    score += (done == -1) ? -1000 : 1000;
+
+    // Show the score
+    Point pt1(-22, 0);
+    Point pt2(-30, -20);
+
+    if (score < 0)
+    {
+        score *= -1;
+        Point pt3(-40, -37);
+        drawText(pt3, "-");
+    }
+
+    drawText(pt1, "Score:");
+    drawNumber(pt2, score);
 
     return;
 }

@@ -128,7 +128,7 @@ public:
     {
         setAngle(0);
         setType(SHIP);
-        fuel = 150;
+        fuel = 200;
         odometer = 0;
     }
     ~Ship() {}

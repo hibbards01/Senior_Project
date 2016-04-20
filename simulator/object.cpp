@@ -132,12 +132,18 @@ void Ship::move(const Interface * pUI)
         }
 
         // Grab the distance that will be traveled
-        float dx = getVector().getDx();
-        float dy = getVector().getDy();
-        odometer += sqrtf((dx * dx) + (dy * dy));
+        float startX = getVector().getPoint().getX();
+        float startY = getVector().getPoint().getY();
 
         // Move the ship
         getVector().move();
+
+        float endX = getVector().getPoint().getX();
+        float endY = getVector().getPoint().getY();
+
+        float finalX = endX - startX;
+        float finalY = endY - startY;
+        odometer += sqrtf((finalX * finalX) + (finalY * finalY));
     }
 
     return;

@@ -36,6 +36,7 @@ public:
     void draw();
     void run(const Interface * pUI);
     void checkCollision();
+    void drawScore();
 
     //
     // Getters
@@ -55,7 +56,8 @@ private:
     int time;                            // How much time is left for the user.
     int timer;                           // This will count how many frames have passed.
     Vector finishLine;                   // Where the finish line is currently.
-    bool score;                          // Is the game done?
+    int done;                            // Is the game done?
+    Point startingPosition;              // This will save the starting position of the ship.
 };
 
 #endif // SIM_H
