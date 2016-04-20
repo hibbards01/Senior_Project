@@ -132,7 +132,9 @@ void Ship::move(const Interface * pUI)
         }
 
         // Grab the distance that will be traveled
-        odometer += abs(tan(getVector().getDy() / getVector().getDx()));
+        float dx = getVector().getDx();
+        float dy = getVector().getDy();
+        odometer += sqrtf((dx * dx) + (dy * dy));
 
         // Move the ship
         getVector().move();

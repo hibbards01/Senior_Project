@@ -135,9 +135,14 @@ void drawNumber(const Point & topLeft, unsigned int number)
  *   INPUT  topLeft   The top left corner of the text
  *          text      The text to be displayed
  ************************************************************************/
-void drawText(const Point & topLeft, const char * text)
+void drawText(const Point & topLeft, const char * text, bool color)
 {
    void *pFont = GLUT_BITMAP_HELVETICA_18;  // also try _18
+
+   if (color)
+   {
+      glColor3f(0.99609375 /*%red*/, 0.796875 /*%green*/, 0.0 /*%blue*/);
+   }
 
    // prepare to draw the text from the top-left corner
    glRasterPos2f(topLeft.getX(), topLeft.getY());
@@ -145,6 +150,11 @@ void drawText(const Point & topLeft, const char * text)
    // loop through the text
    for (const char *p = text; *p; p++)
       glutBitmapCharacter(pFont, *p);
+
+    if (color)
+    {
+      glColor3f(1.0, 1.0, 1.0);
+    }
 }
 
 /************************************************************************
@@ -234,10 +244,15 @@ void drawRect(const Point & center, char width, char height, int rotation)
  *          rotation True circles are rotation independent.  However, if you
  *                   are drawing a 3-sided circle (triangle), this matters!
  *************************************************************************/
-void drawCircle(const Point & center, char radius, int points, int rotation)
+void drawCircle(const Point & center, char radius, int points, int rotation, bool color)
 {
    // begin drawing
    glBegin(GL_LINE_LOOP);
+
+   if (color)
+   {
+      glColor3f(0.19921875 /*%red*/, 0.59765625 /*%green*/, 0.99609375 /*%blue*/);
+   }
 
    //loop around a circle the given number of times drawing a line from
    //one point to the next
@@ -248,6 +263,11 @@ void drawCircle(const Point & center, char radius, int points, int rotation)
       temp.setY(center.getY() + static_cast<int>(radius * sin(i)));
       rotate(temp, center, rotation);
       glVertex2f(temp.getX(), temp.getY());
+   }
+
+   if (color)
+   {
+      glColor3f (1.0, 1.0, 1.0);  // reset to white
    }
 
    // complete drawing

@@ -54,6 +54,8 @@ private:
     Graphics graphics;                   // The graphics class
     int time;                            // How much time is left for the user.
     int timer;                           // This will count how many frames have passed.
+    Vector finishLine;                   // Where the finish line is currently.
+    bool score;                          // Is the game done?
 };
 
 #endif // SIM_H

@@ -23,7 +23,7 @@ void drawNumber(const Point & topLeft, unsigned int number);
  * DRAW TEXT
  * Draw text using a simple bitmap font
  ************************************************************************/
-void drawText(const Point & topLeft, const char * text);
+void drawText(const Point & topLeft, const char * text, bool color = false);
 
 /************************************************************************
  * ROTATE
@@ -44,7 +44,7 @@ void drawRect(const Point & center, char width, char height, int rotation);
  * DRAW CIRCLE
  * Draw a circle from a given location (center) of a given size (radius).
  *************************************************************************/
-void drawCircle(const Point & center, char radius, int points, int rotation);
+void drawCircle(const Point & center, char radius, int points, int rotation, bool color = false);
 
 /************************************************************************
  * DRAW LINE

@@ -25,8 +25,11 @@ using namespace std;
 /********************************
  * Constructor
  *******************************/
-Simulator::Simulator() : objects(), graphics(), time(100), timer(30)
+Simulator::Simulator() : objects(), time(100), timer(30), graphics()
 {
+    // Set where the finish line is...
+    finishLine.setPosition(graphics.getFinishCircle());
+
     // Set the distance for each pixel
     distance = CUSTOM;
     // distance = MILLMETERS;
@@ -219,6 +222,12 @@ void Simulator::checkCollision()
             {
                 (*ship)->kill();
             }
+        }
+
+        // Finally check to see if the Ship has crossed the finish line
+        if (((*ship)->getVector() - finishLine) < ((*ship)->getSize() + graphics.getFinishSize()))
+        {
+            (*ship)->kill();
         }
     }
 
