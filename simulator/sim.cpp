@@ -359,24 +359,23 @@ float Simulator::getScore()
     Ship * ship = (Ship *) objects.front();
     int fuel = ship->getFuel();
     float dist = ship->getDistance();
+    Point pos = ship->getPoint();
 
     // Now calculate the score
     // Fuel score: total fuel minus current fuel
     float score = 0;
     score += fuel * 2;
 
-    // Distance score: Grab the shortest distance from start to finish
-    float shortestDistance = finishLine.getPoint().grabDistance(startingPosition) - 30;
-
-    // The shorter the distance you got the less is taken off for the points
-    score -= abs(dist - shortestDistance);
+    // Grab how close the ship got to the finish line
+    // Minus off the distance left from the score
+    if (done == -1)
+    {
+        score -= (finishLine.getPoint().grabDistance(pos) - 30);
+    }
 
     // Now do the score for time.
     // The faster that you complete it the more points you get.
     score += (done == -1) ? 0 : time * 10;
-
-    // Take off points if the person dies...
-    score += (done == -1) ? -1000 : 1000;
 
     return score;
 }
@@ -396,7 +395,7 @@ void Simulator::drawScore()
     if (score < 0)
     {
         score *= -1;
-        Point pt3(-40, -37);
+        Point pt3(-45, -37);
         drawText(pt3, "-");
     }
 

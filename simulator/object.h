@@ -29,9 +29,9 @@ public:
     //
     // Constructors
     //
-    Object() : vector(), mass(0.0), alive(true) {}
+    Object() : vector(), mass(0.0), alive(true) { /* vector.getPoint().setWrap(true); */ }
     Object(float x, float y, float dx, float dy, double m, int r) :
-        vector(x, y, dx, dy), mass(m), alive(true), radius(r) {}
+        vector(x, y, dx, dy), mass(m), alive(true), radius(r) { /* vector.getPoint().setWrap(true); */ }
     virtual ~Object() {}
 
     //
