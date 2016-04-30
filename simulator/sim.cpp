@@ -36,6 +36,39 @@ Simulator::Simulator() : objects(), time(60), timer(30), graphics(), done(0)
     // distance = MILLMETERS;
     // distance = METERS4;
 
+    createObjects();
+}
+
+/*******************************************
+ * Destructor
+ ******************************************/
+Simulator::~Simulator()
+{
+    deleteObjects();
+}
+
+/****************************************************
+* restart
+*   Reset everything.
+****************************************************/
+void Simulator::restart()
+{
+    time = 60;
+    timer = 30;
+    done = 0;
+
+    deleteObjects();
+    createObjects();
+
+    return;
+}
+
+/****************************************************
+* createObjects
+*   Create all the objects for the game.
+****************************************************/
+void Simulator::createObjects()
+{
     // Standard earth and moon
     // objects.push_back(new Rock(0, 0, 0, 0, EARTH, 30, 5));
     // objects.push_back(new Rock(0, 280, 1.2, 0, MOON, 15, -10));
@@ -80,12 +113,15 @@ Simulator::Simulator() : objects(), time(60), timer(30), graphics(), done(0)
                                     random(-3.0, 3.0),
                                     random(-3.0, 3.0), ASTEROIDW, 10, 5, ASTEROID));
     }
+
+    return;
 }
 
-/*******************************************
- * Destructor
- ******************************************/
-Simulator::~Simulator()
+/****************************************************
+* deleteObjects
+*   Delete all the objects.
+****************************************************/
+void Simulator::deleteObjects()
 {
     // Delete all the pointers in the object list
     list<Object *> :: iterator i = objects.begin();
@@ -94,6 +130,8 @@ Simulator::~Simulator()
         delete *i;
         i = objects.erase(i);
     }
+
+    return;
 }
 
 /**************************************************
@@ -340,6 +378,13 @@ void Simulator::runSim(const Interface * pUI)
 
         // Check if a collision has happened
         checkCollision();
+    }
+    else
+    {
+        if (pUI->isSpace())
+        {
+            restart();
+        }
     }
 
     // Now draw them.

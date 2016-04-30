@@ -40,6 +40,9 @@ public:
     void drawScore();
     float getScore();
     void runSim(const Interface * pUI);
+    void deleteObjects();
+    void createObjects();
+    void restart();
 
     //
     // Getters
