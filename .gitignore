@@ -1,0 +1,6 @@
+*.o
+sim
+simDebug
+~$*
+/research
+/papers
