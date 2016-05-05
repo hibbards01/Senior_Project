@@ -31,8 +31,10 @@ if len(sys.argv) == 2:
     # Draw the graph
     # NOTE add weights to graph!!!!!!!!!!
     pos = nx.spring_layout(graph)
+    labels = nx.get_edge_attributes(graph, 'weight')
     nx.draw(graph, pos, cmap=plt.get_cmap('jet'), with_labels=True)
     nx.draw_networkx_edges(graph, pos, arrows=True)
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels)
     plt.show()
 else:
     print("\nError you must provide a file to read from.\n\n")
