@@ -1,0 +1,394 @@
+-------------------------------------------------------------------------------
+|                          Pseudocode for Functions                           |
+-------------------------------------------------------------------------------
+Copyright 2001 The University of Texas at Austin
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-------------------------------- Class Supervisor -----------------------------
+
+/**
+ * NOTES:
+ *  When initalizing the population first create all the output nodes then
+ *      do all the sensor nodes afterwards.
+ */
+
+/**
+ * NOTES:
+ *  This will add a new gene to the history if it is not there already.
+ *      If it is then it will not add to the history.
+ */
+addNewGene(id, type)
+    SET found to FALSE
+    FOR innovation in geneHistory
+        IF innovation.nodeType is not NONE AND innovation.node is id
+            SET found to TRUE
+        END
+    END
+
+    IF not found
+        SET innovation to Innovation(NULL, NULL, id, type)
+        INSERT innovation in geneHistory
+    END
+END
+
+/**
+ * NOTES:
+ *  This will add a new link if it doesn't exist. If it does then it will
+ *      return that existing innovation id. Otherwise it will return the
+ *      newly created innovation id.
+ */
+addNewLink(source, destination)
+    SET found to NULL
+    FOR innovation in geneHistory AND found is NULL
+        IF innovation.nodeType is NONE AND innovation.input = source AND innovation.output = destination
+            SET found to innovation.id
+        END
+    END
+
+    IF found is NULL
+        SET innovation to Innovation(source, destination, NULL, NONE)
+        SET found to innovation.id
+        INSERT innovation in geneHistory
+    END
+
+    RETURN found
+END
+
+-------------------------------- Class Species --------------------------------
+
+/**
+ * NOTES:
+ *  To do speciation you have to compute the distance it is from one genome from
+ *      any other random genome.
+ *  This is the formula that is given for computing it:
+ *      d = ((c1 * E) / N) + ((c2 * D) / N) + (c3 * W)
+ *  Variables:
+ *      - d, This is the final distance computed.
+ *      - E, This is the number of Excess of the Genes.
+ *      - D, This is the number of disjoint of the Genes.
+ *      -
+ */
+
+getAverageFitness()
+    SET total to zero
+    FOR genome in genomes
+        SET total += genome.getScore()
+    END
+
+    RETURN total / genomes.size()
+END
+
+-------------------------------- Class Genome ---------------------------------
+
+/**
+ * NOTES:
+ *  1. Select two random neurons
+ *      a. Bias can never be a destination
+ *      b. Output neurons cannot be a source
+ *  2. One neuron will be the source the other a destination
+ *  3. Link the two with a small random weight
+ *
+ *  GA02 requirement fulfilled
+ */
+mutateAddLink( database )
+    SET source to NULL
+    SET destination to NULL
+    SET found to FALSE
+    SET num to random(0, 4)
+    SET recurrent to FALSE
+    IF num == 0 # Create a recurrent link on itself
+        FOR node in nodeGenes
+            IF node is not SENSOR AND node is not OUTPUT AND node is not BIAS AND node is not recurrent
+                SET source to node
+                SET destination to node
+                SET found to TRUE
+                SET recurrent to TRUE
+            END
+        END
+    ELSE IF
+    ELSE
+        SET done to FALSE
+        SET numTimes to 10 # How many times should we keep on looping to find something?
+
+        WHILE not done AND numTimes--
+            SET num to random(0, nodeGenes.size())
+            SET source to nodeGenes[node]
+            SET num to random(0, nodeGenes.size())
+            SET destination to nodeGenes[node]
+
+            IF source.type is not OUTPUT AND destination.type is not BIAS AND source.id != destination.id
+                SET done to true
+                SET found to TRUE
+            END
+        END
+    END
+
+    IF found
+        SET weight to random(0, 1)
+        SET id to database.addNewLink(source.id, destination.id)
+
+        SET sourcePath to network.getShortestPath(source.id)
+        SET destPath to network.getShortestPath(destination.id)
+
+        IF destinationPath <= sourcePath
+            SET recurrent to TRUE
+        END
+
+        SET destination.recurrent to recurrent
+
+        SET link to LinkGene(id, source.id, destination.id, weight, true)
+        INSERT link to linkGenes
+    END
+END
+
+/**
+ * NOTES:
+ *  GA02 requirement fulfilled
+ */
+mutateEnableLink()
+    SET done to FALSE
+    FOR link in linkGenes AND done is FALSE
+        IF link.enabled is FALSE
+            link.enabled is TRUE
+            SET done to TRUE
+        END
+    END
+END
+
+/**
+ * NOTES:
+ *  1. Remove a random link
+ *  2. Remove neuron if there is no more links connected to it
+ *      a. Only remove a hidden neuron cannot be anything else
+ *
+ *  GA02 requirement fulfilled
+ */
+mutateRemoveLink()
+    SET num to random(0, linkGenes.size())
+    SET linkGenes[num].enabled to FALSE
+END
+
+/**
+ * NOTES:
+ *  1. Select random link
+ *  2. Link replaced by a neuron and two links
+ *  3. Link closer to the input neuron has the original weight
+ *  4. Other link's weight is set to one
+ *  5. Also create new innovations for the neuron and links if they don't exist
+ *
+ *  GA02 requirement fulfilled
+ */
+mutateAddNeuron( geneHistory )
+    INSERT newNode(HIDDEN) to nodeGenes
+
+    SET num to random(0, linkGenes.size() - 1 - SQRT(linkGenes.size()))
+    SET linkGenes[num].enabled to FALSE
+
+    SET link1 to LinkGene(linkGenes[num].input, newNode.id)
+    SET link2 to LinkGene(newNode.id, linkGenes[num].output)
+
+    geneHistory.addNewGene(nodeGenes.size(), newNode.type)
+
+    SET linkID to geneHistory.addNewLink(link1)
+    SET link1.id to linkID
+    INSERT link1 to linkGenes
+
+    SET linkID to geneHistory.addNewLink(link2)
+    SET link2.id to linkID
+    INSERT link2 to linkGenes
+END
+
+/**
+ * NOTES:
+ *  1. Random link chosen
+ *  2. Multiple weight with another number that is lower then 1
+ *
+ *  GA02 requirement fulfilled
+ */
+mutateWeight()
+    SET num to random(0, linkGenes.size())
+    SET linkGenes[num].weight *= .5  // What number should this be?
+END
+
+-------------------------------- Class Network --------------------------------
+
+/**
+ * NOTES:
+ *  Make sure that the genome makes the output nodes first for line 29
+ */
+feedforward( inputs )
+    SET index equal 0
+    FOR node in sensors
+        node.setOutput(input[index])
+    END
+
+    FOR node in hiddenNodes
+        node.update()
+    END
+
+    SET outputs
+    FOR node in outputNodes
+        node.update()
+        INSERT node.getOutput() into outputNodes
+    END
+
+    RETURN outputs
+END
+
+/**
+ * NOTES:
+ *  NN02 requirement fulfilled
+ */
+writeNetworkToFile( gen )
+    OPEN new file with gen as the number
+
+    IF failed to open file
+        PUT error
+    ELSE
+        FOR node in hiddenNodes
+            FOR input in node.inputs
+                PUT node.getID(), input.getID(), input.weight
+            END
+        END
+
+        FOR node in outputNodes
+            FOR input in node.inputs
+                PUT node.getID(), input.getID(), input.weight
+            END
+        END
+    END
+END
+
+getNode( id )
+    SET node to NULL
+
+    FOR n in sensors
+        IF n.id equals id
+            SET node to n
+        END
+    END
+    FOR n in outputNodes
+        IF n.id equals id
+            SET node to n
+        END
+    END
+    FOR n in hiddenNodes
+        IF n.id equals id
+            SET node to n
+        END
+    END
+
+    RETURN node
+END
+
+/**
+ * NOTES:
+ *  Paths variable must be by reference for this to work.
+ */
+findPaths( id, ids, count, paths )
+    SET node to getNode(id)
+    INSERT id in ids
+
+    FOR input in node.getInputs()
+        IF input.id is not in ids     # This makes sure no infinite loop is made
+            SET temp to getShortestPath(input.id, ids, count + 1, paths)
+        END
+        IF input.type is SENSOR
+            INSERT temp in paths
+        END
+    END
+
+    RETURN count
+END
+
+getShortestPath( id )
+    SET paths to VECTOR
+    SET ids to VECTOR
+
+    findPaths(id, ids, 0, paths)
+
+    SET shortest to MAX_INT
+    FOR path in paths
+        IF path < shortest
+            SET shortest to path
+        END
+    END
+
+    RETURN shortest
+END
+
+update( nodeGenes, linkGenes )
+    deleteNetwork()
+
+    FOR nodeGene in nodeGenes with id AS KEY
+        SET node(id, nodeGene.type)
+
+        IF nodeGene is SENSOR
+            INSERT node to sensors
+        ELSE IF nodeGene is Hidden
+            INSERT node to hiddenNodes
+        ELSE
+            INSERT node to outputNodes
+        END
+    END
+
+    FOR linkGene in linkGenes
+        IF linkGene is enabled
+            SET fromNode to getNode(linkGene.in) # Grab the node that the link is pointing from.
+            SET toNode to getNode(linkGene.out)  # Grab the node that the link is pointing to.
+
+            toNode.addInput(fromNode, weight)
+        END
+    END
+END
+
+deleteNetwork()
+    FOR node in hiddenNodes
+        node.deleteLinks()
+    END
+    FOR node in outputNodes
+        node.deleteLinks()
+    END
+
+    CLEAR sensors
+    CLEAR hiddenNodes
+    CLEAR outputNodes
+END
+
+---------------------------------- Class Node ---------------------------------
+
+addInput( node, weight )
+    SET link to node and weight
+
+    INSERT link in inputs
+END
+
+deleteLinks()
+    FOR input in inputs
+        DELETE input
+    END
+
+    CLEAR inputs
+END
+
+update()
+    SET sum to 0
+    FOR input in inputs
+        IF input.getOutput() IS NOT NULL
+            SET sum += input.weight * input.getOutput()
+        END
+    END
+
+    SET output to 1 / (1 + e ^ (-sum))
+END
