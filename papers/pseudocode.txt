@@ -21,7 +21,7 @@ limitations under the License.
 
 /**
  * NOTES:
- *  When initalizing the population first create all the output nodes then
+ *  When initializing the population first create all the output nodes then
  *      do all the sensor nodes afterwards.
  */
 
@@ -67,6 +67,20 @@ addNewLink(source, destination)
     RETURN found
 END
 
+/**
+ * NOTES:
+ *  This will write the whole population to a file. It will loop through
+ *      each of the Species and have them write to a file.
+ *
+ *  GA05 requirement fulfilled
+ *  NN02 requirement fulfilled
+ */
+writePopulationToFile()
+    FOR s in species with id as KEY
+        s.writeGenomesToFile(generation, id)
+    END
+END
+
 -------------------------------------------------------------------------------
 -------------------------------- Class Species --------------------------------
 -------------------------------------------------------------------------------
@@ -97,9 +111,124 @@ getAverageFitness()
     RETURN total / genomes.size()
 END
 
+/**
+ * NOTES:
+ *  GA05 requirement fulfilled
+ *  NN02 requirement fulfilled
+ */
+writeGenomesToFile(generation, id)
+    OPEN file to "gen" + generation + "species" + id + ".txt"
+
+    IF failed to open file
+        PUT error
+    ELSE
+        FOR genome in genomes with id as KEY
+            PUT "Genome " + id + "\n----------"
+            PUT "Nodes:\n" + genome.getNodesString()
+            PUT "Links:\n" + genome.getLinksString()
+
+            genome.getNetwork().writeNetworkToFile(id)
+        END
+    END
+END
+
 -------------------------------------------------------------------------------
 -------------------------------- Class Genome ---------------------------------
 -------------------------------------------------------------------------------
+
+/**
+ * NOTES:
+ *  RHS variable is a Genome that will do the crossover with THIS.
+ *
+ *  GA01 requirement fulfilled
+ */
+produceOffspring( rhs )
+    SET lhsIterator to linkGenes
+    SET rhsIterator to rhs.linkGenes
+    SET childLinkGenes to VECTOR
+    SET fit to IF rhs.fitness < fitness THEN TRUE ELSE FALSE # Who is the more fit parent?
+
+    WHILE lhsIterator != linkGenes.end() || rhsIterator != rhs.linkGenes.end()
+        SET newLinkGene to NULL
+
+        IF rhsIterator == rhs.linkGenes.end() || lhsIterator.id < rhsIterator.id
+            SET newLinkGene to lhsIterator
+
+            ++lhsIterator
+        ELSE IF lhsIterator == linkGenes.end() || rhsIterator.id < lhsIterator.id
+            SET newLinkGene to rhsIterator
+
+            ++rhsIterator
+        ELSE
+            SET newLinkGene to IF fit THEN lhsIterator ELSE rhsIterator
+
+            ++lhsIterator
+            ++rhsIterator
+        END
+
+        INSERT newLinkGene in childLinkGenes
+    END
+
+    SET childNodeGenes to NULL
+    SET otherNodeGenes to NULL
+
+    IF fit
+        childNodeGenes to nodeGenes
+        otherNodeGenes to rhs.nodeGenes
+    ELSE
+        otherNodeGenes to nodeGenes
+        childNodeGenes to rhs.nodeGenes
+    END
+
+    FOR childNodeGenes.size() till otherNodeGenes.size() with i
+        INSERT otherNodeGenes[i] in childNodeGenes
+    END
+
+    RETURN Genome(childNodeGenes, childLinkGenes)
+END
+
+/**
+ * NOTES:
+ *  This will give back a string of the connection genes in the Genome. This
+ *      allows the Supervisor to write to a file.
+ *
+ *  GA05 requirement fulfilled
+ */
+getLinksString()
+    SET ids
+    SET inputs
+    SET outputs
+    SET weights
+    SET enables
+
+    FOR link in linkGenes
+        ids += "Id: " + link.id + " "
+        inputs += "Input: " + link.input + " "
+        outputs += "Output: " + link.output + " "
+        weights += "Weight: " + link.weight + " "
+        enables += "Enabled: " + link.enables + " "
+    END
+
+    RETURN ids + "\n" + inputs + "\n" + outputs + "\n" + weights + "\n" + enables + "\n"
+END
+
+/**
+ * NOTES:
+ *  GA05 requirement fulfilled
+ */
+getNodesString()
+    SET ids
+    SET types
+    SET numRecurrent
+
+    FOR node in nodeGenes
+        ids += "Id: " + node.id + " "
+        types += "Type: " + node.type + " "
+        numRecurrent += "Recurrent: " + node.recurrent + " "
+    END
+
+    RETURN ids + "\n" + types + "\n" + numRecurrent + "\n"
+END
 
 /**
  * NOTES:
@@ -258,14 +387,17 @@ END
 
 /**
  * NOTES:
+ *  Make sure to append to the file.
+ *
  *  NN02 requirement fulfilled
  */
 writeNetworkToFile( gen )
-    OPEN new file with gen as the number
+    OPEN file to "gen" + gen + "/network" + gen
 
     IF failed to open file
         PUT error
     ELSE
+        PUT "Genome Network: " + gen + "\n"
         FOR node in hiddenNodes
             FOR input in node.inputs
                 PUT node.getID(), input.getID(), input.weight
