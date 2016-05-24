@@ -85,23 +85,6 @@ END
 -------------------------------- Class Species --------------------------------
 -------------------------------------------------------------------------------
 
-/**
- * NOTES:
- *  To do speciation you have to compute the distance it is from one genome from
- *      any other random genome.
- *  This is the formula that is given for computing it:
- *      d = ((c1 * E) / N) + ((c2 * D) / N) + (c3 * W)
- *  Variables:
- *      - d,  This is the final distance computed.
- *      - E,  This is the number of Excess of the Genes.
- *      - D,  This is the number of disjoint of the Genes.
- *      - N,  Genome size. Can be set to 1 if small. Or set to the longest genome.
- *      - W,  This is where you minus both the weights and add them up to the total.
- *            which is then divided by the total number of innovations that were the
- *            same between both of the genomes.
- *      - c1, c2, c3, These adjust the importance of the three.
- */
-
 getAverageFitness()
     SET total to zero
     FOR genome in genomes
@@ -132,9 +115,78 @@ writeGenomesToFile(generation, id)
     END
 END
 
+/**
+ * NOTES:
+ *  This will adjust the fitness so that younger genomes have a better
+ *      chance in surviving in the population.
+ */
+adjustFitness()
+    SET size to genomes.size()
+    FOR genome in genomes
+        # Adjust the fitness more for younger genomes?
+        genome.setAdjustedFitness(genome.getFitness / size)
+    END
+END
+
 -------------------------------------------------------------------------------
 -------------------------------- Class Genome ---------------------------------
 -------------------------------------------------------------------------------
+
+/**
+ * NOTES:
+ *  To do speciation you have to compute the distance it is from one genome from
+ *      any other random genome.
+ *  This is the formula that is given for computing it:
+ *      d = ((c1 * E) / N) + ((c2 * D) / N) + (c3 * W)
+ *  Variables:
+ *      - d,  This is the final distance computed.
+ *      - E,  This is the number of Excess of the Genes.
+ *      - D,  This is the number of disjoint of the Genes.
+ *      - N,  Genome size. Can be set to 1 if small. Or set to the longest genome.
+ *      - W,  This is where you minus both the weights and add them up to the total.
+ *            which is then divided by the total number of innovations that were the
+ *            same between both of the genomes.
+ *      - c1, c2, c3, These adjust the importance of the three. These will be static
+ *                    variables set at the beginning of the program.
+ */
+computeDistance( rhs )
+    SET lhsIterator to linkGenes
+    SET rhsIterator to rhs.linkGenes
+    SET disjoints to 0
+    SET excess to 0
+    SET matched to 0
+    SET weightDifference to 0
+
+    WHILE lhsIterator != linkGenes.end() || rhsIterator != rhs.linkGenes.end()
+        SET newLinkGene to NULL
+
+        IF rhsIterator == rhs.linkGenes.end()
+            ++excess
+            ++lhsIterator
+        ELSE IF lhsIterator == linkGenes.end()
+            ++excess
+            ++rhsIterator
+        ELSE IF lhsIterator.id < rhsIterator.id
+            ++disjoints
+            ++lhsIterator
+        ELSE IF rhsIterator.id < lhsIterator.id
+            ++disjoints
+            ++rhsIterator
+        ELSE
+            weightDifference += ABS(lhsIterator.weight - rhsIterator.weight)
+
+            ++matched
+            ++lhsIterator
+            ++rhsIterator
+        END
+    END
+
+    SET size to IF linkGenes.size() >= rhs.linkGenes.size() THEN linkGenes.size() ELSE rhs.linkGenes.size()
+
+    SET distance = ((c1 * excess) / size) + ((c2 * disjoints) / size) + (c3 * (weightDifferenec / matched))
+
+    RETURN distance
+END
 
 /**
  * NOTES:
