@@ -23,8 +23,13 @@ limitations under the License.
  * NOTES:
  *  When initializing the population first create all the output nodes then
  *      do all the sensor nodes afterwards.
+ *
+ *  GA03 requirement fulfilled
  */
-
+CONSTRUCTOR()
+    SET species to Species(100, 3, 5) # Define these?
+    INSERT species in species # Confusing right? ;)
+END
 
 /**
  * NOTES:
@@ -123,7 +128,7 @@ END
  */
 addNewGene(id, type)
     SET found to FALSE
-    FOR innovation in geneHistory
+    FOR innovation in innovations
         IF innovation.nodeType is not NONE AND innovation.node is id
             SET found to TRUE
         END
@@ -131,7 +136,7 @@ addNewGene(id, type)
 
     IF not found
         SET innovation to Innovation(NULL, NULL, id, type)
-        INSERT innovation in geneHistory
+        INSERT innovation in innovations
     END
 END
 
@@ -143,7 +148,7 @@ END
  */
 addNewLink(source, destination)
     SET found to NULL
-    FOR innovation in geneHistory AND found is NULL
+    FOR innovation in innovations AND found is NULL
         IF innovation.nodeType is NONE AND innovation.input = source AND innovation.output = destination
             SET found to innovation.id
         END
@@ -152,7 +157,7 @@ addNewLink(source, destination)
     IF found is NULL
         SET innovation to Innovation(source, destination, NULL, NONE)
         SET found to innovation.id
-        INSERT innovation in geneHistory
+        INSERT innovation in innovations
     END
 
     RETURN found
@@ -162,6 +167,17 @@ END
 -------------------------------------------------------------------------------
 -------------------------------- Class Species --------------------------------
 -------------------------------------------------------------------------------
+
+/**
+ * NOTES:
+ *  GA03 requirement fulfilled
+ */
+CONSTRUCTOR(population, outputs, inputs)
+    FOR 0 till population
+        SET genome to Genome(outputs, inputs)
+        INSERT genome in genomes
+    END
+END
 
 getAverageFitness()
     SET total to 0
@@ -306,6 +322,35 @@ END
 -------------------------------------------------------------------------------
 -------------------------------- Class Genome ---------------------------------
 -------------------------------------------------------------------------------
+
+/**
+ * NOTES:
+ *  GA03 requirement fulfilled
+ */
+CONSTRUCTOR(outputs, inputs)
+    SET id to 0
+    FOR 0 till outputs as i
+        INSERT NodeGene(id, OUTPUT) in nodeGenes
+        geneHistory.addNewGene(id, OUTPUT)
+
+        ++id
+    END
+
+    FOR 0 till inputs
+        INSERT NodeGene(id, INPUT) in nodeGenes
+        geneHistory.addNewGene(id, INPUT)
+
+        FOR 0 till outputs as i
+            SET source to id
+            SET destination to nodeGenes[i].id
+            SET linkId to geneHistory.addNewLink(source, destination)
+
+            INSERT linkGene(linkId, source, destination, random(0.0, 1.0)) in linkGenes # Give a random weight
+        END
+
+        ++id
+    END
+END
 
 /**
  * NOTES:
