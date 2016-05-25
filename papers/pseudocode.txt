@@ -25,6 +25,97 @@ limitations under the License.
  *      do all the sensor nodes afterwards.
  */
 
+
+/**
+ * NOTES:
+ *  This will write the whole population to a file. It will loop through
+ *      each of the Species and have them write to a file.
+ *
+ *  GA05 requirement fulfilled
+ *  NN02 requirement fulfilled
+ */
+writePopulationToFile()
+    FOR s in species with id as KEY
+        s.writeGenomesToFile(generation, id)
+    END
+END
+
+/**
+ * NOTES:
+ *  This will determine how many babies that are needed to be made for
+ *      the next generation.
+ */
+epoch()
+    FOR s in species
+        s.adjustedFitness()
+    END
+
+    SET average to setOverallAverage()
+
+    sort(species) # Sort the species by best average fitness descending order
+
+    SET totalOffspring to 0
+    SET offspring to VECTOR
+    FOR s in species
+        IF s.getNoImprovment > threshold # When should the species die
+                                           if they don't improve?
+            totalOffspring += s.size()
+            ERASE s in species
+        ELSE
+            SET babies to s.getAverageFitness() / average
+            INSERT babies in offspring
+
+            s.killGenomes()
+
+            totalOffspring += s.getSize() + offspring
+        END
+    END
+
+    FOR o in offspring with id as KEY
+        species[id].produceOffspring(o)
+    END
+
+    SET remainingBabies to (100 - totalOffspring) # Pound define 100?
+
+    IF remainingBabies > 0
+        SET j to 0
+        FOR 0 till remainingBabies as i
+            IF j == species.size()
+                species[i].produceOffspring(1) # This produces the remaining offspring
+                                               # with the better species.
+            ELSE
+                j = 0
+            END
+
+            j++
+        END
+    END
+END
+
+setOverallAverage()
+    SET total to 0
+    FOR s in species
+        total += s.getAverageFitness()
+    END
+
+    SET average to total / species.size()
+
+    IF overallAverage < average
+        SET overallAverage to average
+    END
+
+    RETURN average
+END
+
+-------------------------------------------------------------------------------
+-------------------------------- Class GeneHistory ----------------------------
+-------------------------------------------------------------------------------
+
+/**
+ * NOTES:
+ *  This class acts like a singleton class. Any class can use it if needed.
+ */
+
 /**
  * NOTES:
  *  This will add a new gene to the history if it is not there already.
@@ -67,31 +158,41 @@ addNewLink(source, destination)
     RETURN found
 END
 
-/**
- * NOTES:
- *  This will write the whole population to a file. It will loop through
- *      each of the Species and have them write to a file.
- *
- *  GA05 requirement fulfilled
- *  NN02 requirement fulfilled
- */
-writePopulationToFile()
-    FOR s in species with id as KEY
-        s.writeGenomesToFile(generation, id)
-    END
-END
 
 -------------------------------------------------------------------------------
 -------------------------------- Class Species --------------------------------
 -------------------------------------------------------------------------------
 
 getAverageFitness()
-    SET total to zero
+    SET total to 0
     FOR genome in genomes
         SET total += genome.getScore()
     END
 
-    RETURN total / genomes.size()
+    SET average to total / genomes.size()
+
+    IF averageFitness < average
+        SET averageFitness to average
+        SET noImprovment to 0
+    ELSE
+        noImprovment++
+    END
+
+    RETURN average
+END
+
+/**
+ * NOTES:
+ *  Who has survived this round? This one will loop through everyone to see
+ *      who survived this round. Everyone else will be eliminated.
+ */
+killGenomes()
+    # Can make the 0.2 a pound define.
+    numOfSurvivors = floor(genomes.size() * 0.2) + 1.0
+
+    sort(genomes) # Sort the genomes by adjustedFitness in descending order
+
+    genomes.erase(numOfSurvivors, genomes.size() - 1)
 END
 
 /**
@@ -125,6 +226,80 @@ adjustFitness()
     FOR genome in genomes
         # Adjust the fitness more for younger genomes?
         genome.setAdjustedFitness(genome.getFitness / size)
+    END
+END
+
+
+/**
+ * NOTES:
+ *  This will produce offspring with crossover. But it has to pass
+ *      the crossover rate. If it doesn't then it will give a random
+ *      genome in the species.
+ *
+ *  GA01 requirement fulfilled.
+ */
+produceOffspring( num )
+    SET offspring to VECTOR
+    FOR 0 till num
+        SET child to NULL
+        SET parent1 to random genome in genomes
+
+        IF random(0,10) <= 7 # Bound define for the 7?
+            SET randNum to random(0, genomes.size() - 2)
+
+            IF randNum is same index for parent1
+                SET randNum to genomes.size() - 1
+            END
+
+            SET parent2 to genomes[randNum]
+
+            SET child to parent1.produceChild(parent2)
+        ELSE
+            SET child to parent1
+        END
+
+        mutate(child)
+
+        INSERT child in offspring
+    END
+
+    FOR o in offspring
+        INSERT o in genomes
+    END
+END
+
+/**
+ * NOTES:
+ *  This will mutate the child. It will randomly do any of the
+ *      the functions that are called here.
+ *
+ *  GA02 requirement fulfilled.
+ */
+mutate( child )
+    IF random(0.01, 1.0) < 0.07 # Pound define this?
+        SET num to random(0, 2)
+        SET done to FALSE
+
+        IF num is 0
+            done = child.mutateEnableLink()
+            SET num to random(1, 2)
+        END
+
+        IF not done
+            ELSE IF num is 1
+                child.mutateRemoveLink()
+            ELSE
+                child.mutateAddLink()
+            END
+        END
+    END
+
+    IF random(0.01, 1.0) < 0.03 # Pound define this?
+        child.mutateAddNode()
+    END
+
+    IF random(0.01, 1.0) < 0.2 # Pound define this?
+        child.mutateWeight()
     END
 END
 
@@ -194,7 +369,7 @@ END
  *
  *  GA01 requirement fulfilled
  */
-produceOffspring( rhs )
+produceChild( rhs )
     SET lhsIterator to linkGenes
     SET rhsIterator to rhs.linkGenes
     SET childLinkGenes to VECTOR
@@ -292,11 +467,11 @@ END
  *
  *  GA02 requirement fulfilled
  */
-mutateAddLink( database )
+mutateAddLink()
     SET source to NULL
     SET destination to NULL
     SET found to FALSE
-    SET num to random(0, 4)
+    SET num to random(0, 2)
     SET recurrent to FALSE
     IF num == 0 # Create a recurrent link on itself
         FOR node in nodeGenes
@@ -307,7 +482,6 @@ mutateAddLink( database )
                 SET recurrent to TRUE
             END
         END
-    ELSE IF
     ELSE
         SET numTimes to 10 # How many times should we keep on looping to find something?
 
@@ -325,7 +499,7 @@ mutateAddLink( database )
 
     IF found
         SET weight to random(0, 1)
-        SET id to database.addNewLink(source.id, destination.id)
+        SET id to geneHistory.addNewLink(source.id, destination.id)
 
         SET sourcePath to network.getShortestPath(source.id)
         SET destPath to network.getShortestPath(destination.id)
@@ -353,6 +527,8 @@ mutateEnableLink()
             SET done to TRUE
         END
     END
+
+    RETURN done
 END
 
 /**
