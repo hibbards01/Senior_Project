@@ -16,6 +16,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 -------------------------------------------------------------------------------
+-------------------------------- Driver Program -------------------------------
+-------------------------------------------------------------------------------
+
+main
+    SET sim to Simulator
+    SET supervisor to Supervisor
+
+    WHILE supervisor.getNoImprovement() > 10 OR supervisor.getGeneration() < 1500 # Increase this number?
+        runSolutions(supervisor, sim)
+        supervisor.epoch()
+    END
+END
+
+runSolutions( supervisor, sim )
+    FOR species in supervisor.getSpecies()
+        FOR genome in species.getGenomes()
+            SET score to runSim(sim, genome.getNetwork)
+
+            genome.setScore(score)
+
+            sim.restart()
+        END
+    END
+END
+
+/**
+ * NOTES:
+ *  This will run the simulation for one node. After it is done it will
+ *      grab the score from the simulation.
+ */
+runSim( sim, network )
+    SET controller
+    WHILE sim.run(controller) != 0
+        SET inputs to sim.getInputs()
+
+        SET controller to network.feedForward(inputs)
+    END
+
+    RETURN sim.getScore()
+END
+
+-------------------------------------------------------------------------------
 -------------------------------- Class Supervisor -----------------------------
 -------------------------------------------------------------------------------
 
@@ -60,7 +102,6 @@ epoch()
     sort(species) # Sort the species by best average fitness descending order
 
     SET totalOffspring to 0
-    SET offspring to VECTOR
     FOR s in species
         IF s.getNoImprovment > threshold # When should the species die
                                            if they don't improve?
@@ -68,16 +109,13 @@ epoch()
             ERASE s in species
         ELSE
             SET babies to s.getAverageFitness() / average
-            INSERT babies in offspring
 
             s.killGenomes()
 
-            totalOffspring += s.getSize() + offspring
-        END
-    END
+            totalOffspring += s.getSize() + babies
 
-    FOR o in offspring with id as KEY
-        species[id].produceOffspring(o)
+            s.produceOffspring(offspring)
+        END
     END
 
     SET remainingBabies to (100 - totalOffspring) # Pound define 100?
@@ -89,12 +127,14 @@ epoch()
                 species[i].produceOffspring(1) # This produces the remaining offspring
                                                # with the better species.
             ELSE
-                j = 0
+                SET j to 0
             END
 
             j++
         END
     END
+
+    update() # Update everything
 END
 
 setOverallAverage()
@@ -107,9 +147,23 @@ setOverallAverage()
 
     IF overallAverage < average
         SET overallAverage to average
+    ELSE
+        ++noImprovement
     END
 
     RETURN average
+END
+
+update()
+    FOR s in species
+        s.update()
+    END
+
+    ++generation
+
+    IF generation % 5
+        writePopulationToFile()
+    END
 END
 
 -------------------------------------------------------------------------------
@@ -149,7 +203,7 @@ END
 addNewLink(source, destination)
     SET found to NULL
     FOR innovation in innovations AND found is NULL
-        IF innovation.nodeType is NONE AND innovation.input = source AND innovation.output = destination
+        IF innovation.nodeType is NONE AND innovation.input == source AND innovation.output == destination
             SET found to innovation.id
         END
     END
@@ -179,6 +233,14 @@ CONSTRUCTOR(population, outputs, inputs)
     END
 END
 
+update()
+    FOR genome in genomes
+        genome.update()
+    END
+
+    ++age
+END
+
 getAverageFitness()
     SET total to 0
     FOR genome in genomes
@@ -204,7 +266,7 @@ END
  */
 killGenomes()
     # Can make the 0.2 a pound define.
-    numOfSurvivors = floor(genomes.size() * 0.2) + 1.0
+    SET numOfSurvivors to floor(genomes.size() * 0.2) + 1.0
 
     sort(genomes) # Sort the genomes by adjustedFitness in descending order
 
@@ -297,7 +359,7 @@ mutate( child )
         SET done to FALSE
 
         IF num is 0
-            done = child.mutateEnableLink()
+            SET done to child.mutateEnableLink()
             SET num to random(1, 2)
         END
 
@@ -352,6 +414,12 @@ CONSTRUCTOR(outputs, inputs)
     END
 END
 
+update()
+    network.update(nodeGenes, linkGenes)
+
+    ++age
+END
+
 /**
  * NOTES:
  *  To do speciation you have to compute the distance it is from one genome from
@@ -403,7 +471,7 @@ computeDistance( rhs )
 
     SET size to IF linkGenes.size() >= rhs.linkGenes.size() THEN linkGenes.size() ELSE rhs.linkGenes.size()
 
-    SET distance = ((c1 * excess) / size) + ((c2 * disjoints) / size) + (c3 * (weightDifferenec / matched))
+    SET distance to ((c1 * excess) / size) + ((c2 * disjoints) / size) + (c3 * (weightDifferenec / matched))
 
     RETURN distance
 END
