@@ -57,6 +57,38 @@ runSim( sim, network )
     RETURN sim.getScore()
 END
 
+/**
+ * NOTES:
+ *  This will grab what the inputs are for the ship.
+ */
+getInputs()
+    SET ship to objects[0].getPoint()
+    SET sensors to VECTOR # 2 dimensional array
+
+    FOR 1 till objects.size() with i as KEY
+        IF objects[i].getType is ASTEROID
+            SET x to (objects[i].getPoint().getX() - ship.getX()) / 20
+            SET y to (objects[i].getPoint().getY() - ship.getY()) / 20
+
+            IF x < 6 AND y < 6
+                SET sensors[x][y] to objects[i].getValue()
+            END
+        ELSE
+            SET rockPoints to objects[i].getRockPoints()
+            FOR 0 till rockPoints.getSize() with p as KEY
+                SET x to (rockPoints[p][0] - ship.getX()) / 20
+                SET y to (rockPoints[p][1] - ship.getY()) / 20
+
+                IF x < 6 AND y < 6
+                    SET sensors[x][y] to objects[i].getValue()
+                END
+            END
+        END
+    END
+
+    RETURN sensors
+END
+
 -------------------------------------------------------------------------------
 -------------------------------- Class Supervisor -----------------------------
 -------------------------------------------------------------------------------

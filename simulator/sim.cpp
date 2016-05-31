@@ -82,37 +82,40 @@ void Simulator::createObjects()
     // ************ WARNING ************
     // If changed then the logic will break if not changed in other positions
     objects.push_back(new Ship(650, -350, SHIPW, 4));
+    // objects.push_back(new Ship(0, 0, SHIPW, 4));
     startingPosition.setPoint(650, -350);
 
     // Sun and Jupiter
-    objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
-    objects.push_back(new Rock(200, 0, 0, 3.5, JUPITER, 40, 0, PLANET));
-    objects.push_back(new Rock(300, 0, 0, 2.5, SATURN, 30, 0, PLANET));
-    objects.push_back(new Rock(-375, 0, 0, 2.5, EARTH, 20, 0, PLANET));
-    objects.push_back(new Rock(-390, 0, 0, 2.0, MOON, 15, 0, PLANET));
+    // objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
+    // objects.push_back(new Rock(200, 0, 0, 3.5, JUPITER, 40, 0, PLANET));
+    // objects.push_back(new Rock(300, 0, 0, 2.5, SATURN, 30, 0, PLANET));
+    // objects.push_back(new Rock(-375, 0, 0, 2.5, EARTH, 20, 0, PLANET));
+    // objects.push_back(new Rock(-390, 0, 0, 2.0, MOON, 15, 0, PLANET));
 
-    // Create some asteroids!
-    objects.push_back(new Rock(0, -350, 1.7, 0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(-350, -350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(-350, 350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(350, 350, 0.0, -1.7, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(350, -350, 0.0, 1.8, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(100, 50, -4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(-100, 50, 4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(100, -50, -4.0, -4.0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(-100, -50, -4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(200, 200, -3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(200, -200, 0.0, 3.0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(-200, 200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(-200, -200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
+    // // Create some asteroids!
+    objects.push_back(new Rock(0, 0, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
 
-    for (int i = 0; i < 40; ++i)
-    {
-        objects.push_back(new Rock(random(-700, 700),
-                                    random(-400, 400),
-                                    random(-3.0, 3.0),
-                                    random(-3.0, 3.0), ASTEROIDW, 10, 5, ASTEROID));
-    }
+    // objects.push_back(new Rock(0, -350, 1.7, 0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(-350, -350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(-350, 350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(350, 350, 0.0, -1.7, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(350, -350, 0.0, 1.8, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(100, 50, -4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(-100, 50, 4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(100, -50, -4.0, -4.0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(-100, -50, -4.0, 4.0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(200, 200, -3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(200, -200, 0.0, 3.0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(-200, 200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(-200, -200, 3.0, 0.0, ASTEROIDW, 10, 5, ASTEROID));
+
+    // for (int i = 0; i < 40; ++i)
+    // {
+    //     objects.push_back(new Rock(random(-700, 700),
+    //                                 random(-400, 400),
+    //                                 random(-3.0, 3.0),
+    //                                 random(-3.0, 3.0), ASTEROIDW, 10, 5, ASTEROID));
+    // }
 
     return;
 }
@@ -371,21 +374,21 @@ int Simulator::run()
 ****************************************************/
 void Simulator::runSim(const Interface * pUI)
 {
-    if (done == 0)
-    {
-        // First move the objects.
-        move(pUI);
+    // if (done == 0)
+    // {
+    //     // First move the objects.
+    //     move(pUI);
 
-        // Check if a collision has happened
-        checkCollision();
-    }
-    else
-    {
-        if (pUI->isSpace())
-        {
-            restart();
-        }
-    }
+    //     // Check if a collision has happened
+    //     checkCollision();
+    // }
+    // else
+    // {
+    //     if (pUI->isSpace())
+    //     {
+    //         restart();
+    //     }
+    // }
 
     // Now draw them.
     draw();

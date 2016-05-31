@@ -95,6 +95,44 @@ void Ship::draw()
     if (getIsAlive())
     {
         drawBigShip(getPoint(), getAngle());
+        drawRect(Point(0, 0), 20, 20, 0);
+        drawRect(Point(-20, 0), 20, 20, 0);
+        drawRect(Point(0, 20), 20, 20, 0);
+        drawRect(Point(0, -20), 20, 20, 0);
+        drawRect(Point(20, 0), 20, 20, 0);
+
+        drawRect(Point(-20, 20), 20, 20, 0);
+        drawRect(Point(20, 20), 20, 20, 0);
+        drawRect(Point(20, -20), 20, 20, 0);
+        drawRect(Point(-20, -20), 20, 20, 0);
+
+        drawRect(Point(-40, 0), 20, 20, 0);
+        drawRect(Point(0, 40), 20, 20, 0);
+        drawRect(Point(0, -40), 20, 20, 0);
+        drawRect(Point(40, 0), 20, 20, 0);
+
+        drawRect(Point(-40, 40), 20, 20, 0);
+        drawRect(Point(40, 40), 20, 20, 0);
+        drawRect(Point(40, -40), 20, 20, 0);
+        drawRect(Point(-40, -40), 20, 20, 0);
+
+        drawRect(Point(-40, 20), 20, 20, 0);
+        drawRect(Point(-20, 40), 20, 20, 0);
+        drawRect(Point(20, 40), 20, 20, 0);
+        drawRect(Point(40, 20), 20, 20, 0);
+
+        drawRect(Point(-40, -20), 20, 20, 0);
+        drawRect(Point(-20, -40), 20, 20, 0);
+        drawRect(Point(20, -40), 20, 20, 0);
+        drawRect(Point(40, -20), 20, 20, 0);
+
+        drawRect(Point(-60, 0), 20, 20, 0);
+        drawRect(Point(-60, 20), 20, 20, 0);
+        drawRect(Point(-60, -20), 20, 20, 0);
+
+        drawRect(Point(-80, 0), 20, 20, 0);
+        drawRect(Point(-80, 20), 20, 20, 0);
+        drawRect(Point(-80, -20), 20, 20, 0);
     }
 
     return;
