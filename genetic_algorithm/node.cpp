@@ -8,6 +8,7 @@
 ***********************************************************************/
 
 #include "node.h"
+#include <math.h>
 
 /***********************************************************************
 * deleteLinks
@@ -34,7 +35,7 @@ void Node::deleteLinks()
 ***********************************************************************/
 void Node::update()
 {
-    float sum = 0; // This will sum all the values from the inputs
+    double sum = 0; // This will sum all the values from the inputs
 
     // Loop through all the inputs and grab their values
     for (int i = 0; i < inputs.size(); ++i)
@@ -44,7 +45,7 @@ void Node::update()
     }
 
     // Finally set the output for this node
-    output = 1 / (1 + (-sum));
+    output = 1 / (1 + exp(-sum));
 
     return;
 }

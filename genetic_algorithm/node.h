@@ -15,7 +15,7 @@
 #ifndef NODE_H
 #define NODE_H
 
-class Node;
+class Node; // Need to declare before LINK so that is can use NODE
 
 /***********************************************************************
 * Link
@@ -24,14 +24,14 @@ class Node;
 ***********************************************************************/
 struct Link
 {
-    Link(Node * pointer, float w)
+    Link(Node * pointer, double w)
     {
         input = pointer;
         weight = w;
     }
 
     Node * input;
-    float weight;
+    double weight;
 };
 
 /***********************************************************************
@@ -68,13 +68,14 @@ public:
     std::vector<Link> getInputs() const { return inputs; }
     int getId()                   const { return id;     }
     int getType()                 const { return type;   }
+    double getOutput()            const { return output; }
 private:
     std::vector<Link> inputs; // This holds all the STRUCTs with the
                               // inputs to this node.
     int id;                   // The id of this node.
     int type;                 // What type of node this is. Can be SENSOR,
                               // OUTPUT, or HIDDEN.
-    float output;             // This holds the output value.
+    double output;            // This holds the output value.
 };
 
 #endif // NODE_H
