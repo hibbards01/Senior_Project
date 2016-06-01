@@ -939,7 +939,7 @@ void getAssgFile(Assignment &myAssg)
 }
 
 
-void getInstructions(Assignment &myAssg, Instruction **instructs)
+bool getInstructions(Assignment &myAssg, Instruction **instructs)
 /******************************************************************************
 * Summary:
 *    Reads in the instructions from the test instruction file into **intructs
@@ -955,6 +955,7 @@ void getInstructions(Assignment &myAssg, Instruction **instructs)
    char inLine[256];
    int lineCount = 0;
    int instructIndex = 0;
+   bool good = true;
 
 
       // --- Reset the pointers in the array
@@ -983,7 +984,8 @@ void getInstructions(Assignment &myAssg, Instruction **instructs)
    }
 
       // --- Loop through each line of the instruction file
-   while (! testFile.eof())
+   int count = 0;
+   while (! testFile.eof() && count < MAXINSTRUCTS)
    {
       char *ptr;
 
@@ -1057,9 +1059,18 @@ void getInstructions(Assignment &myAssg, Instruction **instructs)
          instructs[instructIndex]->stop = true;
          instructIndex++;
       }
+
+      ++count;
+   }
+
+   if (!testFile.eof() && count == MAXINSTRUCTS)
+   {
+      good = false;
    }
 
    testFile.close();
+
+   return good;
 }
 
 
@@ -1733,45 +1744,66 @@ main(int argc, char *argv[])
 
    getCommandLine(argc, argv, myAssg);
    getAssgFile(myAssg);
-   getInstructions(myAssg, myInstructs);
-
-      // --- Set the penalty for a time out
-   Process::setTimePenalty(myAssg.programTimePenalty);
-
-      // --- Loop through every source file listed in the command line
-   for (int i = 0; i < myAssg.sourceCount; i++)
+   if (!getInstructions(myAssg, myInstructs))
    {
-         // --- Reset the penalty for a program crash
-      Process::setPenalty(&myPenalties[0]);
+      cout << "Max instructions exceeded\n";
 
-      index = 0;
-      myAssg.sourceIndex = i;
-
-      getResults(myAssg, myInstructs, myResults, myPenalties);
-
-      writeResults(myAssg, myInstructs, myResults, myPenalties);
-
-         // --- If the testing is not occuring in grade mode erase the compiler
-         //     output (including the executable file.)
-      if (! myAssg.gradeMode)
-      {
-         strcpy(fileName, myAssg.sourceFiles[myAssg.sourceIndex]);
-         strcat(fileName, EXESUFFIX);
-         unlink(fileName);
-         strcpy(fileName, myAssg.sourceFiles[myAssg.sourceIndex]);
-         strcat(fileName, COMPILESUFFIX);
-         unlink(fileName);
-      }
-
-         // --- Reset the penalty array for the next program test
-      delete[] myPenalties;
-      myPenalties = new Penalty[MAXPENALTIES];
-
-         // --- Reset the results array for the next program test
+      int index = 0;
       while (myResults[index])
       {
          delete myResults[index];
          myResults[index++] = NULL;
+      }
+
+      index = 0;
+      while (myInstructs[index])
+      {
+         delete myInstructs[index];
+         myInstructs[index++] = NULL;
+      }
+
+      delete [] myPenalties;
+   }
+   else
+   {
+         // --- Set the penalty for a time out
+      Process::setTimePenalty(myAssg.programTimePenalty);
+
+         // --- Loop through every source file listed in the command line
+      for (int i = 0; i < myAssg.sourceCount; i++)
+      {
+            // --- Reset the penalty for a program crash
+         Process::setPenalty(&myPenalties[0]);
+
+         index = 0;
+         myAssg.sourceIndex = i;
+
+         getResults(myAssg, myInstructs, myResults, myPenalties);
+
+         writeResults(myAssg, myInstructs, myResults, myPenalties);
+
+            // --- If the testing is not occuring in grade mode erase the compiler
+            //     output (including the executable file.)
+         if (! myAssg.gradeMode)
+         {
+            strcpy(fileName, myAssg.sourceFiles[myAssg.sourceIndex]);
+            strcat(fileName, EXESUFFIX);
+            unlink(fileName);
+            strcpy(fileName, myAssg.sourceFiles[myAssg.sourceIndex]);
+            strcat(fileName, COMPILESUFFIX);
+            unlink(fileName);
+         }
+
+            // --- Reset the penalty array for the next program test
+         delete[] myPenalties;
+         myPenalties = new Penalty[MAXPENALTIES];
+
+            // --- Reset the results array for the next program test
+         while (myResults[index])
+         {
+            delete myResults[index];
+            myResults[index++] = NULL;
+         }
       }
    }
 }
