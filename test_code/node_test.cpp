@@ -46,15 +46,13 @@ class FooTest : public ::testing::Test {
         // Code here will be called immediately after each test (right
         // before the destructor).
       }
-
-      // Objects declared here can be used by all tests in the test case for Foo.
+      Foo f;
     };
 
     // Tests that the Foo::Bar() method does Abc.
     TEST_F(FooTest, MethodBarDoesAbc) {
       const string input_filepath = "this/package/testdata/myinputfile.dat";
       const string output_filepath = "this/package/testdata/myoutputfile.dat";
-      Foo f;
       EXPECT_EQ(1, f.Bar(input_filepath, output_filepath)) << "This did not work";
     }
 

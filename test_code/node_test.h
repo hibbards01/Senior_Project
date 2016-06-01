@@ -19,24 +19,23 @@ namespace {
     protected:
         NodeTest()
         {
-
+            node = new Node(0, 0);
         }
 
         virtual ~NodeTest()
         {
-
+            delete node;
         }
 
-        virtual void SetUp()
-        {
-
-        }
-
-        virtual void TearDown()
-        {
-
-        }
+        Node * node; // This will be used for the tests
     };
+
+    TEST_F(NodeTest, AddInput)
+    {
+        Node * test = new Node(1, 1);
+
+        node->addInput(test, -1);
+    }
 }
 
 //     // Tests that the Foo::Bar() method does Abc.
