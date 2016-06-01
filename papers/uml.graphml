@@ -121,11 +121,11 @@
           <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="159.4609375" modelName="custom" textColor="#000000" visible="true" width="94.263671875" x="2.0" y="30.1328125">- inputs
 - id
 - type
+- output
 -------------
 + Constructors
 + Destructor
 + Getters
-+ Setters
 + addInput
 + deleteLinks
 + update<y:LabelModel>
