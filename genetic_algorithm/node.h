@@ -75,6 +75,11 @@ public:
     int getId()                   const { return id;     }
     int getType()                 const { return type;   }
     double getOutput()            const { return output; }
+
+    //
+    // Setter
+    //
+    void setOutput(double o)            { output = o;    }
 private:
     std::vector<Link> inputs; // This holds all the STRUCTs with the
                               // inputs to this node.

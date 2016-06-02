@@ -8,6 +8,7 @@
 ***********************************************************************/
 
 #include "../genetic_algorithm/node.h"
+#include <math.h>
 
 namespace {
     /****************************************************
@@ -74,5 +75,35 @@ namespace {
         EXPECT_EQ(0, node->getInputs().size());
 
         delete test;
+    }
+
+    TEST_F(NodeTest, Update)
+    {
+        // Add some nodes
+        Node * test = new Node(1, 2);
+        Node * test2 = new Node(2, 2);
+        Node * test3 = new Node(3, 2);
+        // Set the outputs
+        test->setOutput(0.5);
+        test2->setOutput(1);
+        test3->setOutput(0.75);
+        // Finally add them
+        node->addInput(test, 1);
+        node->addInput(test2, -1);
+        node->addInput(test3, 0.5);
+
+        // Make sure it worked
+        EXPECT_EQ(3, node->getInputs().size());
+
+        // Now do the update
+        node->update();
+
+        double sum = (.5 * 1) + (1 * -1) + (.75 * 0.5);
+        double expected = 1 / (1 + exp(-sum));
+        EXPECT_EQ(expected, node->getOutput());
+
+        delete test;
+        delete test2;
+        delete test3;
     }
 }
