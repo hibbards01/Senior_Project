@@ -276,7 +276,7 @@ END
 getAverageFitness()
     SET total to 0
     FOR genome in genomes
-        SET total += genome.getScore()
+        SET total += genome.getFitness()
     END
 
     SET average to total / genomes.size()

@@ -9,6 +9,7 @@
 
 #include "network.h"
 #include "defines.h"
+#include <limits>
 using namespace std;
 
 /***********************************************************************
@@ -17,7 +18,7 @@ using namespace std;
 *       given by the simulator. After the feedForward is done it will
 *       return the output for the SHIP.
 ***********************************************************************/
-vector<double> Network::feedForward(const vector<double> inputs)
+vector<double> Network::feedForward(const vector<double> & inputs)
 {
     assert(inputs.size() == sensors.size()); // This better be the same.
 
@@ -43,7 +44,7 @@ vector<double> Network::feedForward(const vector<double> inputs)
         outputs.push_back(outputNodes[i]->getOutput()); // Now grab the output.
     }
 
-    return inputs;
+    return outputs;
 }
 
 /***********************************************************************
@@ -91,8 +92,51 @@ Node * Network::getNode(const int id)
 *       NETWORK from the class GENOME. It will delete the old NETWORK
 *       and then rebuild everything based off what it is given.
 ***********************************************************************/
-void Network::update()
+void Network::update(const vector<NodeGene> & nodeGenes, const vector<LinkGene> & linkGenes)
 {
+    deleteNetwork(); // Erase everything and rebuild everything.
+
+    // First create all the nodes.
+    for (int i = 0; i < nodeGenes.size(); ++i)
+    {
+        int type = nodeGenes[i].type;
+        assert(type < 3); // We only have three types so this better pass.
+
+        Node * node = new Node(i, type); // Now create a new node
+
+        // Now insert the node in the proper vector
+        if (type == SENSOR)
+        {
+            sensors.push_back(node);
+        }
+        else if (type == HIDDEN)
+        {
+            hiddenNodes.push_back(node);
+        }
+        else
+        {
+            outputNodes.push_back(node);
+        }
+    }
+
+    // Now link all the nodes together.
+    for (int i = 0; i < linkGenes.size(); ++i)
+    {
+        // First check to see if the link is enabled, if not don't add it.
+        if (linkGenes[i].enabled)
+        {
+            // Now grab both the from and to nodes
+            Node * from = getNode(linkGenes[i].input);
+            Node * to   = getNode(linkGenes[i].output);
+
+            // Either of them better not be NULL
+            assert(from != NULL && to != NULL);
+
+            // Finally link them together with the weight.
+            to->addInput(from, linkGenes[i].weight);
+        }
+    }
+
     return;
 }
 
@@ -194,7 +238,25 @@ void Network::writeNetworkToFile(const int gen)
 ***********************************************************************/
 int Network::getShortestPath(int id)
 {
-    return 0;
+    vector<int> paths; // This will hold all the paths that the node can have.
+    vector<int> ids;   // This will hold all the ids that we have done. This
+                       // mainly makes sure that we don't do a recurrent link.
+                       // and have an infinite loop.
+
+    findPaths(id, ids, 0, paths); // Now find all the paths!
+
+    int shortest = numeric_limits<int>::max(); // Make this the highest value.
+
+    // Finally grab the shortest distance.
+    for (int i = 0; i < paths.size(); ++i)
+    {
+        if (paths[i] < shortest)
+        {
+            shortest = paths[i];
+        }
+    }
+
+    return shortest;
 }
 
 /***********************************************************************
@@ -207,5 +269,13 @@ int Network::getShortestPath(int id)
 ***********************************************************************/
 int Network::findPaths(int id, vector<int> ids, int count, vector<int> & paths)
 {
+    Node * node = getNode(id); // Grab the node that we want to start from.
+    ids.push_back(id);         // Insert the id into the vector.
+
+    // Now loop through that nodes inputs.
+    for (int i = 0; i < node.getInputs().size(); ++i)
+    {
+
+    }
     return 0;
 }

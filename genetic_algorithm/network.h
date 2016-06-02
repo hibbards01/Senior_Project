@@ -12,6 +12,7 @@
 #define NETWORK_H
 
 #include "node.h"
+#include "genes.h"
 #include <vector>
 #include <fstream>
 
@@ -33,11 +34,15 @@ public:
     //
     // Methods
     //
+
     // FeedForward will be the one that does the summations of all the nodes
     // once it is finished it will then return the outputs that the network gave.
-    std::vector<double> feedForward(const std::vector<double> inputs);
+    std::vector<double> feedForward(const std::vector<double> & inputs);
+
+    // This updates the network.
+    void update(const std::vector<NodeGene> & nodeGenes, const std::vector<LinkGene> & linkGenes);
+
     Node * getNode(const int id);           // This grabs the node with the id given.
-    void update();                          // This updates the network.
     void deleteNetwork();                   // This deletes the nodes.
     void writeNetworkToFile(const int gen); // This writes the network to a file.
     int findPaths(int id,                   // This finds the paths for a given node.
