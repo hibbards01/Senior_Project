@@ -30,25 +30,49 @@ namespace {
         Node * node; // This will be used for the tests
     };
 
+    TEST_F(NodeTest, Constructor)
+    {
+        EXPECT_EQ(0, node->getInputs().size());
+        EXPECT_EQ(0, node->getId());
+        EXPECT_EQ(0, node->getType());
+        EXPECT_EQ(0, node->getOutput());
+    }
+
     TEST_F(NodeTest, AddInput)
     {
-        Node * test = new Node(1, 1);
+        // Create a node and add it to the input
+        Node * test = new Node(1, 2);
+        int * addr = (int *)test;
 
         node->addInput(test, -1);
+
+        // Make sure that everything worked
+        EXPECT_EQ(1, node->getInputs().size());
+        EXPECT_EQ(1, node->getInputs()[0].input->getId());
+        EXPECT_EQ(2, node->getInputs()[0].input->getType());
+        EXPECT_EQ(0, node->getInputs()[0].input->getOutput());
+        EXPECT_EQ(-1, node->getInputs()[0].weight);
+        EXPECT_EQ(addr, (int *)node->getInputs()[0].input);
+
+        delete test;
+    }
+
+    TEST_F(NodeTest, DeleteLinks)
+    {
+        // Add nodes. Now delete them
+        Node * test = new Node(1, 2);
+        node->addInput(test, -1);
+
+        node->addInput(node, -1);
+
+        EXPECT_EQ(2, node->getInputs().size());
+        EXPECT_EQ(node, node->getInputs()[1].input);
+
+        // Delete the links
+        node->deleteLinks();
+
+        EXPECT_EQ(0, node->getInputs().size());
+
+        delete test;
     }
 }
-
-//     // Tests that the Foo::Bar() method does Abc.
-//     TEST_F(FooTest, MethodBarDoesAbc) {
-//       const string input_filepath = "this/package/testdata/myinputfile.dat";
-//       const string output_filepath = "this/package/testdata/myoutputfile.dat";
-//       Foo f;
-//       EXPECT_EQ(1, f.Bar(input_filepath, output_filepath)) << "This did not work";
-//     }
-
-//     // Tests that Foo does Xyz.
-//     TEST_F(FooTest, DoesXyz) {
-//       // Exercises the Xyz feature of Foo.
-//     }
-
-// }  // namespace

@@ -11,24 +11,6 @@
 #include <math.h>
 
 /***********************************************************************
-* deleteLinks
-*   This deletes all the pointers that are saved within the vector.
-***********************************************************************/
-void Node::deleteLinks()
-{
-    // Loop through all the inputs and clear the pointers
-    for (int i = 0; i < inputs.size(); ++i)
-    {
-        delete inputs[i].input;
-    }
-
-    // Finally erase all the links from the vector
-    inputs.clear();
-
-    return;
-}
-
-/***********************************************************************
 * update
 *   This does the feed forward for this particular node and sets the
 *       output that this node will give.

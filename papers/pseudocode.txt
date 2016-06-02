@@ -870,10 +870,13 @@ END
 
 deleteNetwork()
     FOR node in hiddenNodes
-        node.deleteLinks()
+        DELETE node
     END
     FOR node in outputNodes
-        node.deleteLinks()
+        DELETE node
+    END
+    FOR node in sensors
+        DELETE node
     END
 
     CLEAR sensors
@@ -892,10 +895,6 @@ addInput( node, weight )
 END
 
 deleteLinks()
-    FOR input in inputs
-        DELETE input
-    END
-
     CLEAR inputs
 END
 
