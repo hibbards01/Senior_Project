@@ -749,7 +749,7 @@ feedforward( inputs )
         node.update()
     END
 
-    SET outputs
+    SET outputs to VECTOR
     FOR node in outputNodes
         node.update()
         INSERT node.getOutput() into outputNodes
@@ -817,7 +817,7 @@ findPaths( id, ids, count, paths )
 
     FOR input in node.getInputs()
         IF input.id is not in ids     # This makes sure no infinite loop is made
-            SET temp to getShortestPath(input.id, ids, count + 1, paths)
+            SET temp to findPaths(input.id, ids, count + 1, paths)
         END
         IF input.type is SENSOR
             INSERT temp in paths

@@ -59,7 +59,7 @@ public:
     {
         inputs.clear(); // This won't worry about deleting the pointers
                         // the class network will take care of that.
-                        // Whatever uses this class must delete the node
+                        // Whatever uses this class must delete the node.
                         // pointers so as to not cause a memory leak.
     }
     void addInput(Node * node, float weight)  // This adds a new input for the NODE.

@@ -17,11 +17,11 @@
     <node id="n0">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="221.4598023293322" width="141.43488469211047" x="536.5" y="316.7700988353339"/>
+          <y:Geometry height="250.73252960205946" width="141.43488469211047" x="536.5" y="302.1337351989703"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="52.580078125" x="44.427403283555236" y="4.0">Network</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="187.7265625" modelName="custom" textColor="#000000" visible="true" width="129.73046875" x="2.0" y="30.1328125">- sensors
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="215.9921875" modelName="custom" textColor="#000000" visible="true" width="129.73046875" x="2.0" y="30.1328125">- sensors
 - outputNodes
 - hiddenNodes
 ------------------
@@ -33,7 +33,9 @@
 + getNode
 + update
 + deleteNetwork
-+ writeNetworkToFile<y:LabelModel>
++ writeNetworkToFile
++ findPaths
++ getShortestPath<y:LabelModel>
               <y:ErdAttributesNodeLabelModel/>
             </y:LabelModel>
             <y:ModelParameter>
