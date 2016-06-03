@@ -243,7 +243,10 @@ int Network::getShortestPath(int id)
                        // mainly makes sure that we don't do a recurrent link.
                        // and have an infinite loop.
 
-    findPaths(id, ids, 0, paths); // Now find all the paths!
+    Node * node = getNode(id); // Grab the node that we want to grab the
+                               // shortest path for.
+
+    findPaths(node, ids, 0, paths); // Now find all the paths!
 
     int shortest = numeric_limits<int>::max(); // Make this the highest value.
 
@@ -267,15 +270,42 @@ int Network::getShortestPath(int id)
 *       what the function GETSHORTESTPATH will use to find the path that
 *       is shortest.
 ***********************************************************************/
-int Network::findPaths(int id, vector<int> ids, int count, vector<int> & paths)
+int Network::findPaths(Node * node, vector<int> ids, int count, vector<int> & paths)
 {
-    Node * node = getNode(id); // Grab the node that we want to start from.
-    ids.push_back(id);         // Insert the id into the vector.
+    ids.push_back(node->getId()); // Insert the id into the vector.
+    int finalCount = 0;           // This will grab the count when one path
+                                  // is finished.
 
-    // Now loop through that nodes inputs.
-    for (int i = 0; i < node.getInputs().size(); ++i)
+    // Now loop through that node's inputs.
+    for (int i = 0; i < node->getInputs().size(); ++i)
     {
+        Node * input = node->getInputs()[i].input;
 
+        // See if this node has been done before
+        bool found = false;
+        for (int id = 0; id < ids.size() && !found; ++id)
+        {
+            // If so then set found to true.
+            if (ids[id] == input->getId())
+            {
+                found = true;
+            }
+        }
+
+        // Only do the inputs that we have not done before. This makes
+        // sure that recurrent links will not cause an infinite recursive loop.
+        if (!found)
+        {
+            finalCount = findPaths(input, ids, count + 1, paths);
+        }
+
+        // Now see if the input is a sensor, if so then save the count. A path
+        // has been found for one route.
+        if (input->getType() == SENSOR)
+        {
+            paths.push_back(finalCount);
+        }
     }
-    return 0;
+
+    return finalCount;
 }

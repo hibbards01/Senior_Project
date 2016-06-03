@@ -45,7 +45,7 @@ public:
     Node * getNode(const int id);           // This grabs the node with the id given.
     void deleteNetwork();                   // This deletes the nodes.
     void writeNetworkToFile(const int gen); // This writes the network to a file.
-    int findPaths(int id,                   // This finds the paths for a given node.
+    int findPaths(Node * node,              // This finds the paths for a given node.
                 std::vector<int> ids,
                 int count,
                 std::vector<int> & paths);
