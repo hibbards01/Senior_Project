@@ -45,20 +45,14 @@ public:
     Node * getNode(const int id);           // This grabs the node with the id given.
     void deleteNetwork();                   // This deletes the nodes.
     void writeNetworkToFile(const int gen); // This writes the network to a file.
-    int findPaths(Node * node,              // This finds the paths for a given node.
-                std::vector<int> ids,
-                int count,
-                std::vector<int> & paths);
     int getShortestPath(int id);            // This finds the shortest path from a node.
 
     //
     // Getters
     //
-
-    //
-    // Setters
-    //
-
+    std::vector<Node *> getSensors()     const { return sensors;     }
+    std::vector<Node *> getHiddenNodes() const { return hiddenNodes; }
+    std::vector<Node *> getOutputNodes() const { return outputNodes; }
 private:
     std::vector<Node *> sensors;     // This holds the sensors that will be given to
                                      // from the game.
@@ -66,6 +60,10 @@ private:
     std::vector<Node *> outputNodes; // These nodes are the results after all the nodes
                                      // have given there output.
     void writeNodes(std::ofstream & fout, Node * node); // This will write the nodes to the file.
+    int findPaths(Node * node,                          // This finds the paths for a given node.
+                std::vector<int> ids,
+                int count,
+                std::vector<int> & paths);
 };
 
 #endif // NETWORK_H

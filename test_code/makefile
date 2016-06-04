@@ -7,8 +7,14 @@
 #   This will compile all the tests and create an execution file.
 ###########################################################################
 
-test.out: driver.cpp node_test.h node.o
-	g++ -o test.out driver.cpp node.o -lgtest
+test.out: driver.cpp node_test.h node.o network_test.h network.o
+	g++ -o test.out driver.cpp node.o network.o -lgtest
 
 node.o: ../genetic_algorithm/node.cpp ../genetic_algorithm/node.h
 	g++ -c ../genetic_algorithm/node.cpp
+
+network.o: ../genetic_algorithm/network.cpp ../genetic_algorithm/network.h ../genetic_algorithm/node.h ../genetic_algorithm/defines.h ../genetic_algorithm/genes.h
+	g++ -c ../genetic_algorithm/network.cpp
+
+clean:
+	rm *.o test.out

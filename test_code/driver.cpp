@@ -10,6 +10,7 @@
 
 #include "gtest/gtest.h"
 #include "node_test.h"
+#include "network_test.h"
 
 int main(int argc, char **argv)
 {

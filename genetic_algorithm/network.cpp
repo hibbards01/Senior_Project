@@ -102,7 +102,7 @@ void Network::update(const vector<NodeGene> & nodeGenes, const vector<LinkGene> 
         int type = nodeGenes[i].type;
         assert(type < 3); // We only have three types so this better pass.
 
-        Node * node = new Node(i, type); // Now create a new node
+        Node * node = new Node(nodeGenes[i].id, type); // Now create a new node
 
         // Now insert the node in the proper vector
         if (type == SENSOR)
@@ -266,14 +266,14 @@ int Network::getShortestPath(int id)
 * findPaths
 *   This one will grab all the number of counts it takes to reach a
 *       SENSOR for any path it can take from the node that is given. Once
-*       all paths are found it will then quite. The variable PATHS is
+*       all paths are found it will then quit. The variable PATHS is
 *       what the function GETSHORTESTPATH will use to find the path that
 *       is shortest.
 ***********************************************************************/
 int Network::findPaths(Node * node, vector<int> ids, int count, vector<int> & paths)
 {
     ids.push_back(node->getId()); // Insert the id into the vector.
-    int finalCount = 0;           // This will grab the count when one path
+    int finalCount = 0;           // This will grab the count when a path
                                   // is finished.
 
     // Now loop through that node's inputs.

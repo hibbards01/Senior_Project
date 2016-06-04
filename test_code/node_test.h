@@ -7,16 +7,21 @@
 *   This includes all the tests for the class NODE and LINK.
 ***********************************************************************/
 
+#ifndef NODE_TEST_H
+#define NODE_TEST_H
+
 #include "../genetic_algorithm/node.h"
 #include <math.h>
 
-namespace {
+namespace
+{
     /****************************************************
     * NodeTest
     *   This will do all the set up for the tests. It will
     *       also make sure to delete the pointers.
     ****************************************************/
-    class NodeTest : public ::testing::Test {
+    class NodeTest : public ::testing::Test
+    {
     protected:
         NodeTest()
         {
@@ -107,3 +112,5 @@ namespace {
         delete test3;
     }
 }
+
+#endif // NODE_TEST_H
