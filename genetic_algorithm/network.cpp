@@ -283,7 +283,7 @@ int Network::findPaths(Node * node, vector<int> ids, int count, vector<int> & pa
     {
         Node * input = node->getInputs()[i].input;
 
-        // See if this node has been done before
+        // See if this input has been done before
         bool found = false;
         for (int id = 0; id < ids.size() && !found; ++id)
         {
