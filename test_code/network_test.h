@@ -12,6 +12,8 @@
 
 #include "../genetic_algorithm/network.h"
 #include "../genetic_algorithm/defines.h"
+#include <stdlib.h>
+#include <fstream>
 #include <math.h>
 using namespace std;
 
@@ -375,6 +377,54 @@ namespace
 
             EXPECT_EQ(output, networkOutput);
         }
+    }
+
+    TEST_F(NetworkTest, GetNode)
+    {
+        buildNetwork(); // Build the network!
+
+        // Now see that the GETNODE function is working.
+        for (int i = 0; i < 14; ++i)
+        {
+            Node * node = network.getNode(i);
+            EXPECT_EQ(i, node->getId());
+        }
+
+        // Now make sure it returns null when there is an invalid id.
+        EXPECT_EQ(NULL, network.getNode(14));
+        EXPECT_EQ(NULL, network.getNode(-1));
+    }
+
+    TEST_F(NetworkTest, WriteNetworkToFile)
+    {
+        buildNetwork(); // Build the network.
+
+        system("mkdir gen1");
+
+        // Now write it to a file.
+        network.writeNetworkToFile(1, 1);
+
+        ifstream fin("gen1/network1.txt");
+
+        ASSERT_TRUE(fin.good());
+
+        fin.close();
+
+        // Now clean up the system
+        system("rm -rf gen1");
+    }
+
+    TEST_F(NetworkTest, GetShortestPath)
+    {
+        buildNetwork(); // Build the network!
+
+        // Finally test the function.
+        EXPECT_EQ(3, network.getShortestPath(0));
+        EXPECT_EQ(2, network.getShortestPath(13));
+        EXPECT_EQ(1, network.getShortestPath(8));
+        EXPECT_EQ(0, network.getShortestPath(2));
+        EXPECT_EQ(-1, network.getShortestPath(14));
+        EXPECT_EQ(-1, network.getShortestPath(-1));
     }
 }
 

@@ -42,9 +42,11 @@ public:
     // This updates the network.
     void update(const std::vector<NodeGene> & nodeGenes, const std::vector<LinkGene> & linkGenes);
 
+    // This writes the network to a file.
+    void writeNetworkToFile(const int id, const int gen);
+
     Node * getNode(const int id);           // This grabs the node with the id given.
     void deleteNetwork();                   // This deletes the nodes.
-    void writeNetworkToFile(const int gen); // This writes the network to a file.
     int getShortestPath(int id);            // This finds the shortest path from a node.
 
     //

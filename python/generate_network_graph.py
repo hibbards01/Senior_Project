@@ -15,7 +15,11 @@ if len(sys.argv) == 2:
 
     # Read the file line by line
     print("\nCreating graph...")
+    num = 0
     for line in file:
+        if num is 0:
+            num += 1
+            continue
         edge = line.split(',')
 
         fr = int(edge[0])

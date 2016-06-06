@@ -192,11 +192,10 @@ void Network::writeNodes(ofstream & fout, Node * node)
 *   This will be given a generation and it will save the network to a
 *       that will be saved in the data/ folder.
 ***********************************************************************/
-void Network::writeNetworkToFile(const int gen)
+void Network::writeNetworkToFile(const int id, const int gen)
 {
     // Create the file name
-    string num = toString<int>(gen);
-    string file = "gen" + num + "/network" + num + ".txt";
+    string file = "gen" + toString<int>(gen) + "/network" + toString<int>(id) + ".txt";
 
     // Start the process of writing to a file.
     ofstream fout(file.c_str());
@@ -210,7 +209,7 @@ void Network::writeNetworkToFile(const int gen)
     else
     {
         // Write the title.
-        fout << "Genome Network: " << gen << endl;
+        fout << "Genome Network: " << id << endl;
 
         // Now write all the nodes to the file.
         for (int n = 0; n < hiddenNodes.size(); ++n)
@@ -246,16 +245,21 @@ int Network::getShortestPath(int id)
     Node * node = getNode(id); // Grab the node that we want to grab the
                                // shortest path for.
 
-    findPaths(node, ids, 0, paths); // Now find all the paths!
-
-    int shortest = numeric_limits<int>::max(); // Make this the highest value.
-
-    // Finally grab the shortest distance.
-    for (int i = 0; i < paths.size(); ++i)
+    int shortest = -1;
+    if (node != NULL)
     {
-        if (paths[i] < shortest)
+        findPaths(node, ids, 0, paths); // Now find all the paths!
+
+        // Make this the highest value.
+        shortest = (paths.size() == 0) ? 0 : numeric_limits<int>::max();
+
+        // Finally grab the shortest distance.
+        for (int i = 0; i < paths.size(); ++i)
         {
-            shortest = paths[i];
+            if (paths[i] < shortest)
+            {
+                shortest = paths[i];
+            }
         }
     }
 
@@ -273,8 +277,6 @@ int Network::getShortestPath(int id)
 int Network::findPaths(Node * node, vector<int> ids, int count, vector<int> & paths)
 {
     ids.push_back(node->getId()); // Insert the id into the vector.
-    int finalCount = 0;           // This will grab the count when a path
-                                  // is finished.
 
     // Now loop through that node's inputs.
     for (int i = 0; i < node->getInputs().size(); ++i)
@@ -292,6 +294,9 @@ int Network::findPaths(Node * node, vector<int> ids, int count, vector<int> & pa
             }
         }
 
+        int finalCount = 0; // This will grab the count when a path
+                            // is finished.
+
         // Only do the inputs that we have not done before. This makes
         // sure that recurrent links will not cause an infinite recursive loop.
         if (!found)
@@ -307,5 +312,5 @@ int Network::findPaths(Node * node, vector<int> ids, int count, vector<int> & pa
         }
     }
 
-    return finalCount;
+    return count;
 }

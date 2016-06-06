@@ -16,5 +16,14 @@ node.o: ../genetic_algorithm/node.cpp ../genetic_algorithm/node.h
 network.o: ../genetic_algorithm/network.cpp ../genetic_algorithm/network.h ../genetic_algorithm/node.h ../genetic_algorithm/defines.h ../genetic_algorithm/genes.h
 	g++ -c ../genetic_algorithm/network.cpp
 
+node_debug.o: ../genetic_algorithm/node.cpp ../genetic_algorithm/node.h
+	g++ -g -c -o node_debug.o ../genetic_algorithm/node.cpp
+
+network_debug.o: ../genetic_algorithm/network.cpp ../genetic_algorithm/network.h ../genetic_algorithm/node.h ../genetic_algorithm/defines.h ../genetic_algorithm/genes.h
+	g++ -g -c -o network_debug.o ../genetic_algorithm/network.cpp
+
+debug.out: network_test.cpp network_debug.o ../genetic_algorithm/defines.h node_debug.o
+	g++ -g -o debug.out network_test.cpp network_debug.o node_debug.o
+
 clean:
-	rm *.o test.out
+	rm *.o test.out debug.out
