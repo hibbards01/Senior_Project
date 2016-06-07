@@ -13,8 +13,11 @@ node.o: node.cpp node.h
 network.o: network.cpp network.h node.h defines.h genes.h
 	g++ -c network.cpp
 
-genome.o: genome.cpp genome.h network.h defines.h
+genome.o: genome.cpp genome.h network.h genes.h defines.h
 	g++ -c genome.cpp
+
+geneHistory.o: geneHistory.cpp geneHistory.h
+	g++ -c geneHistory.cpp
 
 clean:
 	rm *.o

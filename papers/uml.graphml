@@ -17,7 +17,7 @@
     <node id="n0">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="250.73252960205946" width="141.43488469211047" x="536.5" y="302.1337351989703"/>
+          <y:Geometry height="250.73252960205946" width="141.43488469211047" x="536.5" y="348.3035089735828"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="52.580078125" x="44.427403283555236" y="4.0">Network</y:NodeLabel>
@@ -75,11 +75,11 @@
     <node id="n2">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="336.18639153178805" width="133.0" x="320.0" y="-22.093195765894023"/>
+          <y:Geometry height="316.09319576589405" width="133.0" x="320.0" y="-12.046597882946998"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="52.064453125" x="40.4677734375" y="4.0">Genome</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="300.7890625" modelName="custom" textColor="#000000" visible="true" width="128.34765625" x="2.0" y="30.1328125">- nodeGenes
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="286.65625" modelName="custom" textColor="#000000" visible="true" width="128.34765625" x="2.0" y="30.1328125">- nodeGenes
 - linkGenes
 - network
 - age
@@ -98,7 +98,6 @@
 + getNodesString
 + produceChild
 + computeDistance
-+ killGenomes
 + update<y:LabelModel>
               <y:ErdAttributesNodeLabelModel/>
             </y:LabelModel>
@@ -115,7 +114,7 @@
     <node id="n3">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="194.0" width="109.0" x="711.8046540763314" y="330.5"/>
+          <y:Geometry height="194.0" width="109.0" x="711.8046540763314" y="376.66977377461245"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="34.474609375" x="37.2626953125" y="4.0">Node</y:NodeLabel>
@@ -145,11 +144,11 @@
     <node id="n4">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="221.4598023293322" width="133.0" x="93.5" y="35.2700988353339"/>
+          <y:Geometry height="250.73252960205946" width="133.0" x="93.5" y="20.63373519897027"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="47.119140625" x="42.9404296875" y="4.0">Species</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="187.7265625" modelName="custom" textColor="#000000" visible="true" width="123.630859375" x="2.0" y="30.1328125">- genomes
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="215.9921875" modelName="custom" textColor="#000000" visible="true" width="123.630859375" x="2.0" y="30.1328125">- genomes
 - noImprovment
 - age
 - averageFitness
@@ -161,7 +160,9 @@
 + getAverageFitness
 + produceOffspring
 + mutate
-+ update<y:LabelModel>
++ update
++ killGenomes
++ getLeader<y:LabelModel>
               <y:ErdAttributesNodeLabelModel/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -177,7 +178,7 @@
     <node id="n5">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="90.0" width="80.0" x="854.6744234605524" y="382.5"/>
+          <y:Geometry height="90.0" width="80.0" x="854.6744234605524" y="428.66977377461245"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="28.328125" x="25.8359375" y="4.0">Link</y:NodeLabel>
@@ -276,12 +277,12 @@
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="140.857421875" x="4.604809824101693" y="4.0">GeneHistory (Singleton)</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="102.9296875" modelName="custom" textColor="#000000" visible="true" width="93.35546875" x="2.0" y="30.1328125">- innovations
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="102.9296875" modelName="custom" textColor="#000000" visible="true" width="108.150390625" x="2.0" y="30.1328125">- innovations
 - geneHistory
-------------
+---------------
 + Constructor
 + Destructor
-+ addNewGene
++ addNewNeuron
 + addNewLink<y:LabelModel>
               <y:ErdAttributesNodeLabelModel/>
             </y:LabelModel>
@@ -314,7 +315,7 @@
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
-            <y:Point x="497.0" y="427.5"/>
+            <y:Point x="497.0" y="473.66977377461245"/>
             <y:Point x="497.0" y="146.0"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>

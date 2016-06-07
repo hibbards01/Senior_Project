@@ -16,6 +16,7 @@
 #include "network.h"
 #include "genes.h"
 #include <vector>
+#include <iostream>
 
 /***********************************************************************
 * Genome
@@ -30,22 +31,54 @@ public:
     // Constructors
     //
     Genome(int outputs, int inputs);
-    ~Genome();
+    Genome(std::vector<NodeGene> nodes, std::vector<LinkGene> links) : nodeGenes(nodes), linkGenes(links) {}
+    Genome(const Genome & rhs)
+    {
+        nodeGenes = rhs.nodeGenes;
+        linkGenes = rhs.linkGenes;
+        age = rhs.age;
+        fitness = rhs.fitness;
+        adjustedFitness = rhs.adjustedFitness;
+    }
 
     //
     // Methods
     //
+    void mutateAddLink();         // These are all the mutations that can be
+    void mutateAddNeuron();       // done for one genome. Three things can be
+    void mutateEnableLink();      // mutated the neurons, links, and weights.
+    std::string getLinksString(); // This will get the link history for writing to a file.
+    std::string getNodesString(); // This will grab all the nodes for writing to a file.
+    Genome produceChild(const Genome & rhs);   // This will produce a child based off
+                                               // the two parents.
+    float computeDistance(const Genome & rhs); // This will compute the distance
+                                               // between two genomes.
+    // Remove a random link.
+    void mutateRemoveLink()
+    {
+        return;
+    }
+
+    // Mutate a weight.
+    void mutateWeight()
+    {
+        return;
+    }
+
+    // Update the genome. This will update the age and the NETWORK of the GENOME.
+    void update()
+    {
+        return;
+    }
 
 
     //
     // Getters
     //
-
-
-    //
-    // Setters
-    //
-
+    Network & getNetwork()           { return network;         }
+    int getAge()               const { return age;             }
+    float getFitness()         const { return fitness;         }
+    float getAdjustedFitness() const { return adjustedFitness; }
 private:
     std::vector<NodeGene> nodeGenes; // This will hold all it's nodes
     std::vector<LinkGene> linkGenes; // This will hold all it's links to and from nodes.

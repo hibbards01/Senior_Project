@@ -212,7 +212,7 @@ END
  *  This will add a new gene to the history if it is not there already.
  *      If it is then it will not add to the history.
  */
-addNewGene(id, type)
+addNewNeuron(id, type)
     SET found to FALSE
     FOR innovation in innovations
         IF innovation.nodeType is not NONE AND innovation.node is id
@@ -335,7 +335,7 @@ adjustFitness()
     SET size to genomes.size()
     FOR genome in genomes
         # Adjust the fitness more for younger genomes?
-        genome.setAdjustedFitness(genome.getFitness / size)
+        genome.setAdjustedFitness(genome.getFitness() / size)
     END
 END
 
@@ -699,7 +699,7 @@ END
  *
  *  GA02 requirement fulfilled
  */
-mutateAddNeuron( geneHistory )
+mutateAddNeuron()
     INSERT newNode(HIDDEN) to nodeGenes
 
     SET num to random(0, linkGenes.size() - 1 - SQRT(linkGenes.size()))
