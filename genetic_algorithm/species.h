@@ -12,7 +12,6 @@
 #define SPECIES_H
 
 #include "genome.h"
-#include <vector>
 
 /***********************************************************************
 * Species
@@ -30,7 +29,7 @@ public:
     //
     // Methods
     //
-    void getAverageFitness();                      // This will grab the average fitness.
+    float getAverageFitness();                     // This will grab the average fitness.
     void writeGenomesToFile(int gen, int id);      // This will save the GENOMES to a file.
     std::vector<Genome> produceOffspring(int num); // Produce offspring within the species.
     void mutate(Genome & child);                   // See if it needs to be mutated.
@@ -57,22 +56,17 @@ public:
 
     // This will grab the leader of the group. This will be used by the SUPERVISOR
     // class.
-    Genome & getLeader() { return genomes[0]; }
+    Genome & getLeader() { return genomes[0];    }
 
     //
     // Getters
     //
-
-
-    //
-    // Setters
-    //
-
+    int getNoImprovement() const { return noImprovement; }
+    int getAge()           const { return age;           }
 private:
     std::vector<Genome> genomes; // This will hold all the genomes for this species.
     int noImprovement;           // This will keep track how long it has not improved.
     int age;                     // How old this species is.
-    float averageFitness;        // Average fitness for this species.
 };
 
 #endif // SPECIES_H

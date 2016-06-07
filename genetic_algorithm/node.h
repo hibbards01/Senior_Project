@@ -10,10 +10,10 @@
 *       that does exactly what was described in the first sentence.
 ***********************************************************************/
 
-#include <vector>
-
 #ifndef NODE_H
 #define NODE_H
+
+#include <vector>
 
 class Node; // Need to declare before LINK so that is can use NODE
 

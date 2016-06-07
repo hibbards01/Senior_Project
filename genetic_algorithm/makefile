@@ -19,5 +19,8 @@ genome.o: genome.cpp genome.h network.h genes.h defines.h
 geneHistory.o: geneHistory.cpp geneHistory.h
 	g++ -c geneHistory.cpp
 
+species.o: species.cpp species.h genome.h
+	g++ -c species.cpp
+
 clean:
 	rm *.o

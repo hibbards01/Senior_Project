@@ -13,7 +13,6 @@
 
 #include "node.h"
 #include "genes.h"
-#include <vector>
 #include <fstream>
 
 /***********************************************************************

@@ -15,7 +15,6 @@
 
 #include "network.h"
 #include "genes.h"
-#include <vector>
 #include <iostream>
 
 /***********************************************************************
