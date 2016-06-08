@@ -37,7 +37,7 @@ namespace
         void buildNetwork()
         {
             // First build all the nodes.
-            std::vector<NodeGene> nodes;
+            vector<NodeGene> nodes;
             nodes.push_back(NodeGene(0, OUTPUT));
             nodes.push_back(NodeGene(1, OUTPUT));
 
@@ -58,7 +58,7 @@ namespace
 
 
             // Now build all the links.
-            std::vector<LinkGene> links;
+            vector<LinkGene> links;
 
             // Start the first layer...
             links.push_back(LinkGene(0, 2, 7, 0.5));
@@ -221,14 +221,14 @@ namespace
         buildNetwork(); // Build the network.
 
         // Create the inputs and add it to the vector.
-        std::vector<double> inputs;
+        vector<double> inputs;
         for (int i = 0; i < 5; ++i)
         {
             inputs.push_back(1);
         }
 
         // Now feed forward the inputs
-        std::vector<double> results;
+        vector<double> results;
         results = network.feedForward(inputs);
 
         // Check all the outputs the nodes are giving...
@@ -288,14 +288,14 @@ namespace
         buildNetwork(); // Build the network.
 
         // Create the inputs and add it to the vector.
-        std::vector<double> inputs;
+        vector<double> inputs;
         for (int i = 0; i < 5; ++i)
         {
             inputs.push_back(1);
         }
 
         // Now feed forward the inputs
-        std::vector<double> results;
+        vector<double> results;
         results = network.feedForward(inputs);
 
         // Hurry and save two outputs. These ones are the recursive ones.
@@ -425,6 +425,52 @@ namespace
         EXPECT_EQ(0, network.getShortestPath(2));
         EXPECT_EQ(-1, network.getShortestPath(14));
         EXPECT_EQ(-1, network.getShortestPath(-1));
+    }
+
+    TEST_F(NetworkTest, Bias)
+    {
+        // Create nodes
+        vector<NodeGene> nodes;
+        nodes.push_back(NodeGene(0, OUTPUT));
+        nodes.push_back(NodeGene(1, SENSOR));
+        nodes.push_back(NodeGene(2, SENSOR));
+        nodes.push_back(NodeGene(3, HIDDEN));
+        nodes.push_back(NodeGene(4, BIAS));
+
+        // Now links
+        vector<LinkGene> links;
+        links.push_back(LinkGene(0, 1, 3, 0.5));
+        links.push_back(LinkGene(1, 2, 3, 0.25));
+        links.push_back(LinkGene(2, 4, 3, 0.98));
+        links.push_back(LinkGene(3, 3, 0, 0.1));
+
+        // Now build the network
+        network.update(nodes, links);
+
+        // Create the inputs
+        vector<double> inputs;
+        inputs.push_back(1);
+        inputs.push_back(1);
+
+        // Now do the feedForward
+        vector<double> results = network.feedForward(inputs);
+
+        // Finally test the output
+        EXPECT_EQ(1, results.size());
+
+        // Do the hidden summation
+        double summation = (1 * 0.5) + (1 * 0.25) + (-1.0 * 0.98);
+        double output = 1 / (1 + exp(-summation));
+
+        // Now the output summation
+        summation = output * 0.1;
+        output = 1 / (1 + exp(-summation));
+
+        // Had to do this because of precision problems.
+        output = floor(output * pow(10, 6)) / pow(10, 6);
+        double networkOutput = floor(results[0] * pow(10, 6)) / pow(10, 6);
+
+        EXPECT_EQ(output, networkOutput);
     }
 }
 

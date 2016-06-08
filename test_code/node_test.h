@@ -92,6 +92,7 @@ namespace
         test->setOutput(0.5);
         test2->setOutput(1);
         test3->setOutput(0.75);
+
         // Finally add them
         node->addInput(test, 1);
         node->addInput(test2, -1);
@@ -110,6 +111,16 @@ namespace
         delete test;
         delete test2;
         delete test3;
+    }
+
+    TEST_F(NodeTest, Bias)
+    {
+        // Create a bias node.
+        Node * test = new Node(1, 3);
+
+        EXPECT_EQ(0, test->getOutput());
+
+        delete test;
     }
 }
 
