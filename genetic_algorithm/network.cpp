@@ -100,7 +100,7 @@ void Network::update(const vector<NodeGene> & nodeGenes, const vector<LinkGene> 
     for (int i = 0; i < nodeGenes.size(); ++i)
     {
         int type = nodeGenes[i].type;
-        assert(type < 3); // We only have three types so this better pass.
+        assert(type < 4); // We only have three types so this better pass.
 
         Node * node = new Node(nodeGenes[i].id, type); // Now create a new node
 
@@ -109,8 +109,14 @@ void Network::update(const vector<NodeGene> & nodeGenes, const vector<LinkGene> 
         {
             sensors.push_back(node);
         }
-        else if (type == HIDDEN)
+        else if (type == HIDDEN || type == BIAS)
         {
+            // Set the output for bias nodes to -1
+            if (type == BIAS)
+            {
+                node->setOutput(-1);
+            }
+
             hiddenNodes.push_back(node);
         }
         else
@@ -306,7 +312,7 @@ int Network::findPaths(Node * node, vector<int> ids, int count, vector<int> & pa
 
         // Now see if the input is a sensor, if so then save the count. A path
         // has been found for one route.
-        if (input->getType() == SENSOR)
+        if (input->getType() == SENSOR || input->getType() == BIAS)
         {
             paths.push_back(finalCount);
         }

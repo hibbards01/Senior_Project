@@ -13,6 +13,9 @@
 
 #include <vector>
 
+static int innovationId = 0; // This will increment every time a new
+                             // Innovation is added to the database.
+
 /***********************************************************************
 * Innovation
 *   This will be the STRUCT that will hold all the innovations. This
@@ -20,6 +23,15 @@
 ***********************************************************************/
 struct Innovation
 {
+    Innovation(int in, int out, int n, int type)
+    {
+        id = innovationId++; // Increment the innovation.
+        input = in;
+        output = out;
+        node = n;
+        nodeType = type;
+    }
+
     int id;       // The innovation id.
     int input;    // The input and output, this is the link
     int output;   // that will be saved.

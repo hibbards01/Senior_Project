@@ -25,6 +25,7 @@ public:
     // Constructors
     //
     Species(int population, int outputs, int inputs) {}
+    ~Species() { genomes.clear(); }
 
     //
     // Methods

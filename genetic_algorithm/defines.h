@@ -17,7 +17,7 @@
 #include <sstream>
 
 // This holds the value types.
-enum {SENSOR, HIDDEN, OUTPUT};
+enum {SENSOR, HIDDEN, OUTPUT, BIAS};
 
 /******************************************************************
  * RANDOM

@@ -8,6 +8,7 @@
 ***********************************************************************/
 
 #include "node.h"
+#include "defines.h"
 #include <math.h>
 #include <iostream>
 using namespace std;
@@ -19,17 +20,20 @@ using namespace std;
 ***********************************************************************/
 void Node::update()
 {
-    double sum = 0; // This will sum all the values from the inputs
-
-    // Loop through all the inputs and grab their values
-    for (int i = 0; i < inputs.size(); ++i)
+    if (type != BIAS)
     {
-        // Have the weight times the output of the input and sum it up
-        sum += inputs[i].weight * inputs[i].input->output;
-    }
+        double sum = 0; // This will sum all the values from the inputs
 
-    // Finally set the output for this node
-    output = 1 / (1 + exp(-sum));
+        // Loop through all the inputs and grab their values
+        for (int i = 0; i < inputs.size(); ++i)
+        {
+            // Have the weight times the output of the input and sum it up
+            sum += inputs[i].weight * inputs[i].input->output;
+        }
+
+        // Finally set the output for this node
+        output = 1 / (1 + exp(-sum));
+    }
 
     return;
 }

@@ -39,24 +39,21 @@ public:
         fitness = rhs.fitness;
         adjustedFitness = rhs.adjustedFitness;
     }
+    ~Genome() { network.deleteNetwork(); }
 
     //
     // Methods
     //
     void mutateAddLink();         // These are all the mutations that can be
     void mutateAddNeuron();       // done for one genome. Three things can be
-    void mutateEnableLink();      // mutated the neurons, links, and weights.
+    bool mutateEnableLink();      // mutated the neurons, links, and weights.
     std::string getLinksString(); // This will get the link history for writing to a file.
     std::string getNodesString(); // This will grab all the nodes for writing to a file.
-    Genome produceChild(const Genome & rhs);   // This will produce a child based off
-                                               // the two parents.
-    float computeDistance(const Genome & rhs); // This will compute the distance
-                                               // between two genomes.
-    // Remove a random link.
-    void mutateRemoveLink()
-    {
-        return;
-    }
+    Genome produceChild(const Genome & rhs) const;   // This will produce a child based off
+                                                     // the two parents.
+    float computeDistance(const Genome & rhs) const; // This will compute the distance
+                                                     // between two genomes.
+    void mutateRemoveLink(); // Remove a random link.
 
     // Mutate a weight.
     void mutateWeight()
@@ -67,6 +64,9 @@ public:
     // Update the genome. This will update the age and the NETWORK of the GENOME.
     void update()
     {
+        network.update(nodeGenes, linkGenes);
+        ++age;
+
         return;
     }
 
@@ -85,6 +85,7 @@ private:
     int age;                         // How old the GENOME is.
     float fitness;                   // The score that it got from the game.
     float adjustedFitness;           // The adjusted fitness based off the species.
+    static float c1, c2, c3;         // These will be used for the computeDistance function.
 };
 
 #endif // GENOME_H

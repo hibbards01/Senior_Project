@@ -17,6 +17,13 @@
 ***********************************************************************/
 struct NodeGene
 {
+    NodeGene()
+    {
+        id = -1;
+        type = -1;
+        recurrent = false;
+    }
+
     NodeGene(int i, int t)
     {
         id = i;
@@ -40,6 +47,15 @@ struct NodeGene
 ***********************************************************************/
 struct LinkGene
 {
+    LinkGene()
+    {
+        id = -1;
+        input = -1;
+        output = -1;
+        weight = -1;
+        enabled = false;
+    }
+
     LinkGene(int i, int in, int out, double w)
     {
         id = i;
@@ -49,7 +65,7 @@ struct LinkGene
         enabled = true;
     }
 
-    int id;
+    int id;        // Innovation id.
     int input;
     int output;
     double weight;
