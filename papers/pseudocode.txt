@@ -182,8 +182,6 @@ setOverallAverage()
     ELSE
         ++noImprovement
     END
-
-    RETURN average
 END
 
 update()
@@ -392,10 +390,10 @@ mutate( child )
 
         IF num is 0
             SET done to child.mutateEnableLink()
-            SET num to random(1, 2)
         END
 
         IF not done
+            SET num to random(1, 2)
             ELSE IF num is 1
                 child.mutateRemoveLink()
             ELSE
@@ -478,7 +476,6 @@ computeDistance( rhs )
     SET weightDifference to 0
 
     WHILE lhsIterator != linkGenes.end() || rhsIterator != rhs.linkGenes.end()
-        SET newLinkGene to NULL
 
         IF rhsIterator == rhs.linkGenes.end()
             ++excess
