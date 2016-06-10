@@ -11,6 +11,13 @@
 #include "gtest/gtest.h"
 #include "node_test.h"
 #include "network_test.h"
+#include "../genetic_algorithm/geneHistory.h"
+#include "genome_test.h"
+
+GeneHistory * GeneHistory::geneHistory = NULL;
+float Genome::c1 = 1;
+float Genome::c2 = 1;
+float Genome::c3 = 0.4;
 
 int main(int argc, char **argv)
 {

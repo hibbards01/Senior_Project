@@ -48,12 +48,6 @@ class GeneHistory
 {
 public:
     //
-    // Constructors
-    //
-    GeneHistory() : innovations() {}
-    ~GeneHistory() {}
-
-    //
     // Methods
     //
     void addNewNeuron(int id, int type);         // This will add a new neuron.
@@ -70,6 +64,12 @@ public:
         return geneHistory;
     }
 private:
+    //
+    // Constructors
+    //
+    GeneHistory() : innovations() {}
+    ~GeneHistory() {}
+
     static GeneHistory * geneHistory;    // This is what makes this class a singleton class.
     std::vector<Innovation> innovations; // This will hold all the innovations.
 };
