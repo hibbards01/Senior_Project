@@ -30,7 +30,8 @@ public:
     // Constructors
     //
     Genome(int outputs, int inputs);
-    Genome(std::vector<NodeGene> nodes, std::vector<LinkGene> links) : nodeGenes(nodes), linkGenes(links) {}
+    Genome(std::vector<NodeGene> nodes, std::vector<LinkGene> links, int in, int out) :
+    nodeGenes(nodes), linkGenes(links), inputs(in), outputs(out) {}
     Genome(const Genome & rhs)
     {
         nodeGenes = rhs.nodeGenes;
@@ -38,6 +39,8 @@ public:
         age = rhs.age;
         fitness = rhs.fitness;
         adjustedFitness = rhs.adjustedFitness;
+        inputs = rhs.inputs;
+        outputs = rhs.outputs;
     }
     ~Genome() { network.deleteNetwork(); }
 
@@ -85,6 +88,8 @@ private:
     int age;                         // How old the GENOME is.
     float fitness;                   // The score that it got from the game.
     float adjustedFitness;           // The adjusted fitness based off the species.
+    int inputs;                      // This will keep track how many inputs it has.
+    int outputs;                     // Same thing as inputs.
     static float c1, c2, c3;         // These will be used for the computeDistance function.
 };
 

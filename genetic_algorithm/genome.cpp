@@ -53,6 +53,9 @@ Genome::Genome(int outputs, int inputs)
             linkGenes.push_back(LinkGene(linkId, source, destination, random(0.0, 1.0)));
         }
     }
+
+    this->inputs = inputs;
+    this->outputs = outputs;
 }
 
 /***********************************************************************
@@ -145,13 +148,131 @@ void Genome::mutateAddLink()
 
 /***********************************************************************
 * mutateAddNeuron
-*   This one will add a random neuron on a link. Here are the steps for that:
+*   This one will add a random neuron on a link. Here are the steps for
+*       a HIDDEN node.
 *       1. Remove random link.
 *       2. Remove neuron if there is no more links connected to it.
 *           a. Only remove a hidden neuron, it cannot be anything else.
+*   For a BIAS node we will just select a random HIDDEN node and give
+*       it an input from the BIAS node.
 ***********************************************************************/
 void Genome::mutateAddNeuron()
 {
+    // Create a brand new neuron. Do a random choice for whether it is a
+    // BIAS node or a HIDDEN node. It is more biased towards HIDDEN nodes.
+    NodeGene node(nodeGenes.size(), -1);
+    bool found = false;
+
+    // Grab the database and add node to it.
+    GeneHistory * db = GeneHistory::getInstance();
+
+    // Now see which mutation will happen.
+    if (random(0.0, 1.0) > 0.1)
+    {
+        // Create a HIDDEN neuron!
+        node.type = HIDDEN;
+
+        // First we need to see how many hidden nodes there are currently.
+        int count = 0;
+        for (int n = 0; n < nodeGenes.size(); ++n)
+        {
+            if (nodeGenes[n].type == HIDDEN)
+            {
+                ++count;
+            }
+        }
+
+        // If we have less then or equal to five then the network is considered
+        // too small. This could result in a repeating of adding multiple nodes
+        // to one link causing a chaining effect. We want it to be random. So
+        // we bias it towards the older links when it is too small.
+        LinkGene * link;
+        int numTries = 20; // This will be used for only when the count is <= 5.
+                           // This will make sure not to loop forever in trying
+                           // to find a link.
+        while (!found && numTries > 0)
+        {
+            int range = linkGenes.size() - 1;
+
+            // Check the count to see if it is too small.
+            if (count <= 5)
+            {
+                range -= sqrt(linkGenes.size());
+                --numTries;
+            }
+
+            // Now grab a random link.
+            int index = random(0, range);
+            assert(index < linkGenes.size() && index > -1);
+
+            link = &linkGenes[index];
+
+            // Now see if its an enabled link. It also cannot be a BIAS link or a recurrent link.
+            if (link->enabled && nodeGenes[link->input].type != BIAS
+                && !nodeGenes[link->input].recurrent)
+            {
+                found = true;
+            }
+        }
+
+        if (found)
+        {
+            // Disable the link.
+            link->enabled = false;
+
+            // Now save the links to the VECTOR
+            linkGenes.push_back(LinkGene(db->addNewLink(link->input, node.id), link->input, node.id, 1));
+            linkGenes.push_back(LinkGene(db->addNewLink(node.id, link->output), node.id, link->output, link->weight));
+        }
+    }
+    else
+    {
+        // Create a BIAS node!
+        node.type = BIAS;
+        int numTries = 10;
+
+        // Loop until we find a node with no BIAS attached to it.
+        NodeGene * toNode;
+        while (!found && numTries-- > 0)
+        {
+            // Grab a random hidden node.
+            int index = random(inputs + outputs, nodeGenes.size() - 1);
+            assert(index < nodeGenes.size() && index > -1);
+
+            // Search through the LINKGENES to make sure that this node doesn't
+            // already have a bias connected already.
+            bool good = true;
+            for (int l = 0; l < linkGenes.size() && good; ++l)
+            {
+                if (nodeGenes[index].id == linkGenes[l].input
+                    && nodeGenes[linkGenes[l].input].type == BIAS)
+                {
+                    good = false;
+                }
+            }
+
+            // We found a node with no BIAS.
+            if (good)
+            {
+                found = true;
+                toNode = &nodeGenes[index];
+            }
+        }
+
+        if (found)
+        {
+            linkGenes.push_back(LinkGene(db->addNewLink(node.id, toNode->id), node.id, toNode->id, random(0.0, 1.0)));
+        }
+    }
+
+    if (found) // We have found a link!
+    {
+        // Add the neuron to the database!
+        db->addNewNeuron(node.id, node.type);
+
+        // Finally save the new node to the VECTOR.
+        nodeGenes.push_back(node);
+    }
 
     return;
 }
@@ -343,7 +464,7 @@ Genome Genome::produceChild(const Genome & rhs) const
         }
     }
 
-    return Genome(childNodeGenes, childLinkGenes);
+    return Genome(childNodeGenes, childLinkGenes, inputs, outputs);
 }
 
 /***********************************************************************
