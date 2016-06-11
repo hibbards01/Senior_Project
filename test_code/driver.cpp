@@ -11,8 +11,8 @@
 #include "gtest/gtest.h"
 #include "node_test.h"
 #include "network_test.h"
-#include "../genetic_algorithm/geneHistory.h"
 #include "genome_test.h"
+#include <ctime>
 
 GeneHistory * GeneHistory::geneHistory = NULL;
 float Genome::c1 = 1;
@@ -21,6 +21,8 @@ float Genome::c3 = 0.4;
 
 int main(int argc, char **argv)
 {
+    srand(time(0));
+
     ::testing::InitGoogleTest(&argc, argv);
 
     return RUN_ALL_TESTS();

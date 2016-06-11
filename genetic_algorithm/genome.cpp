@@ -18,9 +18,9 @@ using namespace std;
 *   The constructor. This will take in the number of outputs and inputs.
 *       for what the GENOME needs to build for its starting history.
 ***********************************************************************/
-Genome::Genome(int outputs, int inputs)
+Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0), network()
 {
-    int id;                                        // This will be used for the NODES.
+    int id = 0;                                    // This will be used for the NODES.
     GeneHistory * db = GeneHistory::getInstance(); // Grab the database.
 
     // First create all the outputs for the Genome.
@@ -67,13 +67,20 @@ Genome::Genome(int outputs, int inputs)
 *       2. One neuron will be the source the other a destination.
 *       3. Link the two with a small random weight.
 ***********************************************************************/
+#ifdef DEBUG
+void Genome::mutateAddLink(int num)
+#else
 void Genome::mutateAddLink()
+#endif
 {
     NodeGene * source;      // As the name applies we need to find two
     NodeGene destination;   // Neurons to connect each other.
     bool found = false;     // This will keep track if we have found it yet.
     bool recurrent = false; // Will this be a recurrent link or not?
+
+#ifndef DEBUG
     int num = random(0, 2); // This will decide what will happen to the link.
+#endif
 
     if (num == 0) // Create a recurrent link onto itself
     {
@@ -108,6 +115,7 @@ void Genome::mutateAddLink()
             int randNode = random(0, nodeGenes.size() - 1);
             source = &nodeGenes[randNode];
             randNode = random(0, nodeGenes.size() - 1);
+            destination = nodeGenes[randNode];
 
             // Now see if everything is correct
             if (source->type != OUTPUT && destination.type != BIAS
@@ -130,7 +138,10 @@ void Genome::mutateAddLink()
 
         if (!recurrent) // This will see if the two nodes are recurrent or not
         {
-            if (network.getShortestPath(source->id) <= network.getShortestPath(destination.id))
+            int path1 = network.getShortestPath(source->id);
+            int path2 = network.getShortestPath(destination.id);
+
+            if (path1 >= path2)
             {
                 recurrent = true;
             }
@@ -349,7 +360,7 @@ void Genome::mutateRemoveLink()
 *   This will grab all the LINKGENES and produce a string. This string
 *       be used to write the string to a file.
 ***********************************************************************/
-string Genome::getLinksString()
+string Genome::getLinksString() const
 {
     string ids;     //
     string inputs;  //
@@ -360,14 +371,14 @@ string Genome::getLinksString()
     // Grab all the links and save them in the strings.
     for (int l = 0; l < linkGenes.size(); ++l)
     {
-        ids += "Id: " + toString<int>(linkGenes[l].id) + " ";
-        inputs += "Input: " + toString<int>(linkGenes[l].input) + " ";
-        outputs += "Output: " + toString<int>(linkGenes[l].output) + " ";
-        weights += "Weight: " + toString<double>(linkGenes[l].weight) + " ";
+        ids += "Id: " + toString<int>(linkGenes[l].id) + " | ";
+        inputs += "Input: " + toString<int>(linkGenes[l].input) + " | ";
+        outputs += "Output: " + toString<int>(linkGenes[l].output) + " | ";
+        weights += "Weight: " + toString<double>(linkGenes[l].weight) + " | ";
 
         string boolean = (linkGenes[l].enabled) ? "True" : "False";
 
-        enables += "Enabled: " + boolean + " ";
+        enables += "Enabled: " + boolean + " | ";
     }
 
     return ids + "\n" + inputs + "\n" + outputs + "\n" + weights + "\n" + enables + "\n";
@@ -378,21 +389,21 @@ string Genome::getLinksString()
 *   This does the same exact thing as GETLINKSSTRING function but for the
 *       nodes instead.
 ***********************************************************************/
-string Genome::getNodesString()
+string Genome::getNodesString() const
 {
     string ids;        //
     string types;      // All these strings save an aspect of the GENOME.
     string recurrents; //
-    string arrayType[3] = {"Sensor", "Hidden", "Output"};
+    string arrayType[4] = {"Sensor", "Hidden", "Output", "Bias"};
 
     for (int n = 0; n < nodeGenes.size(); ++n)
     {
-        ids += "Id: " + toString<int>(nodeGenes[n].id) + " ";
-        types += "Type: " + arrayType[nodeGenes[n].type] + " ";
+        ids += "Id: " + toString<int>(nodeGenes[n].id) + " | ";
+        types += "Type: " + arrayType[nodeGenes[n].type] + " | ";
 
         string boolean = (nodeGenes[n].recurrent) ? "True" : "False";
 
-        recurrents += "Recurrent: " + boolean + " ";
+        recurrents += "Recurrent: " + boolean + " | ";
     }
 
     return ids + "\n" + types + "\n" + recurrents + "\n";
@@ -538,4 +549,16 @@ float Genome::computeDistance(const Genome & rhs) const
     float distance = ((c1 * excess) / size) + ((c2 * disjoints) / size) + (c3 * (weightDifference / matched));
 
     return distance;
+}
+
+/***********************************************************************
+* Operator <<
+*   This will define the insertion operator.
+***********************************************************************/
+ostream & operator << (ostream & out, const Genome & genome)
+{
+    out << "Nodes:\n" << genome.getNodesString() << endl
+        << "Links:\n" << genome.getLinksString() << endl;
+
+    return out;
 }

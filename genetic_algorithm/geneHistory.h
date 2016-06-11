@@ -25,6 +25,7 @@ struct Innovation
 {
     Innovation(int in, int out, int n, int type)
     {
+
         id = innovationId++; // Increment the innovation.
         input = in;
         output = out;
