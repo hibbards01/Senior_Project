@@ -135,7 +135,7 @@ epoch()
 
     SET totalOffspring to 0
     FOR s in species
-        IF s.getNoImprovment > threshold # When should the species die
+        IF s.getnoImprovement > threshold # When should the species die
                                            if they don't improve?
             totalOffspring += s.size()
             ERASE s in species
@@ -281,9 +281,9 @@ getAverageFitness()
 
     IF averageFitness < average
         SET averageFitness to average
-        SET noImprovment to 0
+        SET noImprovement to 0
     ELSE
-        noImprovment++
+        noImprovement++
     END
 
     RETURN average

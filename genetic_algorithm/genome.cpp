@@ -19,29 +19,29 @@ using namespace std;
 ***********************************************************************/
 Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0), network()
 {
-    int id = 0;                                    // This will be used for the NODES.
+    int nodeId = 0;                                    // This will be used for the NODES.
     GeneHistory * db = GeneHistory::getInstance(); // Grab the database.
 
     // First create all the outputs for the Genome.
-    for (int o = 0; o < outputs; ++o, ++id)
+    for (int o = 0; o < outputs; ++o, ++nodeId)
     {
-        nodeGenes.push_back(NodeGene(id, OUTPUT));
+        nodeGenes.push_back(NodeGene(nodeId, OUTPUT));
 
         // Save that node to the main database.
-        db->addNewNeuron(id, OUTPUT);
+        db->addNewNeuron(nodeId, OUTPUT);
     }
 
     // Now create all the inputs.
-    for (int i = 0; i < inputs; ++i, ++id)
+    for (int i = 0; i < inputs; ++i, ++nodeId)
     {
         // First save the object to the vector and the database
-        nodeGenes.push_back(NodeGene(id, SENSOR));
-        db->addNewNeuron(id, SENSOR);
+        nodeGenes.push_back(NodeGene(nodeId, SENSOR));
+        db->addNewNeuron(nodeId, SENSOR);
 
         // Now create all the links from the sensors to the one output
         for (int o = 0; o < outputs; ++o)
         {
-            int source = id;                   // Grab the source and
+            int source = nodeId;               // Grab the source and
             int destination = nodeGenes[o].id; // the destination.
 
             // Add it to the database if new.
@@ -55,6 +55,7 @@ Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0)
 
     this->inputs = inputs;
     this->outputs = outputs;
+    this->id = genomeId++;
 }
 
 /***********************************************************************
@@ -576,6 +577,7 @@ Genome & Genome::operator = (const Genome & rhs)
     adjustedFitness = rhs.adjustedFitness;
     inputs = rhs.inputs;
     outputs = rhs.outputs;
+    id = rhs.id;
 
     return *this;
 }

@@ -12,6 +12,7 @@
 #define SPECIES_H
 
 #include "genome.h"
+#include <cmath>
 
 /***********************************************************************
 * Species
@@ -33,11 +34,18 @@ public:
     float getAverageFitness();                     // This will grab the average fitness.
     void writeGenomesToFile(int gen, int id);      // This will save the GENOMES to a file.
     std::vector<Genome> produceOffspring(int num); // Produce offspring within the species.
-    void mutate(Genome & child);                   // See if it needs to be mutated.
+    void mutate(Genome & genome);                  // See if it needs to be mutated.
 
     // This will update the age for the species and for all it's GENOMES.
     void update()
     {
+        for (int g = 0; g < genomes.size(); ++g)
+        {
+            genomes[g].update();
+        }
+
+        ++age;
+
         return;
     }
 
@@ -45,6 +53,13 @@ public:
     // better chance for surviving.
     void adjustFitness()
     {
+        int size = genomes.size();
+
+        for (int g = 0; g < genomes.size(); ++g)
+        {
+            genomes[g].setAdjustedFitness(genomes[g].getFitness() / size);
+        }
+
         return;
     }
 
@@ -52,12 +67,21 @@ public:
     // else will be eliminated.
     void killGenomes()
     {
+        // First grab the number of survivors
+        int survivors = floor(genomes.size() * 0.2) + 1.0;
+
+        // Sort the GENOMES by adjustedFitness in descending order
+        sort(genomes.begin(), genomes.end(), std::greater<Genome>());
+
+        // Finally erase the GENOMES that didn't survive.
+        genomes.erase(genomes.begin() + survivors, genomes.end());
+
         return;
     }
 
     // This will grab the leader of the group. This will be used by the SUPERVISOR
     // class.
-    Genome & getLeader() { return genomes[0];    }
+    Genome & getLeader()         { return genomes[0];    }
 
     //
     // Getters
@@ -68,6 +92,7 @@ private:
     std::vector<Genome> genomes; // This will hold all the genomes for this species.
     int noImprovement;           // This will keep track how long it has not improved.
     int age;                     // How old this species is.
+    float averageFitness;        // The average fitness of the species.
 };
 
 #endif // SPECIES_H

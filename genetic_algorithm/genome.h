@@ -26,6 +26,10 @@
 #define Debug(x)
 #endif
 
+static int genomeId = 0; // This will assign an ID to every GENOME.
+                         // This will help to know what happens to what GENOME
+                         // in the future.
+
 /***********************************************************************
 * Genome
 *   This holds the NETWORK, LINKGENEs, and NODEGENEs for one solution.
@@ -38,10 +42,18 @@ public:
     //
     // Constructors
     //
+    Genome() : nodeGenes(), linkGenes(), inputs(0), outputs(0), fitness(0), adjustedFitness(0),
+    age(0), network()
+    {
+        id = genomeId++;
+    }
     Genome(int outputs, int inputs);
     Genome(std::vector<NodeGene> nodes, std::vector<LinkGene> links, int in, int out) :
     nodeGenes(nodes), linkGenes(links), inputs(in), outputs(out), fitness(0), adjustedFitness(0),
-    age(0), network() {}
+    age(0), network()
+    {
+        id = genomeId++;
+    }
     Genome(const Genome & rhs) { *this = rhs; }
     ~Genome() { network.deleteNetwork(); }
 
@@ -82,6 +94,11 @@ public:
         return;
     }
 
+    bool operator > (const Genome & rhs) const
+    {
+        return adjustedFitness > rhs.adjustedFitness;
+    }
+
     Genome & operator = (const Genome & rhs);
     friend std::ostream & operator << (std::ostream & out, const Genome & genome);
 
@@ -96,11 +113,13 @@ public:
     std::vector<LinkGene> getLinkGenes() const { return linkGenes;       }
     int getInputs()                      const { return inputs;          }
     int getOutputs()                     const { return outputs;         }
+    int getId()                          const { return id;              }
 
     //
     // Setters
     //
-    void setFitness(float f) { fitness = f; }
+    void setFitness(float f)         { fitness = f;         }
+    void setAdjustedFitness(float f) { adjustedFitness = f; }
 private:
     std::vector<NodeGene> nodeGenes; // This will hold all it's nodes
     std::vector<LinkGene> linkGenes; // This will hold all it's links to and from nodes.
@@ -110,6 +129,7 @@ private:
     float adjustedFitness;           // The adjusted fitness based off the species.
     int inputs;                      // This will keep track how many inputs it has.
     int outputs;                     // Same thing as inputs.
+    int id;                          // The id of the genome.
     static float c1, c2, c3;         // These will be used for the computeDistance function.
 };
 
