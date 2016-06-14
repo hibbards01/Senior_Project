@@ -12,6 +12,7 @@
 #include "node_test.h"
 #include "network_test.h"
 #include "genome_test.h"
+#include "../genetic_algorithm/geneHistory.h"
 #include <ctime>
 
 GeneHistory * GeneHistory::geneHistory = NULL;

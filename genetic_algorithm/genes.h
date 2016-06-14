@@ -31,6 +31,13 @@ struct NodeGene
         recurrent = false;
     }
 
+    NodeGene(int i, int t, bool r)
+    {
+        id = i;
+        type = t;
+        recurrent = r;
+    }
+
     int id;
     int type;
     bool recurrent;
@@ -63,6 +70,15 @@ struct LinkGene
         output = out;
         weight = w;
         enabled = true;
+    }
+
+    LinkGene(int i, int in, int out, double w, bool e)
+    {
+        id = i;
+        input = in;
+        output = out;
+        weight = w;
+        enabled = e;
     }
 
     int id;        // Innovation id.

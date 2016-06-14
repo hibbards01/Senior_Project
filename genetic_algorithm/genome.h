@@ -15,10 +15,11 @@
 
 #include "network.h"
 #include "genes.h"
+#include "defines.h"
 #include <iostream>
 
 // For debugging purposes.
-// To run debug code run in command line: g++ -DDEBUG <file>
+// To run debug code run in command line: g++ -D DEBUG <file>
 #ifdef DEBUG
 #define Debug(x) x
 #else
@@ -41,16 +42,7 @@ public:
     Genome(std::vector<NodeGene> nodes, std::vector<LinkGene> links, int in, int out) :
     nodeGenes(nodes), linkGenes(links), inputs(in), outputs(out), fitness(0), adjustedFitness(0),
     age(0), network() {}
-    Genome(const Genome & rhs)
-    {
-        nodeGenes = rhs.nodeGenes;
-        linkGenes = rhs.linkGenes;
-        age = rhs.age;
-        fitness = rhs.fitness;
-        adjustedFitness = rhs.adjustedFitness;
-        inputs = rhs.inputs;
-        outputs = rhs.outputs;
-    }
+    Genome(const Genome & rhs) { *this = rhs; }
     ~Genome() { network.deleteNetwork(); }
 
     //
@@ -59,10 +51,11 @@ public:
 #ifdef DEBUG
     // All of these are for debugging purposes.
     void mutateAddLink(int num);
+    void mutateAddNeuron(int num);
 #else
-    void mutateAddLink();         // These are all the mutations that can be
-#endif
+    void mutateAddLink();               // These are all the mutations that can be
     void mutateAddNeuron();             // done for one genome. Three things can be
+#endif
     bool mutateEnableLink();            // mutated the neurons, links, and weights.
     std::string getLinksString() const; // This will get the link history for writing to a file.
     std::string getNodesString()const ; // This will grab all the nodes for writing to a file.
@@ -75,6 +68,8 @@ public:
     // Mutate a weight.
     void mutateWeight()
     {
+        linkGenes[random(0, linkGenes.size() - 1)].weight *= 5;
+
         return;
     }
 
@@ -87,6 +82,7 @@ public:
         return;
     }
 
+    Genome & operator = (const Genome & rhs);
     friend std::ostream & operator << (std::ostream & out, const Genome & genome);
 
     //
@@ -100,6 +96,11 @@ public:
     std::vector<LinkGene> getLinkGenes() const { return linkGenes;       }
     int getInputs()                      const { return inputs;          }
     int getOutputs()                     const { return outputs;         }
+
+    //
+    // Setters
+    //
+    void setFitness(float f) { fitness = f; }
 private:
     std::vector<NodeGene> nodeGenes; // This will hold all it's nodes
     std::vector<LinkGene> linkGenes; // This will hold all it's links to and from nodes.

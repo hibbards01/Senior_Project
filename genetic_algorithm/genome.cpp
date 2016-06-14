@@ -8,7 +8,6 @@
 ***********************************************************************/
 
 #include "genome.h"
-#include "defines.h"
 #include "geneHistory.h"
 #include <cmath>
 using namespace std;
@@ -167,7 +166,11 @@ void Genome::mutateAddLink()
 *   For a BIAS node we will just select a random HIDDEN node and give
 *       it an input from the BIAS node.
 ***********************************************************************/
+#ifdef DEBUG
+void Genome::mutateAddNeuron(int num)
+#else
 void Genome::mutateAddNeuron()
+#endif
 {
     // Create a brand new neuron. Do a random choice for whether it is a
     // BIAS node or a HIDDEN node. It is more biased towards HIDDEN nodes.
@@ -178,7 +181,11 @@ void Genome::mutateAddNeuron()
     GeneHistory * db = GeneHistory::getInstance();
 
     // Now see which mutation will happen.
+#ifdef DEBUG
+    if (num == 1)
+#else
     if (random(0.0, 1.0) > 0.1)
+#endif
     {
         // Create a HIDDEN neuron!
         node.type = HIDDEN;
@@ -243,7 +250,7 @@ void Genome::mutateAddNeuron()
         int numTries = 10;
 
         // Loop until we find a node with no BIAS attached to it.
-        NodeGene * toNode;
+        NodeGene toNode;
         while (!found && numTries-- > 0)
         {
             // Grab a random hidden node.
@@ -255,7 +262,7 @@ void Genome::mutateAddNeuron()
             bool good = true;
             for (int l = 0; l < linkGenes.size() && good; ++l)
             {
-                if (nodeGenes[index].id == linkGenes[l].input
+                if (nodeGenes[index].id == linkGenes[l].output
                     && nodeGenes[linkGenes[l].input].type == BIAS)
                 {
                     good = false;
@@ -266,13 +273,13 @@ void Genome::mutateAddNeuron()
             if (good)
             {
                 found = true;
-                toNode = &nodeGenes[index];
+                toNode = nodeGenes[index];
             }
         }
 
         if (found)
         {
-            linkGenes.push_back(LinkGene(db->addNewLink(node.id, toNode->id), node.id, toNode->id, random(0.0, 1.0)));
+            linkGenes.push_back(LinkGene(db->addNewLink(node.id, toNode.id), node.id, toNode.id, random(0.0, 1.0)));
         }
     }
 
@@ -321,11 +328,15 @@ bool Genome::mutateEnableLink()
 void Genome::mutateRemoveLink()
 {
     // Remove a random link.
-    int index = random(0, linkGenes.size() - 1);
+    int index = (linkGenes.size() == 1) ? 0 : random(0, linkGenes.size() - 1);
 
     // Now see if we need to remove the nodes that were connected by this link.
     int removeNode = linkGenes[index].input;
     int removeNode2 = linkGenes[index].output;
+
+    // Remove the link.
+    linkGenes.erase(linkGenes.begin() + index);
+
     for (int l = 0; l < linkGenes.size(); ++l)
     {
         if (removeNode == linkGenes[l].input
@@ -343,12 +354,12 @@ void Genome::mutateRemoveLink()
 
     // If either of them is -1 then we don't need to remove a node.
     // If they are not then we need to remove it.
-    for (vector<NodeGene>::iterator it = nodeGenes.begin(); it != nodeGenes.end(); ++it)
+    for (int n = 0; n < nodeGenes.size(); ++n)
     {
-        if ((it->id == removeNode || it->id == removeNode2) &&
-            (it->type == HIDDEN || it->type == BIAS))
+        if ((nodeGenes[n].id == removeNode || nodeGenes[n].id == removeNode2) &&
+            (nodeGenes[n].type == HIDDEN || nodeGenes[n].type == BIAS))
         {
-            it = nodeGenes.erase(it);
+            nodeGenes.erase(nodeGenes.begin() + n);
         }
     }
 
@@ -426,13 +437,14 @@ Genome Genome::produceChild(const Genome & rhs) const
     bool fit = (rhs.fitness < fitness) ? true : false; // Which parent is the more fit one?
 
     // Now loop through the histories.
-    while (lhsIter != linkGenes.begin() || rhsIter != rhs.linkGenes.end())
+    while (lhsIter != linkGenes.end() || rhsIter != rhs.linkGenes.end())
     {
         LinkGene newLinkGene; // Create a gene.
 
         // First two conditions check if there is an excess or disjoint history
         // between the GENOMES. It will then grab that LINKGEN from them.
-        if (rhsIter == rhs.linkGenes.end() || lhsIter->id < rhsIter->id)
+        if ((rhsIter == rhs.linkGenes.end() || lhsIter->id < rhsIter->id)
+            && lhsIter != linkGenes.end())
         {
             newLinkGene = *lhsIter;
             ++lhsIter;
@@ -512,7 +524,7 @@ float Genome::computeDistance(const Genome & rhs) const
     // Now loop through both of there histories.
     while (lhsIter != linkGenes.end() || rhsIter != rhs.linkGenes.end())
     {
-        if (rhsIter == rhs.linkGenes.end()) // If one is done then we have excess.
+        if (rhsIter == rhs.linkGenes.end() && lhsIter != linkGenes.end()) // If one is done then we have excess.
         {
             ++excess;
             ++lhsIter;
@@ -549,6 +561,23 @@ float Genome::computeDistance(const Genome & rhs) const
     float distance = ((c1 * excess) / size) + ((c2 * disjoints) / size) + (c3 * (weightDifference / matched));
 
     return distance;
+}
+
+/***********************************************************************
+* Operator =
+*   This is the assignment operator.
+***********************************************************************/
+Genome & Genome::operator = (const Genome & rhs)
+{
+    nodeGenes = rhs.nodeGenes;
+    linkGenes = rhs.linkGenes;
+    age = rhs.age;
+    fitness = rhs.fitness;
+    adjustedFitness = rhs.adjustedFitness;
+    inputs = rhs.inputs;
+    outputs = rhs.outputs;
+
+    return *this;
 }
 
 /***********************************************************************
