@@ -12,6 +12,7 @@
 
 #include "../genetic_algorithm/genome.h"
 #include "../genetic_algorithm/defines.h"
+#include "../genetic_algorithm/geneHistory.h"
 #include <cmath>
 using namespace std;
 
@@ -28,12 +29,16 @@ namespace {
     /****************************************************
     * NetworkTest
     *   This will test all the functions for the class
-    *       NETWORK. This class will build a network
-    *       and then delete the network once it is finished.
+    *       GENOME.
     ****************************************************/
     class GenomeTest : public ::testing::Test
     {
     protected:
+        virtual ~GenomeTest()
+        {
+            GeneHistory::getInstance().getInnovations().clear();
+        }
+
         void buildGenome(vector<NodeGene> & nodes, vector<LinkGene> & links)
         {
             nodes.clear();

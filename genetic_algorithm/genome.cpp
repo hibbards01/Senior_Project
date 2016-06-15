@@ -19,8 +19,8 @@ using namespace std;
 ***********************************************************************/
 Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0), network()
 {
-    int nodeId = 0;                                    // This will be used for the NODES.
-    GeneHistory * db = GeneHistory::getInstance(); // Grab the database.
+    int nodeId = 0;                                // This will be used for the NODES.
+    GeneHistory & db = GeneHistory::getInstance(); // Grab the database.
 
     // First create all the outputs for the Genome.
     for (int o = 0; o < outputs; ++o, ++nodeId)
@@ -28,7 +28,7 @@ Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0)
         nodeGenes.push_back(NodeGene(nodeId, OUTPUT));
 
         // Save that node to the main database.
-        db->addNewNeuron(nodeId, OUTPUT);
+        db.addNewNeuron(nodeId, OUTPUT);
     }
 
     // Now create all the inputs.
@@ -36,7 +36,7 @@ Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0)
     {
         // First save the object to the vector and the database
         nodeGenes.push_back(NodeGene(nodeId, SENSOR));
-        db->addNewNeuron(nodeId, SENSOR);
+        db.addNewNeuron(nodeId, SENSOR);
 
         // Now create all the links from the sensors to the one output
         for (int o = 0; o < outputs; ++o)
@@ -45,7 +45,7 @@ Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0)
             int destination = nodeGenes[o].id; // the destination.
 
             // Add it to the database if new.
-            int linkId = db->addNewLink(source, destination);
+            int linkId = db.addNewLink(source, destination);
 
             // Finally save the link
             // Give it a random weight.
@@ -133,8 +133,8 @@ void Genome::mutateAddLink()
         double weight = random(0.0, 1.0);
 
         // Now add the link to the new database and grab the id for it.
-        GeneHistory * db = GeneHistory::getInstance();
-        int id = db->addNewLink(source->id, destination.id);
+        GeneHistory & db = GeneHistory::getInstance();
+        int id = db.addNewLink(source->id, destination.id);
 
         if (!recurrent) // This will see if the two nodes are recurrent or not
         {
@@ -179,7 +179,7 @@ void Genome::mutateAddNeuron()
     bool found = false;
 
     // Grab the database and add node to it.
-    GeneHistory * db = GeneHistory::getInstance();
+    GeneHistory & db = GeneHistory::getInstance();
 
     // Now see which mutation will happen.
 #ifdef DEBUG
@@ -240,8 +240,8 @@ void Genome::mutateAddNeuron()
             link->enabled = false;
 
             // Now save the links to the VECTOR
-            linkGenes.push_back(LinkGene(db->addNewLink(link->input, node.id), link->input, node.id, 1));
-            linkGenes.push_back(LinkGene(db->addNewLink(node.id, link->output), node.id, link->output, link->weight));
+            linkGenes.push_back(LinkGene(db.addNewLink(link->input, node.id), link->input, node.id, 1));
+            linkGenes.push_back(LinkGene(db.addNewLink(node.id, link->output), node.id, link->output, link->weight));
         }
     }
     else
@@ -280,14 +280,14 @@ void Genome::mutateAddNeuron()
 
         if (found)
         {
-            linkGenes.push_back(LinkGene(db->addNewLink(node.id, toNode.id), node.id, toNode.id, random(0.0, 1.0)));
+            linkGenes.push_back(LinkGene(db.addNewLink(node.id, toNode.id), node.id, toNode.id, random(0.0, 1.0)));
         }
     }
 
     if (found) // We have found a link!
     {
         // Add the neuron to the database!
-        db->addNewNeuron(node.id, node.type);
+        db.addNewNeuron(node.id, node.type);
 
         // Finally save the new node to the VECTOR.
         nodeGenes.push_back(node);

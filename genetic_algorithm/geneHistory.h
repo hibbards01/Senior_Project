@@ -55,23 +55,25 @@ public:
     int addNewLink(int source, int destination); // This will add a new link.
 
     // This will return the GENEHISTORY. It will create a new instance if necessary.
-    static GeneHistory * getInstance()
+    static GeneHistory & getInstance()
     {
-        if (geneHistory == NULL)
-        {
-            geneHistory = new GeneHistory();
-        }
-
-        return geneHistory;
+        static GeneHistory inst;
+        return inst;
     }
+
+    //
+    // Getters
+    //
+    std::vector<Innovation> & getInnovations() { return innovations; }
 private:
     //
     // Constructors
     //
     GeneHistory() : innovations() {}
+    GeneHistory(const GeneHistory & rhs) {}
     ~GeneHistory() {}
+    GeneHistory & operator = (const GeneHistory & rhs) { return *this; }
 
-    static GeneHistory * geneHistory;    // This is what makes this class a singleton class.
     std::vector<Innovation> innovations; // This will hold all the innovations.
 };
 

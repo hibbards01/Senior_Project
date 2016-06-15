@@ -85,12 +85,12 @@ void Species::writeGenomesToFile(int gen, int speciesId)
 *       It will then return that offspring and the SUPERVISOR will put
 *       them in the correct species.
 ***********************************************************************/
-vector<Genome> Species::produceOffspring(int num)
+vector<Genome> Species::produceOffspring(int children)
 {
     vector<Genome> offspring; // This will hold all the children that will be created.
 
     // Loop until all the offspring is produced.
-    for (int i = 0; i < num; ++i)
+    for (int i = 0; i < children; ++i)
     {
         Genome child; // Set the child to be empty for now.
 
@@ -100,7 +100,7 @@ vector<Genome> Species::produceOffspring(int num)
 
         // See if it will pass the crossover rate. If not then it will
         // give a random genome in the species.
-        if (random(0, 10) <= 7)
+        if (random(0, 10) <= 7 && genomes.size() > 1)
         {
             // Now grab another parent that is not the LEFTPARENT.
             int randNum;

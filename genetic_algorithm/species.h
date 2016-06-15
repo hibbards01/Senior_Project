@@ -31,10 +31,10 @@ public:
     //
     // Methods
     //
-    float getAverageFitness();                     // This will grab the average fitness.
-    void writeGenomesToFile(int gen, int id);      // This will save the GENOMES to a file.
-    std::vector<Genome> produceOffspring(int num); // Produce offspring within the species.
-    void mutate(Genome & genome);                  // See if it needs to be mutated.
+    float getAverageFitness();                          // This will grab the average fitness.
+    void writeGenomesToFile(int gen, int id);           // This will save the GENOMES to a file.
+    std::vector<Genome> produceOffspring(int children); // Produce offspring within the species.
+    void mutate(Genome & genome);                       // See if it needs to be mutated.
 
     // This will update the age for the species and for all it's GENOMES.
     void update()

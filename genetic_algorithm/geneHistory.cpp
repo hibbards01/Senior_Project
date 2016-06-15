@@ -23,7 +23,7 @@ void GeneHistory::addNewNeuron(int id, int type)
     // Loop through all the innovations until found.
     for (int i = 0; i < innovations.size() && !found; ++i)
     {
-        if (innovations[i].id == id && innovations[i].nodeType == type)
+        if (innovations[i].node == id && innovations[i].nodeType == type)
         {
             found = true;
         }

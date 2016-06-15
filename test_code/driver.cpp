@@ -12,10 +12,9 @@
 #include "node_test.h"
 #include "network_test.h"
 #include "genome_test.h"
-#include "../genetic_algorithm/geneHistory.h"
+#include "geneHistory_test.h"
 #include <ctime>
 
-GeneHistory * GeneHistory::geneHistory = NULL;
 float Genome::c1 = 1;
 float Genome::c2 = 1;
 float Genome::c3 = 0.4;

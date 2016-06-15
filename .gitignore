@@ -1,6 +1,8 @@
 *.o
 sim
 simDebug
+show
+test
 ~$*
 /research
 /papers/hours.txt
