@@ -146,7 +146,7 @@ epoch()
 
             totalOffspring += s.getSize() + babies
 
-            s.produceOffspring(offspring)
+            s.produceOffspring(babies)
         END
     END
 

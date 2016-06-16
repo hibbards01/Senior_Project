@@ -118,9 +118,7 @@ namespace {
             species.getGenomes()[g].setAdjustedFitness(random(0, 1000));
         }
 
-        species.killGenomes();
-
-        EXPECT_EQ(21, species.getGenomes().size());
+        EXPECT_EQ(21, species.killGenomes());
     }
 }
 

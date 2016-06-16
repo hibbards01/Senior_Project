@@ -25,7 +25,7 @@ public:
     //
     // Constructors
     //
-    Supervisor();
+    Supervisor(int population, int outputs, int inputs);
     ~Supervisor() { species.clear(); }
 
     //
@@ -37,12 +37,7 @@ public:
     void update();                 // Update everything!
     void run();                    // This will run the everything.
     float runSimulation();         // This will take the network and run the simulation.
-
-    // Write the population to a file.
-    void writePopulationToFile()
-    {
-        return;
-    }
+    void writePopulationToFile();  // Write the population to a file.
 private:
     std::vector<Species> species; // Confusing, right? ;)
     int generation;               // What generation are we in? This will
@@ -50,10 +45,12 @@ private:
     float overallAverage;         // What is the overall average of the species.
     int noImprovement;            // This will be the tracker of when this
                                   // algorithm is done.
+    Genome bestGenome;            // This will be the best performing genome.
+    int population;               // This will hold how many of population we shall create.
 
     // This will calculate where the babies go to
     // which species in the population.
-    void giveOffspringToSpecies(std::vector<Genome> genomes);
+    void giveOffspringToSpecies(std::vector<Genome> & genomes);
 
     // This will mutate the offspring that was made by the population.
     void mutateOffspring(std::vector<Genome> & genomes);

@@ -11,22 +11,22 @@
 # All the Genetic Algorithm compilations.
 ###########################################################################
 
-node.o: node.cpp node.h
+node.o: node.cpp node.h defines.h
 	g++ -c node.cpp
 
-network.o: network.cpp network.h node.h defines.h genes.h
+network.o: network.cpp network.h defines.h
 	g++ -c network.cpp
 
-genome.o: genome.cpp genome.h network.h genes.h defines.h geneHistory.h
+genome.o: genome.cpp genome.h geneHistory.h
 	g++ -c genome.cpp
 
 geneHistory.o: geneHistory.cpp geneHistory.h
 	g++ -c geneHistory.cpp
 
-species.o: species.cpp species.h genome.h
+species.o: species.cpp species.h defines.h
 	g++ -c species.cpp
 
-supervisor.o: supervisor.cpp supervisor.h species.h
+supervisor.o: supervisor.cpp supervisor.h defines.h
 	g++ -c supervisor.cpp
 
 ###########################################################################

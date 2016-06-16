@@ -588,7 +588,8 @@ Genome & Genome::operator = (const Genome & rhs)
 ***********************************************************************/
 ostream & operator << (ostream & out, const Genome & genome)
 {
-    out << "Nodes:\n" << genome.getNodesString() << endl
+    out << "Genome ID: " << id << endl
+        << "Nodes:\n" << genome.getNodesString() << endl
         << "Links:\n" << genome.getLinksString() << endl;
 
     return out;

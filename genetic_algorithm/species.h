@@ -69,8 +69,8 @@ public:
     }
 
     // This one will loop through everyone to see who survived this round. Everyone
-    // else will be eliminated.
-    void killGenomes()
+    // else will be eliminated. This will return how many is left over.
+    int killGenomes()
     {
         // First grab the number of survivors
         int survivors = floor(genomes.size() * 0.2) + 1.0;
@@ -81,12 +81,17 @@ public:
         // Finally erase the GENOMES that didn't survive.
         genomes.erase(genomes.begin() + survivors, genomes.end());
 
-        return;
+        return genomes.size();
     }
 
     // This will grab the leader of the group. This will be used by the SUPERVISOR
     // class.
     Genome & getLeader()                   { return genomes[0];    }
+
+    bool operator > (const Species & rhs) const
+    {
+        return averageFitness > rhs.averageFitness;
+    }
 
     //
     // Getters

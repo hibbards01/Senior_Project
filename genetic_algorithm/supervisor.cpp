@@ -8,6 +8,12 @@
 ***********************************************************************/
 
 #include "supervisor.h"
+#include "defines.h"
+#include <sys/stat.h>
+#include <fstream>
+#include <math.h>
+#include <cassert>
+using namespace std;
 
 // For debugging purposes.
 // To run debug code run in command line: g++ -D DEBUG <file>
@@ -16,6 +22,17 @@
 #else
 #define Debug(x)
 #endif
+
+/***********************************************************************
+* Supervisor
+*   This will initialize everything. The population will start with one
+*       species and 100 GENOMES.
+***********************************************************************/
+Supervisor::Supervisor(int population, int outputs, int inputs) : bestGenome(),
+noImprovement(0), overallAverage(0), generation(0), population(population)
+{
+    return;
+}
 
 /***********************************************************************
 * run
@@ -41,10 +58,101 @@ float Supervisor::runSimulation()
 /***********************************************************************
 * epoch
 *   This will determine how many babies that are needed to be made for
-*       the next generation.
+*       the next generation. It will also give the children to the correct
+*       species and update everything.
 ***********************************************************************/
 void Supervisor::epoch()
 {
+    // First we need to adjust all the species fitnesses'.
+    for (int s = 0; s < species.size(); ++s)
+    {
+        species[s].adjustFitness();
+    }
+
+    // Now set the overall average of the species.
+    setOverallAverage();
+
+    // Sort the species in descending order of the average fitness for the species.
+    // This way the offspring will always be created from the best performing species.
+    sort(species.begin(), species.end(), greater<Species>());
+
+    // Now grab the total of offspring that will be produced.
+    // Also produce them and save them in the vector.
+    int total = 0;
+    vector<Genome> offspring;
+
+    // Now loop through the species and grab the offspring. If that offspring
+    // did not perform for 10 generations then we will kill of that species.
+    for (vector<Species>::iterator s = species.begin(); s != species.end(); ++s)
+    {
+        if (s->getNoImprovement() > 10)
+        {
+            // Kill off the species since it did not perform as well.
+            s = species.erase(s);
+        }
+        else
+        {
+            // Still performing well, so now we need to produce some offspring.
+            // This will be computed by how well the species is performing divided by it's size.
+            int babies = ceil(s->getAverageFitness() / overallAverage);
+
+            // Now kill all the genomes that did not perform that well. Also grab how many
+            // survived from those species.
+            total += s->killGenomes();
+
+            // Now produce the babies that were calculated. Make sure it does not go over
+            // POPULATION. This could happen due to the CEIL function call on link 94.
+            if (total + babies <= population)
+            {
+                // Add up the babies.
+                total += babies;
+
+                // Now produce the offspring based off of the number BABIES.
+                vector<Genome> children = s->produceOffspring(babies);
+
+                // Finally save it to the vector.
+                offspring.insert(offspring.end(), children.begin(), children.end());
+            }
+        }
+    }
+
+    // Make sure that the TOTAL; is the same as the POPULATION. If it is less
+    // then the population then we need to produce some more offspring.
+    int remainigBabies = population - total;
+
+    if (remainigBabies > 0)
+    {
+        int babies = ceil(remainigBabies / species.size());
+        for (int s = 0; s < species.size() && total < population; ++s)
+        {
+            if (total + babies > population)
+            {
+                // Make up for the rest of the population.
+                babies = population - total;
+            }
+
+            // Add up the babies
+            total += babies;
+
+            // Create the children
+            vector<Genome> children = species[s].produceOffspring(babies);
+
+            // Finally save it to the vector.
+            offspring.insert(offspring.end(), children.begin(), children.end());
+        }
+    }
+
+    assert(total == population && offspring.size() < population);
+
+    // Mutate the children. See if any mutation occurs.
+    mutateOffspring(offspring);
+
+    // Now give the offspring to the correct species
+    giveOffspringToSpecies(offspring);
+
+    // Finally update everything!
+    update();
+
     return;
 }
 
@@ -55,6 +163,25 @@ void Supervisor::epoch()
 ***********************************************************************/
 void Supervisor::setOverallAverage()
 {
+    int average = 0; // This will grab all the averages from everyone!
+
+    // Now loop through the species and grab their averages
+    for (int s = 0; s < species.size(); ++s)
+    {
+        average += species[s].getAverageFitness();
+    }
+
+    average /= species.size();
+
+    if (overallAverage < average)
+    {
+        overallAverage = average;
+    }
+    else
+    {
+        ++noImprovement;
+    }
+
     return;
 }
 
@@ -63,6 +190,31 @@ void Supervisor::setOverallAverage()
 *   Update all the SPECIES.
 ***********************************************************************/
 void Supervisor::update()
+{
+    // Loop through all the species and update them
+    for (int s = 0; s < species.size(); ++s)
+    {
+        species[s].update();
+    }
+
+    ++generation;
+
+    if (generation % 5 == 0)
+    {
+        writePopulationToFile();
+    }
+
+    return;
+}
+
+/***********************************************************************
+* giveOffspringToSpecies
+*   This will compute the distance that the offspring is from the species
+*       and give that child to that species. If none of them are that
+*       close to the child then this will create a new species for the
+*       child.
+***********************************************************************/
+void Supervisor::giveOffspringToSpecies(vector<Genome> & genomes)
 {
     return;
 }
@@ -122,6 +274,52 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
         {
             genomes[g].mutateWeight();
         }
+    }
+
+    return;
+}
+
+/***********************************************************************
+* writePopulationToFile
+*   This will start the whole process of writing the files to the folder.
+***********************************************************************/
+void Supervisor::writePopulationToFile()
+{
+    // Create a new folder for the generation!
+    string folder = "gen" + toString<int>(generation);
+    int error = mkdir(folder.c_str(), DEFFILEMODE);
+
+    if (error == -1)
+    {
+        cout << "Error could not create directory: " << folder << endl;
+    }
+    else
+    {
+        // Create the main file that will help show the overall progress of the
+        // program.
+        string file = folder + "/population_summary.txt";
+        ofstream fout(file.c_str());
+
+        if (fout.fail())
+        {
+            cout << "ERROR could not write to file: " << file << endl;
+        }
+        else
+        {
+            // Write the overall progress of the population.
+            fout << "Generation: " << generation << endl
+                 << "Overall Average: " << overallAverage << endl
+                 << "Number of Species: " << species.size() << endl << endl
+                 << "Best Performing Genome\n---------------------\n"
+                 << bestGenome << endl;
+
+            for (int s = 0; s < species.size(); ++s)
+            {
+                species[s].writeGenomesToFile(generation, s);
+            }
+        }
+
+        fout.close(); // Always close it.
     }
 
     return;

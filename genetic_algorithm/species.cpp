@@ -58,7 +58,7 @@ void Species::writeGenomesToFile(int gen, int speciesId)
     // Make sure it was able to do it. If not then output an error message.
     if (fout.fail())
     {
-        cout << "Error could not write species" + toString<int>(speciesId) + " to file: " << file << endl;
+        cout << "ERROR could not write species" + toString<int>(speciesId) + " to file: " << file << endl;
     }
     else
     {
@@ -104,16 +104,24 @@ vector<Genome> Species::produceOffspring(int children)
         {
             // Now grab another parent that is not the LEFTPARENT.
             int randNum;
+            int count = 5;
             do
             {
                 randNum = random(0, genomes.size() - 1);
             }
-            while (randNum == num);
+            while (randNum == num && count-- > 0);
 
             assert(randNum >= 0 && randNum < genomes.size());
 
             // Finally create the child!
-            child = genomes[num].produceChild(genomes[randNum]);
+            if (count == 0)
+            {
+                child = genomes[randNum];
+            }
+            else
+            {
+                child = genomes[num].produceChild(genomes[randNum]);
+            }
         }
         else
         {
