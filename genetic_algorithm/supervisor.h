@@ -38,7 +38,6 @@ public:
     void run();                    // This will run the everything.
     float runSimulation();         // This will take the network and run the simulation.
 
-
     // Write the population to a file.
     void writePopulationToFile()
     {
@@ -55,6 +54,9 @@ private:
     // This will calculate where the babies go to
     // which species in the population.
     void giveOffspringToSpecies(std::vector<Genome> genomes);
+
+    // This will mutate the offspring that was made by the population.
+    void mutateOffspring(std::vector<Genome> & genomes);
 };
 
 #endif // SUPERVISOR_H

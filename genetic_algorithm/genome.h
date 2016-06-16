@@ -42,6 +42,11 @@ public:
     //
     // Constructors
     //
+    Genome() : nodeGenes(), linkGenes(), inputs(0), outputs(0), fitness(0), adjustedFitness(0),
+    age(0), network()
+    {
+        id = genomeId++;
+    }
     Genome(int outputs, int inputs);
     Genome(std::vector<NodeGene> nodes, std::vector<LinkGene> links, int in, int out) :
     nodeGenes(nodes), linkGenes(links), inputs(in), outputs(out), fitness(0), adjustedFitness(0),
