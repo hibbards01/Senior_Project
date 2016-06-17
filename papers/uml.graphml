@@ -223,11 +223,11 @@
     <node id="n7">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="194.0" width="150.0670415232034" x="-150.0670415232034" y="49.0"/>
+          <y:Geometry height="222.36626480102973" width="150.0670415232034" x="-150.0670415232034" y="34.816867599485136"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="65.13671875" x="42.46516138660169" y="4.0">Supervisor</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="159.4609375" modelName="custom" textColor="#000000" visible="true" width="151.791015625" x="2.0" y="30.1328125">- species
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="187.7265625" modelName="custom" textColor="#000000" visible="true" width="151.791015625" x="2.0" y="30.1328125">- species
 - generation
 - overallAverage
 - noImprovement
@@ -237,7 +237,9 @@
 + setOverallAverage
 + writePopulationToFile
 - giveOffspringToSpecies
-- mutateOffspring<y:LabelModel>
+- mutateOffspring
++ run
++ runSimulation<y:LabelModel>
               <y:ErdAttributesNodeLabelModel/>
             </y:LabelModel>
             <y:ModelParameter>

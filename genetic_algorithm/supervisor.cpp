@@ -94,7 +94,7 @@ void Supervisor::epoch()
         {
             // Still performing well, so now we need to produce some offspring.
             // This will be computed by how well the species is performing divided by it's size.
-            int babies = ceil(s->getAverageFitness() / overallAverage);
+            int babies = (overallAverage > 0) ? ceil(s->getAverageFitness() / overallAverage) : 0;
 
             // Now kill all the genomes that did not perform that well. Also grab how many
             // survived from those species.
@@ -142,7 +142,8 @@ void Supervisor::epoch()
         }
     }
 
-    assert(total == population && offspring.size() < population);
+    assert(total == population);
+    assert(offspring.size() < population);
 
     // Mutate the children. See if any mutation occurs.
     mutateOffspring(offspring);
@@ -197,12 +198,12 @@ void Supervisor::update()
         species[s].update();
     }
 
-    ++generation;
-
     if (generation % 5 == 0)
     {
         writePopulationToFile();
     }
+
+    ++generation;
 
     return;
 }
@@ -309,12 +310,16 @@ void Supervisor::writePopulationToFile()
 {
     // Create a new folder for the generation!
     string folder = "gen" + toString<int>(generation);
-    int error = mkdir(folder.c_str(), DEFFILEMODE);
-    int error2 = mkdir("network", DEFFILEMODE);
+    int error = mkdir(folder.c_str(), ACCESSPERMS);
+
+    string network = folder + "/network";
+    int error2 = mkdir(network.c_str(), ACCESSPERMS);
 
     if (error == -1 || error2 == -1)
     {
-        cout << "Error could not create directory: " << folder << " or network\n";
+        cout << "Error could not create directory.\n"
+             << "Folder: " << folder << " Error: " << error << endl
+             << "Folder: " << network << " Error: " << error2 << endl;
     }
     else
     {

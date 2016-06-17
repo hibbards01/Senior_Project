@@ -14,6 +14,7 @@
 #include "genome_test.h"
 #include "geneHistory_test.h"
 #include "species_test.h"
+#include "supervisor_test.h"
 #include <ctime>
 
 float Genome::c1 = 1;

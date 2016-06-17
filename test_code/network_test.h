@@ -400,11 +400,12 @@ namespace
         buildNetwork(); // Build the network.
 
         system("mkdir gen1");
+        system("mkdir gen1/network");
 
         // Now write it to a file.
         network.writeNetworkToFile(1, 1);
 
-        ifstream fin("gen1/network1.txt");
+        ifstream fin("gen1/network/network1.txt");
 
         ASSERT_TRUE(fin.good());
 

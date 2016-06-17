@@ -59,6 +59,7 @@ namespace {
         Species species(50, 3, 5);
 
         system("mkdir gen1");
+        system("mkdir gen1/network");
 
         species.writeGenomesToFile(1, 1);
 

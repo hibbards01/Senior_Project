@@ -7,11 +7,8 @@
 #   This will compile all the tests and create an execution file.
 ###########################################################################
 
-test: driver.o node.o network.o genome.o geneHistory.o species.o
-	g++ -D DEBUG -o test driver.o node.o network.o genome.o geneHistory.o species.o -lgtest
-
-driver.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_test.h species_test.h
-	g++ -D DEBUG -c driver.cpp
+test: driver.o node.o network.o genome.o geneHistory.o species.o supervisor.o
+	g++ -D DEBUG -o test driver.o node.o network.o genome.o geneHistory.o species.o supervisor.o -lgtest
 
 node.o: ../genetic_algorithm/node.cpp ../genetic_algorithm/node.h ../genetic_algorithm/defines.h
 	g++ -c ../genetic_algorithm/node.cpp
@@ -28,15 +25,21 @@ geneHistory.o: ../genetic_algorithm/geneHistory.cpp ../genetic_algorithm/geneHis
 species.o: ../genetic_algorithm/species.cpp ../genetic_algorithm/species.h ../genetic_algorithm/defines.h
 	g++ -c ../genetic_algorithm/species.cpp
 
+supervisor.o: ../genetic_algorithm/supervisor.cpp ../genetic_algorithm/supervisor.h ../genetic_algorithm/defines.h
+	g++ -c -D DEBUG ../genetic_algorithm/supervisor.cpp
+
+driver.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_test.h species_test.h supervisor_test.h
+	g++ -D DEBUG -c driver.cpp
+
 ###########################################################################
 # SHOW
 #	This will be mainly used to show a presentation that the requirements
 #		are being fulfilled.
 ###########################################################################
-show: driver_show.o node.o network.o genome.o geneHistory.o species.o
-	g++ -D SHOW -D DEBUG -o show driver_show.o node.o network.o genome.o geneHistory.o species.o -lgtest
+show: driver_show.o node.o network.o genome.o geneHistory.o species.o supervisor.o
+	g++ -D SHOW -D DEBUG -o show driver_show.o node.o network.o genome.o geneHistory.o species.o supervisor.o -lgtest
 
-driver_show.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_test.h species_test.h
+driver_show.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_test.h species_test.h supervisor_test.h
 	g++ -D SHOW -D DEBUG -c driver.cpp -o driver_show.o
 
 ###########################################################################
@@ -44,11 +47,8 @@ driver_show.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_t
 #	For debugging purposes. This allows me to use gdb.
 ###########################################################################
 
-debug: driver_debug.o network_debug.o ../genetic_algorithm/defines.h node_debug.o genome_debug.o geneHistory_debug.o species_debug.o
-	g++ -g -o debug network_debug.o node_debug.o genome_debug.o geneHistory_debug.o driver_debug.o species_debug.o -lgtest
-
-driver_debug.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_test.h species_test.h
-	g++ -g -D DEBUG -c -o driver_debug.o driver.cpp
+debug: driver_debug.o network_debug.o node_debug.o genome_debug.o geneHistory_debug.o species_debug.o supervisor_debug.o
+	g++ -g -o debug network_debug.o node_debug.o genome_debug.o geneHistory_debug.o driver_debug.o species_debug.o supervisor_debug.o -lgtest
 
 node_debug.o: ../genetic_algorithm/node.cpp ../genetic_algorithm/node.h ../genetic_algorithm/defines.h
 	g++ -g -c -o node_debug.o ../genetic_algorithm/node.cpp
@@ -64,6 +64,12 @@ geneHistory_debug.o: ../genetic_algorithm/geneHistory.cpp ../genetic_algorithm/g
 
 species_debug.o: ../genetic_algorithm/species.cpp ../genetic_algorithm/species.h ../genetic_algorithm/defines.h
 	g++ -g -c -o species_debug.o ../genetic_algorithm/species.cpp
+
+supervisor_debug.o: ../genetic_algorithm/supervisor.cpp ../genetic_algorithm/supervisor.h ../genetic_algorithm/defines.h
+	g++ -g -c -D DEBUG -o supervisor_debug.o ../genetic_algorithm/supervisor.cpp
+
+driver_debug.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_test.h species_test.h
+	g++ -g -D DEBUG -c -o driver_debug.o driver.cpp
 
 clean:
 	rm *.o test debug show

@@ -254,8 +254,19 @@ void Genome::mutateAddNeuron()
         NodeGene toNode;
         while (!found && numTries-- > 0)
         {
-            // Grab a random hidden node.
-            int index = random(inputs + outputs, nodeGenes.size() - 1);
+            // Grab the min and max.
+            int min = outputs + inputs;
+            int max = nodeGenes.size() - 1;
+
+            // If there are only inputs and outputs then we will grab a random output.
+            if (min == nodeGenes.size())
+            {
+                min = 0;
+                max = outputs - 1;
+            }
+
+            // Grab a random hidden node
+            int index = random(min, max);
             assert(index < nodeGenes.size() && index > -1);
 
             // Search through the LINKGENES to make sure that this node doesn't
@@ -588,7 +599,7 @@ Genome & Genome::operator = (const Genome & rhs)
 ***********************************************************************/
 ostream & operator << (ostream & out, const Genome & genome)
 {
-    out << "Genome ID: " << id << endl
+    out << "Genome ID: " << genome.id << endl << endl
         << "Nodes:\n" << genome.getNodesString() << endl
         << "Links:\n" << genome.getLinksString() << endl;
 

@@ -42,7 +42,11 @@ public:
     //
     // Getters
     //
-    int getOverallAverage() const { return overallAverage; }
+    int getOverallAverage()       const { return overallAverage; }
+    int getGeneration()           const { return generation;     }
+    int getNoImprovement()        const { return noImprovement;  }
+    int getPopulation()           const { return population;     }
+    std::vector<Species> & getSpecies() { return species;        }
 private:
     std::vector<Species> species; // Confusing, right? ;)
     int generation;               // What generation are we in? This will
