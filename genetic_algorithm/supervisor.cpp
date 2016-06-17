@@ -28,10 +28,10 @@ using namespace std;
 *   This will initialize everything. The population will start with one
 *       species and 100 GENOMES.
 ***********************************************************************/
-Supervisor::Supervisor(int population, int outputs, int inputs) : bestGenome(),
-noImprovement(0), overallAverage(0), generation(0), population(population)
+Supervisor::Supervisor(int population, int outputs, int inputs) : noImprovement(0),
+overallAverage(0), generation(0), population(population)
 {
-    return;
+    species.push_back(Species(population, outputs, inputs));
 }
 
 /***********************************************************************
@@ -216,6 +216,28 @@ void Supervisor::update()
 ***********************************************************************/
 void Supervisor::giveOffspringToSpecies(vector<Genome> & genomes)
 {
+    // Loop through all the genomes
+    for (int g = 0; g < genomes.size(); ++g)
+    {
+        bool found = false; // When the genome is added to someone finish
+                            // this second for loop
+        for (int s = 0; s < species.size() && !found; ++s)
+        {
+            // Check the compatibility threshold.
+            if (genomes[g].computeDistance(species[s].getLeader()) < 0.26) // # define this?
+            {
+                species[s].getGenomes().push_back(genomes[g]);
+                found = true;
+            }
+        }
+
+        // If we did not find anyone then we will create a new species with that Genome
+        if (!found)
+        {
+            species.push_back(Species(genomes[g]));
+        }
+    }
+
     return;
 }
 
@@ -288,10 +310,11 @@ void Supervisor::writePopulationToFile()
     // Create a new folder for the generation!
     string folder = "gen" + toString<int>(generation);
     int error = mkdir(folder.c_str(), DEFFILEMODE);
+    int error2 = mkdir("network", DEFFILEMODE);
 
-    if (error == -1)
+    if (error == -1 || error2 == -1)
     {
-        cout << "Error could not create directory: " << folder << endl;
+        cout << "Error could not create directory: " << folder << " or network\n";
     }
     else
     {
@@ -309,14 +332,26 @@ void Supervisor::writePopulationToFile()
             // Write the overall progress of the population.
             fout << "Generation: " << generation << endl
                  << "Overall Average: " << overallAverage << endl
-                 << "Number of Species: " << species.size() << endl << endl
-                 << "Best Performing Genome\n---------------------\n"
-                 << bestGenome << endl;
+                 << "Number of Species: " << species.size() << endl << endl;
 
+            Genome bestGenome;  // Grab the best performer.
             for (int s = 0; s < species.size(); ++s)
             {
+                fout << "Species " << s << ": " << species[s].getGenomes().size()
+                     << " genomes\n";
+
                 species[s].writeGenomesToFile(generation, s);
+
+                // See which one is the best performer.
+                if (species[s].getBestGenome().getFitness() > bestGenome.getFitness())
+                {
+                    bestGenome = species[s].getBestGenome();
+                }
             }
+
+            // Finally write this genome as well to the file.
+            fout << endl << "Best Performing Genome\n----------------------\n"
+                 << bestGenome << endl;
         }
 
         fout.close(); // Always close it.

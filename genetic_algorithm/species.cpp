@@ -133,3 +133,29 @@ vector<Genome> Species::produceOffspring(int children)
 
     return offspring;
 }
+
+/***********************************************************************
+* update
+*   This will update the genomes. It will also grab the best performer
+*       of the species.
+***********************************************************************/
+void Species::update()
+{
+    Genome genome;
+    for (int g = 0; g < genomes.size(); ++g)
+    {
+        genomes[g].update();
+
+        if (genomes[g].getFitness() > genome.getFitness())
+        {
+            genome = genomes[g];
+        }
+    }
+
+    // Save the best performer
+    bestGenome = genome;
+
+    ++age;
+
+    return;
+}

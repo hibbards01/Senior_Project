@@ -32,6 +32,7 @@ public:
             genomes.push_back(Genome(outputs, inputs));
         }
     }
+    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(0) { genomes.push_back(genome); }
     ~Species() { genomes.clear(); }
 
     //
@@ -40,19 +41,8 @@ public:
     float getAverageFitness();                          // This will grab the average fitness.
     void writeGenomesToFile(int gen, int id);           // This will save the GENOMES to a file.
     std::vector<Genome> produceOffspring(int children); // Produce offspring within the species.
-
-    // This will update the age for the species and for all it's GENOMES.
-    void update()
-    {
-        for (int g = 0; g < genomes.size(); ++g)
-        {
-            genomes[g].update();
-        }
-
-        ++age;
-
-        return;
-    }
+    void update();                                      // This will update the age for the species
+                                                        // and for all it's GENOMES.
 
     // This will update all the fitnesses so that younger genomes have a
     // better chance for surviving.
@@ -99,11 +89,13 @@ public:
     int getNoImprovement()            const { return noImprovement; }
     int getAge()                      const { return age;           }
     std::vector<Genome> & getGenomes()      { return genomes;       }
+    Genome & getBestGenome()                { return bestGenome;    }
 private:
     std::vector<Genome> genomes; // This will hold all the genomes for this species.
     int noImprovement;           // This will keep track how long it has not improved.
     int age;                     // How old this species is.
     float averageFitness;        // The average fitness of the species.
+    Genome bestGenome;           // This will save the best performing genome.
 };
 
 #endif // SPECIES_H

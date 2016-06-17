@@ -38,6 +38,11 @@ public:
     void run();                    // This will run the everything.
     float runSimulation();         // This will take the network and run the simulation.
     void writePopulationToFile();  // Write the population to a file.
+
+    //
+    // Getters
+    //
+    int getOverallAverage() const { return overallAverage; }
 private:
     std::vector<Species> species; // Confusing, right? ;)
     int generation;               // What generation are we in? This will
@@ -45,7 +50,6 @@ private:
     float overallAverage;         // What is the overall average of the species.
     int noImprovement;            // This will be the tracker of when this
                                   // algorithm is done.
-    Genome bestGenome;            // This will be the best performing genome.
     int population;               // This will hold how many of population we shall create.
 
     // This will calculate where the babies go to
