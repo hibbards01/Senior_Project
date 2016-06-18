@@ -52,7 +52,7 @@ float Species::getAverageFitness()
 void Species::writeGenomesToFile(int gen, int speciesId)
 {
     // Create the file name based off the numbers.
-    string file = "gen" + toString<int>(gen) + "/species" + toString<int>(speciesId) + ".txt";
+    string file = "../data/gen" + toString<int>(gen) + "/species" + toString<int>(speciesId) + ".txt";
     ofstream fout(file.c_str());
 
     // Make sure it was able to do it. If not then output an error message.
@@ -95,7 +95,7 @@ vector<Genome> Species::produceOffspring(int children)
         Genome child; // Set the child to be empty for now.
 
         // Grab a random parent.
-        int num = random(0, genomes.size() - 1);
+        int num = (genomes.size() > 1) ? random(0, genomes.size() - 1) : 0;
         assert(num >= 0 && num < genomes.size());
 
         // See if it will pass the crossover rate. If not then it will

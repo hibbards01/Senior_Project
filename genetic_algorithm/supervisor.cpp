@@ -122,23 +122,27 @@ void Supervisor::epoch()
 
     if (remainigBabies > 0)
     {
+        assert(species.size() > 0);
         int babies = ceil(remainigBabies / species.size());
-        for (int s = 0; s < species.size() && total < population; ++s)
+        while (total < population)
         {
-            if (total + babies > population)
+            for (int s = 0; s < species.size() && total < population; ++s)
             {
-                // Make up for the rest of the population.
-                babies = population - total;
+                if (total + babies > population)
+                {
+                    // Make up for the rest of the population.
+                    babies = population - total;
+                }
+
+                // Add up the babies
+                total += babies;
+
+                // Create the children
+                vector<Genome> children = species[s].produceOffspring(babies);
+
+                // Finally save it to the vector.
+                offspring.insert(offspring.end(), children.begin(), children.end());
             }
-
-            // Add up the babies
-            total += babies;
-
-            // Create the children
-            vector<Genome> children = species[s].produceOffspring(babies);
-
-            // Finally save it to the vector.
-            offspring.insert(offspring.end(), children.begin(), children.end());
         }
     }
 
@@ -309,7 +313,7 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
 void Supervisor::writePopulationToFile()
 {
     // Create a new folder for the generation!
-    string folder = "gen" + toString<int>(generation);
+    string folder = "../data/gen" + toString<int>(generation);
     int error = mkdir(folder.c_str(), ACCESSPERMS);
 
     string network = folder + "/network";

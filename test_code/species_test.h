@@ -58,19 +58,19 @@ namespace {
     {
         Species species(50, 3, 5);
 
-        system("mkdir gen1");
-        system("mkdir gen1/network");
+        system("mkdir ../data/gen1");
+        system("mkdir ../data/gen1/network");
 
         species.writeGenomesToFile(1, 1);
 
-        ifstream fin("gen1/species1.txt");
+        ifstream fin("../data/gen1/species1.txt");
 
         ASSERT_TRUE(fin.good());
 
         fin.close();
 
         // Now clean up the system
-        system("rm -rf gen1");
+        system("rm -rf ../data/gen1");
     }
 
     TEST_F(SpeciesTest, ProduceOffspring)

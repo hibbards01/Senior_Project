@@ -39,13 +39,13 @@ namespace {
         Supervisor spv(100, 3, 5);
         spv.writePopulationToFile();
 
-        ifstream fin("gen0/population_summary.txt");
+        ifstream fin("../data/gen0/population_summary.txt");
 
         EXPECT_EQ(true, fin.good());
 
         fin.close();
 
-        system("rm -rf gen0");
+        system("rm -rf ../data/gen0");
     }
 
     TEST_F(SupervisorTest, Update)
@@ -55,7 +55,7 @@ namespace {
 
         EXPECT_EQ(1, spv.getGeneration());
 
-        system("rm -rf gen0");
+        system("rm -rf ../data/gen0");
     }
 
     TEST_F(SupervisorTest, SetOverallAverage)
@@ -85,10 +85,10 @@ namespace {
 
         EXPECT_EQ(100, total);
 
-        system("rm -rf gen0");
+        system("rm -rf ../data/gen0");
 
         // Run one more time to see if it still works!
-        spv.epoch();               // This is the big function!
+        spv.epoch();
 
         EXPECT_EQ(2, spv.getGeneration());
         EXPECT_EQ(2, spv.getNoImprovement());
@@ -103,7 +103,7 @@ namespace {
 
         EXPECT_EQ(100, total);
 
-        system("rm -rf gen0");
+        system("rm -rf ../data/gen0");
     }
 }
 

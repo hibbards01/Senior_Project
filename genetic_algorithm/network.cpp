@@ -201,7 +201,7 @@ void Network::writeNodes(ofstream & fout, Node * node)
 void Network::writeNetworkToFile(const int id, const int gen)
 {
     // Create the file name
-    string file = "gen" + toString<int>(gen) + "/network/network" + toString<int>(id) + ".txt";
+    string file = "../data/gen" + toString<int>(gen) + "/network/network" + toString<int>(id) + ".txt";
 
     // Start the process of writing to a file.
     ofstream fout(file.c_str());

@@ -399,20 +399,20 @@ namespace
     {
         buildNetwork(); // Build the network.
 
-        system("mkdir gen1");
-        system("mkdir gen1/network");
+        system("mkdir ../data/gen1");
+        system("mkdir ../data/gen1/network");
 
         // Now write it to a file.
         network.writeNetworkToFile(1, 1);
 
-        ifstream fin("gen1/network/network1.txt");
+        ifstream fin("../data/gen1/network/network1.txt");
 
         ASSERT_TRUE(fin.good());
 
         fin.close();
 
         // Now clean up the system
-        system("rm -rf gen1");
+        system("rm -rf ../data/gen1");
     }
 
     TEST_F(NetworkTest, GetShortestPath)
