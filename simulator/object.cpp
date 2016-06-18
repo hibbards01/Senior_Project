@@ -72,8 +72,8 @@ void Rock::createRock()
     int p = 0;
     for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_ROCK)
     {
-        points[p][0] = static_cast<int>((getRadius() * cos(i)) * random(0.5, 1.0));
-        points[p][1] = static_cast<int>((getRadius() * sin(i)) * random(0.5, 1.0));
+        points[p][0] = (getRadius() * cos(i)) * random(0.5, 1.0);
+        points[p][1] = (getRadius() * sin(i)) * random(0.5, 1.0);
 
         ++p;
     }
@@ -95,44 +95,36 @@ void Ship::draw()
     if (getIsAlive())
     {
         drawBigShip(getPoint(), getAngle());
-        drawRect(Point(0, 0), 20, 20, 0);
-        drawRect(Point(-20, 0), 20, 20, 0);
-        drawRect(Point(0, 20), 20, 20, 0);
-        drawRect(Point(0, -20), 20, 20, 0);
-        drawRect(Point(20, 0), 20, 20, 0);
+        // drawRect(Point(0, 0), 20, 20, 0);
+        // drawRect(Point(-20, 0), 20, 20, 0);
+        // drawRect(Point(0, 20), 20, 20, 0);
+        // drawRect(Point(0, -20), 20, 20, 0);
+        // drawRect(Point(20, 0), 20, 20, 0);
 
-        drawRect(Point(-20, 20), 20, 20, 0);
-        drawRect(Point(20, 20), 20, 20, 0);
-        drawRect(Point(20, -20), 20, 20, 0);
-        drawRect(Point(-20, -20), 20, 20, 0);
+        // drawRect(Point(-20, 20), 20, 20, 0);
+        // drawRect(Point(20, 20), 20, 20, 0);
+        // drawRect(Point(20, -20), 20, 20, 0);
+        // drawRect(Point(-20, -20), 20, 20, 0);
 
-        drawRect(Point(-40, 0), 20, 20, 0);
-        drawRect(Point(0, 40), 20, 20, 0);
-        drawRect(Point(0, -40), 20, 20, 0);
-        drawRect(Point(40, 0), 20, 20, 0);
+        // drawRect(Point(-40, 0), 20, 20, 0);
+        // drawRect(Point(0, 40), 20, 20, 0);
+        // drawRect(Point(0, -40), 20, 20, 0);
+        // drawRect(Point(40, 0), 20, 20, 0);
 
-        drawRect(Point(-40, 40), 20, 20, 0);
-        drawRect(Point(40, 40), 20, 20, 0);
-        drawRect(Point(40, -40), 20, 20, 0);
-        drawRect(Point(-40, -40), 20, 20, 0);
+        // drawRect(Point(-40, 40), 20, 20, 0);
+        // drawRect(Point(40, 40), 20, 20, 0);
+        // drawRect(Point(40, -40), 20, 20, 0);
+        // drawRect(Point(-40, -40), 20, 20, 0);
 
-        drawRect(Point(-40, 20), 20, 20, 0);
-        drawRect(Point(-20, 40), 20, 20, 0);
-        drawRect(Point(20, 40), 20, 20, 0);
-        drawRect(Point(40, 20), 20, 20, 0);
+        // drawRect(Point(-40, 20), 20, 20, 0);
+        // drawRect(Point(-20, 40), 20, 20, 0);
+        // drawRect(Point(20, 40), 20, 20, 0);
+        // drawRect(Point(40, 20), 20, 20, 0);
 
-        drawRect(Point(-40, -20), 20, 20, 0);
-        drawRect(Point(-20, -40), 20, 20, 0);
-        drawRect(Point(20, -40), 20, 20, 0);
-        drawRect(Point(40, -20), 20, 20, 0);
-
-        drawRect(Point(-60, 0), 20, 20, 0);
-        drawRect(Point(-60, 20), 20, 20, 0);
-        drawRect(Point(-60, -20), 20, 20, 0);
-
-        drawRect(Point(-80, 0), 20, 20, 0);
-        drawRect(Point(-80, 20), 20, 20, 0);
-        drawRect(Point(-80, -20), 20, 20, 0);
+        // drawRect(Point(-40, -20), 20, 20, 0);
+        // drawRect(Point(-20, -40), 20, 20, 0);
+        // drawRect(Point(20, -40), 20, 20, 0);
+        // drawRect(Point(40, -20), 20, 20, 0);
     }
 
     return;
@@ -176,12 +168,12 @@ void Ship::move(const Interface * pUI)
         // Move the ship
         getVector().move();
 
-        float endX = getVector().getPoint().getX();
-        float endY = getVector().getPoint().getY();
+        // float endX = getVector().getPoint().getX();
+        // float endY = getVector().getPoint().getY();
 
-        float finalX = endX - startX;
-        float finalY = endY - startY;
-        odometer += sqrtf((finalX * finalX) + (finalY * finalY));
+        // float finalX = endX - startX;
+        // float finalY = endY - startY;
+        // odometer += sqrtf((finalX * finalX) + (finalY * finalY));
     }
 
     return;

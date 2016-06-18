@@ -38,11 +38,12 @@ public:
     int run();
     void checkCollision();
     void drawScore();
-    float getScore();
     void runSim(const Interface * pUI);
     void deleteObjects();
     void createObjects();
     void restart();
+    void computeScore();
+    void getInputs(int sensors[][25]) const;
 
     //
     // Getters
@@ -63,7 +64,8 @@ private:
     int timer;                           // This will count how many frames have passed.
     Vector finishLine;                   // Where the finish line is currently.
     int done;                            // Is the game done?
-    Point startingPosition;              // This will save the starting position of the ship.
+    Point positionOfShip;                // This will save the starting position of the ship.
+    int score;                           // This will hold the score
 };
 
 #endif // SIM_H

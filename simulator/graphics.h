@@ -31,15 +31,12 @@ public:
     //
     // Methods
     //
-    void draw(int fuel, int dist, int time) const; // Draw all the graphics
-    int getFinishSize()                     const { return finishSize;   }
-    Point & getFinishCircle()                     { return finishCircle; }
+    void draw(int fuel, int time) const; // Draw all the graphics
+    int getFinishSize()           const { return finishSize;   }
+    Point & getFinishCircle()           { return finishCircle; }
 private:
     Point fuelText;     // The fuel display of the text.
     Point fuelNum;      // This will show how much fuel you have.
-    Point distText;     // Where to display the distance text.
-    Point distNum;      // How much distance is covered will be
-                        // displayed at the point specified.
     Point timeText;     // Display the word "time."
     Point timeNum;      // Display the number.
     Point finishCircle; // Where the finish line will be.

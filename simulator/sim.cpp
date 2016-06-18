@@ -83,7 +83,7 @@ void Simulator::createObjects()
     // If changed then the logic will break if not changed in other positions
     objects.push_back(new Ship(650, -350, SHIPW, 4));
     // objects.push_back(new Ship(0, 0, SHIPW, 4));
-    startingPosition.setPoint(650, -350);
+    positionOfShip.setPoint(650, -350);
 
     // Sun and Jupiter
     // objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
@@ -338,7 +338,7 @@ void Simulator::draw()
     }
 
     // Now grab the fuel and the distance of the ship
-    graphics.draw(ship->getFuel(), ship->getDistance(), time);
+    graphics.draw(ship->getFuel(), time);
 
     if (done != 0)
     {
@@ -396,36 +396,19 @@ void Simulator::runSim(const Interface * pUI)
     return;
 }
 
-/****************************************************
-* getScore
-*   This will calculate the score that the person gets
-*       when being killed or crosses the finish line.
-****************************************************/
-float Simulator::getScore()
+/***********************************************************************
+* computeScore
+*   This will add to the score at every frame.
+***********************************************************************/
+void Simulator::computeScore()
 {
-    // Grab the distance, and fuel from the ship
+    // Grab the ship.
     Ship * ship = (Ship *) objects.front();
-    int fuel = ship->getFuel();
-    float dist = ship->getDistance();
-    Point pos = ship->getPoint();
 
-    // Now calculate the score
-    // Fuel score: total fuel minus current fuel
-    float score = 0;
-    score += fuel * 2;
+    // Now grab where it is currently at.
+    Point endPosition = ship->getPoint();
 
-    // Grab how close the ship got to the finish line
-    // Minus off the distance left from the score
-    if (done == -1)
-    {
-        score -= (finishLine.getPoint().grabDistance(pos) - 30);
-    }
-
-    // Now do the score for time.
-    // The faster that you complete it the more points you get.
-    score += (done == -1) ? 0 : time * 10;
-
-    return score;
+    return;
 }
 
 /****************************************************
@@ -434,8 +417,6 @@ float Simulator::getScore()
 ****************************************************/
 void Simulator::drawScore()
 {
-    float score = getScore();
-
     // Show the score
     Point pt1(-22, 0);
     Point pt2(-30, -20);
@@ -449,6 +430,50 @@ void Simulator::drawScore()
 
     drawText(pt1, "Score:");
     drawNumber(pt2, score);
+
+    return;
+}
+
+/***********************************************************************
+* getInputs
+*   This will grab the sensors for the Genetic Algorithm.
+***********************************************************************/
+void Simulator::getInputs(int sensors[][25]) const
+{
+    // Grab the ship and the objects. Move the iterator over one
+    // to skip the ship.
+    Point ship = objects.front()->getPoint();
+    list<Object *> :: const_iterator it = objects.begin();
+    ++it;
+
+    for (; it != objects.end(); ++it)
+    {
+        // This will grab how far away the object is from the ship.
+        int x = 0;
+        int y = 0;
+
+        // See what type of object it is
+        if ((*it)->getType() == ASTEROID)
+        {
+            // Grab the x and y from the asteroid
+            x = ((*it)->getPoint().getX() - ship.getX()) / 20;
+            y = ((*it)->getPoint().getY() - ship.getY()) / 20;
+
+            // Check if the x and y are in range of the ship
+            if (x < 3 && x > -3 && y < 3 && y > -3)
+            {
+                // Now convert the x and y to r and c for the array
+                int r = 2 - y;
+                int c = 2 + x;
+
+                // Save the value!
+                sensors[r][c] = (*it)->getValue();
+            }
+        }
+        else
+        {
+        }
+    }
 
     return;
 }

@@ -37,11 +37,12 @@ public:
     //
     // Methods
     //
-    virtual void move(const Interface * pUI);        // Virtual function
-    virtual void draw() = 0;                         // Pure virtual function
-    void addVectors(Vector & v);                     // Add two vectors together
+    virtual void move(const Interface * pUI);        // Virtual function.
+    virtual void draw() = 0;                         // Pure virtual function.
+    virtual int getValue() const { return 0; }       // Virtual function.
+    void addVectors(Vector & v);                     // Add two vectors together.
     void kill()            { alive = false;        } // Kill the object!
-    void rotate(int speed) { vector.rotate(speed); } // Rotate the object
+    void rotate(int speed) { vector.rotate(speed); } // Rotate the object.
 
     //
     // Getters
@@ -89,11 +90,7 @@ public:
     Rock(float x, float y, float dx, float dy, double m, int r, int s, int type) : Object(x, y, dx, dy, m, r), rotationSpeed(s)
     {
         setType(type);
-
-        if (type == ASTEROID)
-        {
-            createRock();
-        }
+        createRock();
     }
     ~Rock() {}
 
@@ -101,16 +98,18 @@ public:
     // Methods
     //
     void draw();
+    int getValue() const { return value; }
 
     //
     // Setters
     //
     void setRotationSpeed(int s) { rotationSpeed = s; }
 private:
-    void createRock();              // This will create the points for the rock
+    void createRock();              // This will create the points for the rock.
     int rotationSpeed;              // This will rotate the Rock.
-    int points[POINTS_FOR_ROCK][2]; // This will hold the length of each of the sides
+    int points[POINTS_FOR_ROCK][2]; // This will hold the length of each of the sides.
                                     // this allows the asteroids to look jagged.
+    int value;
 };
 
 /*********************************
@@ -129,7 +128,6 @@ public:
         setAngle(0);
         setType(SHIP);
         fuel = 200;
-        odometer = 0;
     }
     ~Ship() {}
 
@@ -143,17 +141,14 @@ public:
     //
     // Getters
     //
-    float getDistance() const { return odometer; }
-    int getFuel()       const { return fuel;     }
+    int getFuel()    const { return fuel;  }
 
     //
     // Setters
     //
-    void setDistance(float d) { odometer = d;    }
     void setFuel(int f)       { fuel = f;        }
 private:
-    int fuel;       // How much fuel the ship has.
-    float odometer; // The distance the ship as traveled.
+    int fuel;  // How much fuel the ship has.
 };
 
 #endif // OBJECTS_H
