@@ -82,8 +82,7 @@ void Simulator::createObjects()
     // ************ WARNING ************
     // If changed then the logic will break if not changed in other positions
     objects.push_back(new Ship(75, -75, SHIPW, 4));
-    // objects.push_back(new Ship(0, 0, SHIPW, 4));
-    positionOfShip.setPoint(650, -350);
+    // objects.push_back(new Ship(650, -350, SHIPW, 4));
 
     // Sun and Jupiter
     objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
@@ -92,7 +91,7 @@ void Simulator::createObjects()
     // objects.push_back(new Rock(-375, 0, 0, 2.5, EARTH, 20, 0, PLANET));
     // objects.push_back(new Rock(-390, 0, 0, 2.0, MOON, 15, 0, PLANET));
 
-    // // Create some asteroids!
+    // // // Create some asteroids!
     objects.push_back(new Rock(100, -100, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
     objects.push_back(new Rock(60, -120, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
 
@@ -401,15 +400,35 @@ void Simulator::runSim(const Interface * pUI)
 * computeScore
 *   This will add to the score at every frame.
 ***********************************************************************/
-void Simulator::computeScore()
+float Simulator::computeScore()
 {
     // Grab the ship.
     Ship * ship = (Ship *) objects.front();
 
-    // Now grab where it is currently at.
-    Point endPosition = ship->getPoint();
+    float distance = 1100; // This will grab the distance left for the ship.
+    if (done == -1)
+    {
 
-    return;
+        // Grab the x and the y from the finish line and the ship.
+        float x = finishLine.getPoint().getX() - ship->getPoint().getX();
+        float y = finishLine.getPoint().getY() - ship->getPoint().getY();
+
+        // Grab the distance that is left.
+        distance += sqrt((x * x) + (y * y));
+    }
+    else
+    {
+        distance -= 100; // You won some more points!
+    }
+
+    // Finally grab the fuel and time.
+    int fuel     = 2.5 * ship->getFuel();
+    int timeLeft = 8.34 * time;
+
+    // Minus off the fuel and the time left over from the distance.
+    distance -= fuel - timeLeft;
+
+    return distance;
 }
 
 /****************************************************
@@ -422,12 +441,9 @@ void Simulator::drawScore()
     Point pt1(-22, 0);
     Point pt2(-30, -20);
 
-    if (score < 0)
-    {
-        score *= -1;
-        Point pt3(-45, -37);
-        drawText(pt3, "-");
-    }
+    int score = computeScore();
+
+    assert(distance >= 0);
 
     drawText(pt1, "Score:");
     drawNumber(pt2, score);

@@ -178,7 +178,7 @@ void readFile(string fileName, bool sim) throw (string)
             }
             else
             {
-
+                // Grab the genome provided and grab all the data it has.
             }
         }
     }
