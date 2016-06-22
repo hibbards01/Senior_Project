@@ -569,8 +569,10 @@ float Genome::computeDistance(const Genome & rhs) const
     // Grab the the biggest genome size
     int size = (linkGenes.size() >= rhs.linkGenes.size()) ? linkGenes.size() : rhs.linkGenes.size();
 
+    GeneHistory & db = GeneHistory::getInstance();
+
     // Finally compute the distance between the GENOMES.
-    float distance = ((c1 * excess) / size) + ((c2 * disjoints) / size) + (c3 * (weightDifference / matched));
+    float distance = ((db.getC1() * excess) / size) + ((db.getC2() * disjoints) / size) + (db.getC3() * (weightDifference / matched));
 
     return distance;
 }

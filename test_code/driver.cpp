@@ -17,10 +17,6 @@
 #include "supervisor_test.h"
 #include <ctime>
 
-float Genome::c1 = 1;
-float Genome::c2 = 1;
-float Genome::c3 = 0.4;
-
 int main(int argc, char **argv)
 {
     srand(time(0));

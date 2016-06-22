@@ -81,19 +81,20 @@ void Simulator::createObjects()
     // The collision function will use that assumption.
     // ************ WARNING ************
     // If changed then the logic will break if not changed in other positions
-    objects.push_back(new Ship(650, -350, SHIPW, 4));
+    objects.push_back(new Ship(75, -75, SHIPW, 4));
     // objects.push_back(new Ship(0, 0, SHIPW, 4));
     positionOfShip.setPoint(650, -350);
 
     // Sun and Jupiter
-    // objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
+    objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
     // objects.push_back(new Rock(200, 0, 0, 3.5, JUPITER, 40, 0, PLANET));
     // objects.push_back(new Rock(300, 0, 0, 2.5, SATURN, 30, 0, PLANET));
     // objects.push_back(new Rock(-375, 0, 0, 2.5, EARTH, 20, 0, PLANET));
     // objects.push_back(new Rock(-390, 0, 0, 2.0, MOON, 15, 0, PLANET));
 
     // // Create some asteroids!
-    objects.push_back(new Rock(0, 0, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(100, -100, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
+    objects.push_back(new Rock(60, -120, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
 
     // objects.push_back(new Rock(0, -350, 1.7, 0, ASTEROIDW, 10, 5, ASTEROID));
     // objects.push_back(new Rock(-350, -350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
@@ -467,11 +468,41 @@ void Simulator::getInputs(int sensors[][25]) const
                 int c = 2 + x;
 
                 // Save the value!
+                assert(r > -1 && r < 25 && c > -1 && c < 25);
                 sensors[r][c] = (*it)->getValue();
             }
         }
         else
         {
+            // First grab the planet and it's position.
+            assert((*it)->getType() == PLANET);
+
+            Rock * rock = (Rock *) *it;
+            Point pos = rock->getPoint();
+
+            // Now loop through the points
+            for (int p = 0; p < POINTS_FOR_ROCK; ++p)
+            {
+                // First add the x and y to the center of the rock
+                int posX = rock->getPoints()[p][0] + pos.getX();
+                int posY = rock->getPoints()[p][1] + pos.getY();
+
+                // Now see where this point is in relation to the ship.
+                x = (posX - ship.getX()) / 20;
+                y = (posY - ship.getY()) / 20;
+
+                // Check if the x and y are in range of the ship
+                if (x < 3 && x > -3 && y < 3 && y > -3)
+                {
+                    // Now convert the x and y to r and c for the array
+                    int r = 2 - y;
+                    int c = 2 + x;
+
+                    // Save the value!
+                    assert(r > -1 && r < 25 && c > -1 && c < 25);
+                    sensors[r][c] = (*it)->getValue();
+                }
+            }
         }
     }
 

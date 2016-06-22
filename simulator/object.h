@@ -13,10 +13,10 @@
 
 #include "vector.h"
 #include "uiInteract.h"
+#include "defines.h"
 
 // ENUM for the type of objects
 enum {NOTHING, SHIP, PLANET, ASTEROID};
-#define POINTS_FOR_ROCK 20
 
 /**********************************
  * Objects
@@ -92,7 +92,15 @@ public:
         setType(type);
         createRock();
     }
-    ~Rock() {}
+    ~Rock()
+    {
+        for (int r = 0; r < POINTS_FOR_ROCK; ++r)
+        {
+            delete [] points[r];
+        }
+
+        delete [] points;
+    }
 
     //
     // Methods
@@ -104,12 +112,17 @@ public:
     // Setters
     //
     void setRotationSpeed(int s) { rotationSpeed = s; }
+
+    //
+    // Getters
+    //
+    int ** getPoints()           { return points;     }
 private:
-    void createRock();              // This will create the points for the rock.
-    int rotationSpeed;              // This will rotate the Rock.
-    int points[POINTS_FOR_ROCK][2]; // This will hold the length of each of the sides.
-                                    // this allows the asteroids to look jagged.
-    int value;
+    void createRock(); // This will create the points for the rock.
+    int rotationSpeed; // This will rotate the Rock.
+    int **points;      // This will hold the length of each of the sides.
+                       // this allows the asteroids to look jagged.
+    int value; // The value of the rock for the interaction for the ship.
 };
 
 /*********************************
@@ -136,7 +149,6 @@ public:
     //
     void draw();
     void move(const Interface * pUI);
-    // void moveship(int angle, float dx, float dy);
 
     //
     // Getters

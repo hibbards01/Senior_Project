@@ -69,6 +69,13 @@ namespace {
 
     TEST_F(SupervisorTest, Epoch)
     {
+        GeneHistory & db = GeneHistory::getInstance();
+        db.setSpeciesCompatibility(0.26);
+        db.setLinkRate(0.07);
+        db.setNodeRate(0.03);
+        db.setWeightRate(0.2);
+        db.setKillRate(10);
+
         Supervisor spv(100, 3, 5);
         spv.epoch();               // This is the big function!
 

@@ -8,6 +8,12 @@
 ###########################################################################
 
 ###########################################################################
+# Finally put it all together!
+###########################################################################
+sim: node.o network.o genome.o geneHistory.o species.o supervisor.o main.cpp object.o point.o sim.o vector.o graphics.o uiDraw.o uiInteract.o geneHistory.h
+	g++ -o sim node.o network.o genome.o geneHistory.o species.o supervisor.o main.cpp object.o point.o sim.o vector.o graphics.o uiDraw.o uiInteract.o -framework OpenGL -framework GLUT
+
+###########################################################################
 # All the Genetic Algorithm compilations.
 ###########################################################################
 
@@ -23,17 +29,35 @@ genome.o: genome.cpp genome.h geneHistory.h
 geneHistory.o: geneHistory.cpp geneHistory.h
 	g++ -c geneHistory.cpp
 
-species.o: species.cpp species.h defines.h
+species.o: species.cpp species.h defines.h geneHistory.h
 	g++ -c species.cpp
 
-supervisor.o: supervisor.cpp supervisor.h defines.h
+supervisor.o: supervisor.cpp supervisor.h defines.h geneHistory.h
 	g++ -c supervisor.cpp
 
 ###########################################################################
 # All the simulation compilations.
 ###########################################################################
+object.o: ../simulator/object.cpp ../simulator/object.h ../simulator/vector.h ../simulator/uiDraw.h
+	g++ -c ../simulator/object.cpp
 
+point.o: ../simulator/point.cpp ../simulator/point.h
+	g++ -c ../simulator/point.cpp
 
+sim.o: ../simulator/sim.cpp ../simulator/sim.h ../simulator/defines.h ../simulator/uiDraw.h
+	g++ -c ../simulator/sim.cpp
+
+vector.o: ../simulator/vector.cpp ../simulator/vector.h ../simulator/point.h
+	g++ -c ../simulator/vector.cpp
+
+graphics.o: ../simulator/graphics.cpp ../simulator/graphics.h ../simulator/point.h ../simulator/uiDraw.h
+	g++ -c ../simulator/graphics.cpp
+
+uiDraw.o: ../simulator/uiDraw.cpp ../simulator/uiDraw.h ../simulator/point.h
+	g++ -c ../simulator/uiDraw.cpp -Wno-deprecated
+
+uiInteract.o: ../simulator/uiInteract.cpp ../simulator/uiInteract.h ../simulator/point.h
+	g++ -c ../simulator/uiInteract.cpp -Wno-deprecated
 
 ###########################################################################
 # Tools that I can use

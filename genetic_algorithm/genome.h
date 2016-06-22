@@ -130,7 +130,6 @@ private:
     int inputs;                      // This will keep track how many inputs it has.
     int outputs;                     // Same thing as inputs.
     int id;                          // The id of the genome.
-    static float c1, c2, c3;         // These will be used for the computeDistance function.
 };
 
 #endif // GENOME_H

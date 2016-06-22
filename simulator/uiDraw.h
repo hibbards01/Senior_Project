@@ -79,6 +79,6 @@ void drawTextColor(const Point & topLeft, const char * text);
 void drawCoolShip(const Point & center, int rotation);
 void drawBigShip(const Point & center, int rotation);
 void drawLesserShip(const Point & center, int rotation);
-void drawAsteroid(const Point & center, int points[][2], int size, int rotation);
+void drawAsteroid(const Point & center, int **points, int size, int rotation);
 
 #endif // UI_DRAW_H

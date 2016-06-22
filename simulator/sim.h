@@ -33,7 +33,7 @@ public:
     // Methods
     //
     void move(const Interface * pUI);
-    void move(){}
+    void move() {}
     void draw();
     int run();
     void checkCollision();

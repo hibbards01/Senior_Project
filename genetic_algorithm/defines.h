@@ -8,8 +8,8 @@
 *       the files that use them.
 ***********************************************************************/
 
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef GENETIC_DEFINES_H
+#define GENETIC_DEFINES_H
 
 #include <cassert>
 #include <math.h>
@@ -64,4 +64,4 @@ inline std::string toString(const T & t)
     return ss.str();
 }
 
-#endif // DEFINES_H
+#endif // GENETIC_DEFINES_H

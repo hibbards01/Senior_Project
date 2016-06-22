@@ -280,7 +280,7 @@ void drawCircle(const Point & center, char radius, int points, int rotation, boo
  *  Draw an asteroid based off the center of the
  *    point and radius that is given.
  *************************************************/
-void drawAsteroid(const Point & center, int points[][2], int size, int rotation)
+void drawAsteroid(const Point & center, int **points, int size, int rotation)
 {
    // Begin drawing the Asteroid
    glBegin(GL_LINE_LOOP);

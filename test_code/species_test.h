@@ -75,6 +75,9 @@ namespace {
 
     TEST_F(SpeciesTest, ProduceOffspring)
     {
+        GeneHistory & db = GeneHistory::getInstance();
+        db.setCrossoverRate(7.0);
+
         Species species(50, 3, 5);
 
         vector<Genome> children = species.produceOffspring(10);

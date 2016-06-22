@@ -9,6 +9,7 @@
 
 #include "species.h"
 #include "defines.h"
+#include "geneHistory.h"
 #include <fstream>
 #include <cassert>
 using namespace std;
@@ -87,6 +88,9 @@ void Species::writeGenomesToFile(int gen, int speciesId)
 ***********************************************************************/
 vector<Genome> Species::produceOffspring(int children)
 {
+    GeneHistory & db = GeneHistory::getInstance();
+    float crossoverRate = db.getCrossoverRate();
+
     vector<Genome> offspring; // This will hold all the children that will be created.
 
     // Loop until all the offspring is produced.
@@ -100,7 +104,7 @@ vector<Genome> Species::produceOffspring(int children)
 
         // See if it will pass the crossover rate. If not then it will
         // give a random genome in the species.
-        if (random(0, 10) <= 7 && genomes.size() > 1)
+        if (random(0, 10) <= crossoverRate && genomes.size() > 1)
         {
             // Now grab another parent that is not the LEFTPARENT.
             int randNum;

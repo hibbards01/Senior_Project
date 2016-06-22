@@ -9,6 +9,7 @@
 
 #include "supervisor.h"
 #include "defines.h"
+#include "geneHistory.h"
 #include <sys/stat.h>
 #include <fstream>
 #include <math.h>
@@ -83,9 +84,11 @@ void Supervisor::epoch()
 
     // Now loop through the species and grab the offspring. If that offspring
     // did not perform for 10 generations then we will kill of that species.
+    GeneHistory & db = GeneHistory::getInstance();
+    int killRate = db.getKillRate();
     for (vector<Species>::iterator s = species.begin(); s != species.end(); ++s)
     {
-        if (s->getNoImprovement() > 10)
+        if (s->getNoImprovement() > killRate)
         {
             // Kill off the species since it did not perform as well.
             s = species.erase(s);
@@ -221,6 +224,9 @@ void Supervisor::update()
 ***********************************************************************/
 void Supervisor::giveOffspringToSpecies(vector<Genome> & genomes)
 {
+    GeneHistory & db = GeneHistory::getInstance();
+    float speciesCompatibility = db.getSpeciesCompatibility();
+
     // Loop through all the genomes
     for (int g = 0; g < genomes.size(); ++g)
     {
@@ -229,7 +235,7 @@ void Supervisor::giveOffspringToSpecies(vector<Genome> & genomes)
         for (int s = 0; s < species.size() && !found; ++s)
         {
             // Check the compatibility threshold.
-            if (genomes[g].computeDistance(species[s].getLeader()) < 0.26) // # define this?
+            if (genomes[g].computeDistance(species[s].getLeader()) < speciesCompatibility)
             {
                 species[s].getGenomes().push_back(genomes[g]);
                 found = true;
@@ -253,11 +259,16 @@ void Supervisor::giveOffspringToSpecies(vector<Genome> & genomes)
 ***********************************************************************/
 void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
 {
+    GeneHistory & db = GeneHistory::getInstance();
+    float linkRate = db.getLinkRate();
+    float nodeRate = db.getNodeRate();
+    float weightRate = db.getWeightRate();
+
     for (int g = 0; g < genomes.size(); ++g)
     {
         // Now see if this GENOME will get mutated.
         // First see if a link will be added or taken away...
-        if (random(0.01, 1.0) < 0.07) // # define this?
+        if (random(0.01, 1.0) < linkRate)
         {
             int num = random(0, 2); // Do a random mutation on the link.
             bool done = false;      // Make sure one of the mutations happens.
@@ -287,7 +298,7 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
         }
 
         // See if we should add another neuron.
-        if (random(0.01, 1.0) < 0.03)
+        if (random(0.01, 1.0) < nodeRate)
         {
 #ifdef DEBUG
             genomes[g].mutateAddNeuron(random(0, 1));
@@ -297,7 +308,7 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
         }
 
         // Now see if a mutation on a weight will happen.
-        if (random(0.01, 1.0) < 0.2)
+        if (random(0.01, 1.0) < weightRate)
         {
             genomes[g].mutateWeight();
         }

@@ -547,6 +547,11 @@ namespace {
 
     TEST_F(GenomeTest, ComputeDistance)
     {
+        GeneHistory & db = GeneHistory::getInstance();
+        db.setC1(1.0);
+        db.setC2(1.0);
+        db.setC3(0.4);
+
         vector<NodeGene> nodes;
         vector<LinkGene> links;
         buildGenome(nodes, links);

@@ -40,4 +40,6 @@
 #define deg2rad(value) ((M_PI / 180) * (value))
 #define rad2deg(value) (value * 180 / PI)
 
+#define POINTS_FOR_ROCK 20
+
 #endif // DEFINES_H

@@ -69,13 +69,33 @@ void Rock::draw()
  ******************************************/
 void Rock::createRock()
 {
-    int p = 0;
-    for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_ROCK)
-    {
-        points[p][0] = (getRadius() * cos(i)) * random(0.5, 1.0);
-        points[p][1] = (getRadius() * sin(i)) * random(0.5, 1.0);
+    // Allocate the memory for the points
+    points = new int*[POINTS_FOR_ROCK];
 
-        ++p;
+    int p = 0;
+    if (getType() == ASTEROID)
+    {
+        for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_ROCK)
+        {
+            points[p] = new int[2];
+
+            points[p][0] = (getRadius() * cos(i)) * random(0.5, 1.0);
+            points[p][1] = (getRadius() * sin(i)) * random(0.5, 1.0);
+
+            ++p;
+        }
+    }
+    else
+    {
+        for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_ROCK)
+        {
+            points[p] = new int[2];
+
+            points[p][0] = (getRadius() * cos(i));
+            points[p][1] = (getRadius() * sin(i));
+
+            ++p;
+        }
     }
 
     return;
@@ -94,37 +114,40 @@ void Ship::draw()
     // Draw the ship, make sure it is alive
     if (getIsAlive())
     {
+        int x = getPoint().getX();
+        int y = getPoint().getY();
+
         drawBigShip(getPoint(), getAngle());
-        // drawRect(Point(0, 0), 20, 20, 0);
-        // drawRect(Point(-20, 0), 20, 20, 0);
-        // drawRect(Point(0, 20), 20, 20, 0);
-        // drawRect(Point(0, -20), 20, 20, 0);
-        // drawRect(Point(20, 0), 20, 20, 0);
+        drawRect(Point(x + 0, y + 0), 20, 20, 0);
+        drawRect(Point(x + -20, y + 0), 20, 20, 0);
+        drawRect(Point(x + 0, y + 20), 20, 20, 0);
+        drawRect(Point(x + 0, y + -20), 20, 20, 0);
+        drawRect(Point(x + 20, y + 0), 20, 20, 0);
 
-        // drawRect(Point(-20, 20), 20, 20, 0);
-        // drawRect(Point(20, 20), 20, 20, 0);
-        // drawRect(Point(20, -20), 20, 20, 0);
-        // drawRect(Point(-20, -20), 20, 20, 0);
+        drawRect(Point(x + -20, y + 20), 20, 20, 0);
+        drawRect(Point(x + 20, y + 20), 20, 20, 0);
+        drawRect(Point(x + 20, y + -20), 20, 20, 0);
+        drawRect(Point(x + -20, y + -20), 20, 20, 0);
 
-        // drawRect(Point(-40, 0), 20, 20, 0);
-        // drawRect(Point(0, 40), 20, 20, 0);
-        // drawRect(Point(0, -40), 20, 20, 0);
-        // drawRect(Point(40, 0), 20, 20, 0);
+        drawRect(Point(x + -40, y + 0), 20, 20, 0);
+        drawRect(Point(x + 0, y + 40), 20, 20, 0);
+        drawRect(Point(x + 0, y + -40), 20, 20, 0);
+        drawRect(Point(x + 40, y + 0), 20, 20, 0);
 
-        // drawRect(Point(-40, 40), 20, 20, 0);
-        // drawRect(Point(40, 40), 20, 20, 0);
-        // drawRect(Point(40, -40), 20, 20, 0);
-        // drawRect(Point(-40, -40), 20, 20, 0);
+        drawRect(Point(x + -40, y + 40), 20, 20, 0);
+        drawRect(Point(x + 40, y + 40), 20, 20, 0);
+        drawRect(Point(x + 40, y + -40), 20, 20, 0);
+        drawRect(Point(x + -40, y + -40), 20, 20, 0);
 
-        // drawRect(Point(-40, 20), 20, 20, 0);
-        // drawRect(Point(-20, 40), 20, 20, 0);
-        // drawRect(Point(20, 40), 20, 20, 0);
-        // drawRect(Point(40, 20), 20, 20, 0);
+        drawRect(Point(x + -40, y + 20), 20, 20, 0);
+        drawRect(Point(x + -20, y + 40), 20, 20, 0);
+        drawRect(Point(x + 20, y + 40), 20, 20, 0);
+        drawRect(Point(x + 40, y + 20), 20, 20, 0);
 
-        // drawRect(Point(-40, -20), 20, 20, 0);
-        // drawRect(Point(-20, -40), 20, 20, 0);
-        // drawRect(Point(20, -40), 20, 20, 0);
-        // drawRect(Point(40, -20), 20, 20, 0);
+        drawRect(Point(x + -40, y + -20), 20, 20, 0);
+        drawRect(Point(x + -20, y + -40), 20, 20, 0);
+        drawRect(Point(x + 20, y + -40), 20, 20, 0);
+        drawRect(Point(x + 40, y + -20), 20, 20, 0);
     }
 
     return;
@@ -161,19 +184,8 @@ void Ship::move(const Interface * pUI)
             }
         }
 
-        // Grab the distance that will be traveled
-        float startX = getVector().getPoint().getX();
-        float startY = getVector().getPoint().getY();
-
         // Move the ship
         getVector().move();
-
-        // float endX = getVector().getPoint().getX();
-        // float endY = getVector().getPoint().getY();
-
-        // float finalX = endX - startX;
-        // float finalY = endY - startY;
-        // odometer += sqrtf((finalX * finalX) + (finalY * finalY));
     }
 
     return;
