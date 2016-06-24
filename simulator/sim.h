@@ -12,7 +12,6 @@
 #define SIM_H
 
 #include <list>
-#include <vector>
 #include "object.h"
 #include "graphics.h"
 
@@ -34,9 +33,9 @@ public:
     // Methods
     //
     void move(const Interface * pUI);
-    void move() {}
+    void move(std::vector<double> & inputs);
     void draw();
-    void run(std::vector<double> inputs);
+    void run(std::vector<double> & inputs);
     void checkCollision();
     void drawScore();
     void runSim(const Interface * pUI);

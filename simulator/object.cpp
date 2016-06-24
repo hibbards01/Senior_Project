@@ -17,6 +17,20 @@ using namespace std;
  ************************* Object **************************
  **********************************************************/
 
+/***********************************************************
+* move
+*   Same as the function below.
+***********************************************************/
+void Object::move(vector<double> & inputs)
+{
+    if (getIsAlive())
+    {
+        v.move();
+    }
+
+    return;
+}
+
 /*********************************
  * move
  *  This will add the vector to the
@@ -27,7 +41,7 @@ void Object::move(const Interface * pUI)
     if (getIsAlive())
     {
         // Move the object
-        vector.move();
+        v.move();
     }
 
     return;
@@ -193,5 +207,14 @@ void Ship::move(const Interface * pUI)
         getVector().move();
     }
 
+    return;
+}
+
+/***********************************************************************
+* move
+*   This will move the ship based off of what the computer gives it.
+***********************************************************************/
+void Ship::move(vector<double> & inputs)
+{
     return;
 }

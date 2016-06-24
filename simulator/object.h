@@ -14,6 +14,7 @@
 #include "vector.h"
 #include "uiInteract.h"
 #include "defines.h"
+#include <vector>
 
 // ENUM for the type of objects
 enum {NOTHING, SHIP, PLANET, ASTEROID};
@@ -29,29 +30,30 @@ public:
     //
     // Constructors
     //
-    Object() : vector(), mass(0.0), alive(true) { /* vector.getPoint().setWrap(true); */ }
+    Object() : v(), mass(0.0), alive(true) { /* v.getPoint().setWrap(true); */ }
     Object(float x, float y, float dx, float dy, double m, int r) :
-        vector(x, y, dx, dy), mass(m), alive(true), radius(r) { /* vector.getPoint().setWrap(true); */ }
+        v(x, y, dx, dy), mass(m), alive(true), radius(r) { /* v.getPoint().setWrap(true); */ }
     virtual ~Object() {}
 
     //
     // Methods
     //
     virtual void move(const Interface * pUI);        // Virtual function.
+    virtual void move(std::vector<double> & inputs); // Virtual function.
     virtual void draw() = 0;                         // Pure virtual function.
     virtual int getValue() const { return 0; }       // Virtual function.
     void addVectors(Vector & v);                     // Add two vectors together.
     void kill()            { alive = false;        } // Kill the object!
-    void rotate(int speed) { vector.rotate(speed); } // Rotate the object.
+    void rotate(int speed) { v.rotate(speed); } // Rotate the object.
 
     //
     // Getters
     //
-    Vector getVector() const { return vector;            }
+    Vector getVector() const { return v;                 }
     float getMass()    const { return mass;              }
-    Point getPoint()   const { return vector.getPoint(); }
-    Vector & getVector()     { return vector;            }
-    int getAngle()     const { return vector.getAngle(); }
+    Point getPoint()   const { return v.getPoint();      }
+    Vector & getVector()     { return v;                 }
+    int getAngle()     const { return v.getAngle();      }
     bool getIsAlive()  const { return alive;             }
     int getType()      const { return type;              }
     int getSize()      const { return radius;            }
@@ -60,15 +62,15 @@ public:
     //
     // Setters
     //
-    void setVector(Vector & v) { vector = v;             }
-    void setMass(float m)      { mass = m;               }
-    void setWrap(bool wrap)    { vector.setWrap(wrap);   }
-    void setAngle(int angle)   { vector.setAngle(angle); }
-    void setIsAlive(bool a)    { alive = a;              }
-    void setType(int t)        { type = t;               }
-    void setRadius(int r)      { radius = r;             }
+    void setVector(Vector & ve) { v = ve;                 }
+    void setMass(float m)       { mass = m;               }
+    void setWrap(bool wrap)     { v.setWrap(wrap);        }
+    void setAngle(int angle)    { v.setAngle(angle);      }
+    void setIsAlive(bool a)     { alive = a;              }
+    void setType(int t)         { type = t;               }
+    void setRadius(int r)       { radius = r;             }
 private:
-    Vector vector; // This will allow the object to move!
+    Vector v;      // This will allow the object to move!
     double mass;   // This will hold the mass of the object!
     bool alive;    // This will keep track of whether it is alive
                    // or not.
@@ -151,6 +153,7 @@ public:
     //
     void draw();
     void move(const Interface * pUI);
+    void move(std::vector<double> & inputs);
 
     //
     // Getters

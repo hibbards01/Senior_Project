@@ -324,6 +324,45 @@ void Simulator::move(const Interface * pUI)
     return;
 }
 
+/***********************************************************************
+* move
+*   This function will do the same thing as the other function MOVE.
+***********************************************************************/
+void Simulator::move(vector<double> & inputs)
+{
+    // Calculate gravity!
+    calculateAccerlation();
+
+    // Loop through all the objects and move them!
+    for (list<Object *> :: iterator i = objects.begin(); i != objects.end(); ++i)
+    {
+        (*i)->move(inputs);
+    }
+
+    // Check how much fuel is left
+    Ship * ship = (Ship *) objects.front();
+    if (ship->getFuel() == 0 && done == 0)
+    {
+        done = -1;
+    }
+
+    // Change the time as well.
+    if (--timer == 0 && done == 0)
+    {
+        if (time > 0)
+        {
+            --time;
+            timer = 30;
+        }
+        else
+        {
+            done = -1;
+        }
+    }
+
+    return;
+}
+
 /**************************************************
  * draw
  *  This will then draw the objects.
@@ -359,12 +398,12 @@ void Simulator::draw()
  *      It will also return if it
  *      is done or not.
  *******************************/
-void Simulator::run(vector<double> inputs)
+void Simulator::run(vector<double> & inputs)
 {
     if (done == 0)
     {
         // First move the objects.
-        move();
+        move(inputs);
 
         // Check if a collision has happened
         checkCollision();
