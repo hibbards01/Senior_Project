@@ -20,7 +20,7 @@ float Point::xMax = 700.0;
 float Point::yMin = -400.0;
 float Point::yMax = 400.0;
 
-const static Simulator sim;
+static Simulator sim;
 
 /***********************************************************************
 * displayHelp
@@ -195,6 +195,104 @@ void readFile(string fileName, bool sim) throw (string)
 }
 
 /***********************************************************************
+* runSimulation
+*   This will run the simulation with the Genome that was given.
+***********************************************************************/
+int runSimulation(Network & network)
+{
+    // Run the simulation until done.
+    while (sim.run() != 0)
+    {
+        // Create the array from scratch for the inputs
+        int arrayInputs[5][5] = {
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0}
+        };
+
+        // Now grab the inputs for the ship.
+        sim.getInputs(arrayInputs);
+
+        // Convert the inputs to an array
+        vector<int> inputs;
+        for (int r = 0; r < 5; ++r)
+        {
+            for (int c = 0; c < 5; ++c)
+            {
+                if (r != 2 && c != 2)
+                {
+                    inputs.push_back(arrayInputs[r][c]);
+                }
+            }
+        }
+
+        // Give the inputs to the network.
+        vector<double> outputs = network.feedForward(inputs);
+    }
+
+    return 0;
+}
+
+/***********************************************************************
+* runSolutions
+*   This will loop through everyone and run their solutions against the
+*       the game and retrieve the score for them.
+***********************************************************************/
+void runSolutions(Supervisor & supervisor)
+{
+    // Loop through all the genomes and see how they do against the game.
+    for (int s = 0; s < supervisor.getSpecies().size(); ++s)
+    {
+        for (int g = 0; g < supervisor.getSpecies()[s].getGenomes().size(); ++g)
+        {
+            // Grab the score it got.
+            int score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
+
+            // Save the score for the genome.
+            supervisor.getSpecies()[s].getGenomes()[g].setFitness(score);
+
+            // Restart the game.
+            sim.restart();
+        }
+    }
+
+    return;
+}
+
+/***********************************************************************
+* runGeneticAlgorithm
+*   This will run the genetic algorithm and start the whole process.
+*       This will terminate when the conditions are met.
+***********************************************************************/
+void runGeneticAlgorithm()
+{
+    Supervisor supervisor(100, 4, 24); // Declare the genetic algorithm.
+
+    // Start the whole process, once there is no improvement or we reach
+    // the limit for the generation then it is done.
+    while (supervisor.getNoImprovement() <= 10 && supervisor.getGeneration() < 2000)
+    {
+        // Run the solutions against the simulator.
+        runSolutions(supervisor);
+    }
+
+    return;
+}
+
+/***********************************************************************
+* runGame
+*   This will run the game instead. This will allow the player to play
+*       unless the file was specified. If that is the case then it will
+*       run the Genome on the game instead.
+***********************************************************************/
+void runGame()
+{
+    return;
+}
+
+/***********************************************************************
 * main
 *   This will be the main driver of the program.
 ***********************************************************************/
@@ -216,6 +314,16 @@ int main(int argc, char *argv[])
             if (!fileName.empty())
             {
                 readFile(fileName, sim);
+            }
+
+            // Run what was requested.
+            if (sim)
+            {
+                runGame();
+            }
+            else
+            {
+                runGeneticAlgorithm();
             }
         }
         catch (string error)

@@ -36,27 +36,6 @@ overallAverage(0), generation(0), population(population)
 }
 
 /***********************************************************************
-* run
-*   This will start the whole process. It will check the NOIMPROVEMENT
-*       to see if it is not making any more improvement. Once it doesn't
-*       after a certain amount of time it will finally terminate.
-***********************************************************************/
-void Supervisor::run()
-{
-    return;
-}
-
-/***********************************************************************
-* runSimulation
-*   This will run the simulation with the network. It will then return
-*       the score once it is finished.
-***********************************************************************/
-float Supervisor::runSimulation()
-{
-    return 0;
-}
-
-/***********************************************************************
 * epoch
 *   This will determine how many babies that are needed to be made for
 *       the next generation. It will also give the children to the correct

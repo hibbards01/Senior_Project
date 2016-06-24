@@ -18,7 +18,7 @@ using namespace std;
 *       given by the simulator. After the feedForward is done it will
 *       return the output for the SHIP.
 ***********************************************************************/
-vector<double> Network::feedForward(const vector<double> & inputs)
+vector<double> Network::feedForward(const vector<int> & inputs)
 {
     assert(inputs.size() == sensors.size()); // This better be the same.
 

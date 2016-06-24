@@ -36,7 +36,7 @@ public:
 
     // FeedForward will be the one that does the summations of all the nodes
     // once it is finished it will then return the outputs that the network gave.
-    std::vector<double> feedForward(const std::vector<double> & inputs);
+    std::vector<double> feedForward(const std::vector<int> & inputs);
 
     // This updates the network.
     void update(const std::vector<NodeGene> & nodeGenes, const std::vector<LinkGene> & linkGenes);

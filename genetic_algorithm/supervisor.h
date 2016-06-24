@@ -35,8 +35,6 @@ public:
                                    // to the population.
     void setOverallAverage();      // Grab the overall average of the population.
     void update();                 // Update everything!
-    void run();                    // This will run the everything.
-    float runSimulation();         // This will take the network and run the simulation.
     void writePopulationToFile();  // Write the population to a file.
 
     //
