@@ -81,19 +81,16 @@ void Simulator::createObjects()
     // The collision function will use that assumption.
     // ************ WARNING ************
     // If changed then the logic will break if not changed in other positions
-    objects.push_back(new Ship(75, -75, SHIPW, 4));
     // objects.push_back(new Ship(650, -350, SHIPW, 4));
 
     // Sun and Jupiter
-    objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
+    // objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
     // objects.push_back(new Rock(200, 0, 0, 3.5, JUPITER, 40, 0, PLANET));
     // objects.push_back(new Rock(300, 0, 0, 2.5, SATURN, 30, 0, PLANET));
     // objects.push_back(new Rock(-375, 0, 0, 2.5, EARTH, 20, 0, PLANET));
     // objects.push_back(new Rock(-390, 0, 0, 2.0, MOON, 15, 0, PLANET));
 
-    // // // Create some asteroids!
-    objects.push_back(new Rock(100, -100, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
-    objects.push_back(new Rock(60, -120, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
+    // Create some asteroids!
 
     // objects.push_back(new Rock(0, -350, 1.7, 0, ASTEROIDW, 10, 5, ASTEROID));
     // objects.push_back(new Rock(-350, -350, 1.8, 0, ASTEROIDW, 10, 5, ASTEROID));
@@ -116,6 +113,14 @@ void Simulator::createObjects()
     //                                 random(-3.0, 3.0),
     //                                 random(-3.0, 3.0), ASTEROIDW, 10, 5, ASTEROID));
     // }
+
+    // For testing purposes
+    // objects.push_back(new Ship(75, -75, SHIPW, 4));
+    // objects.push_back(new Rock(50, 50, 0, 0, SUN, 70, 0, PLANET));
+    // objects.push_back(new Rock(100, -100, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(60, -120, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(60, -60, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
+    // objects.push_back(new Rock(120, -40, 0, 0, ASTEROIDW, 10, 5, ASTEROID));
 
     return;
 }
@@ -455,11 +460,11 @@ void Simulator::drawScore()
 * getInputs
 *   This will grab the sensors for the Genetic Algorithm.
 ***********************************************************************/
-void Simulator::getInputs(int sensors[][25]) const
+void Simulator::getInputs(int sensors[][5]) const
 {
     // Grab the ship and the objects. Move the iterator over one
     // to skip the ship.
-    Point ship = objects.front()->getPoint();
+    Ship * ship = (Ship *) objects.front();
     list<Object *> :: const_iterator it = objects.begin();
     ++it;
 
@@ -473,8 +478,9 @@ void Simulator::getInputs(int sensors[][25]) const
         if ((*it)->getType() == ASTEROID)
         {
             // Grab the x and y from the asteroid
-            x = ((*it)->getPoint().getX() - ship.getX()) / 20;
-            y = ((*it)->getPoint().getY() - ship.getY()) / 20;
+            Point ptShip = ship->getPoint();
+            x = round(((*it)->getPoint().getX() - ptShip.getX()) / 20);
+            y = round(((*it)->getPoint().getY() - ptShip.getY()) / 20);
 
             // Check if the x and y are in range of the ship
             if (x < 3 && x > -3 && y < 3 && y > -3)
@@ -484,7 +490,7 @@ void Simulator::getInputs(int sensors[][25]) const
                 int c = 2 + x;
 
                 // Save the value!
-                assert(r > -1 && r < 25 && c > -1 && c < 25);
+                assert(r > -1 && r < 5 && c > -1 && c < 5);
                 sensors[r][c] = (*it)->getValue();
             }
         }
@@ -494,31 +500,36 @@ void Simulator::getInputs(int sensors[][25]) const
             assert((*it)->getType() == PLANET);
 
             Rock * rock = (Rock *) *it;
-            Point pos = rock->getPoint();
 
-            // Now loop through the points
-            for (int p = 0; p < POINTS_FOR_ROCK; ++p)
+            if ((ship->getVector() - rock->getVector()) < (ship->getSize() + rock->getSize() + 50))
             {
-                // First add the x and y to the center of the rock
-                int posX = rock->getPoints()[p][0] + pos.getX();
-                int posY = rock->getPoints()[p][1] + pos.getY();
-
-                // Now see where this point is in relation to the ship.
-                x = (posX - ship.getX()) / 20;
-                y = (posY - ship.getY()) / 20;
-
-                // Check if the x and y are in range of the ship
-                if (x < 3 && x > -3 && y < 3 && y > -3)
+                // Now loop through the points
+                Point ptShip = ship->getPoint();
+                Point pos = rock->getPoint();
+                for (int p = 0; p < POINTS_FOR_PLANET; ++p)
                 {
-                    // Now convert the x and y to r and c for the array
-                    int r = 2 - y;
-                    int c = 2 + x;
+                    // First add the x and y to the center of the rock
+                    int posX = rock->getPoints()[p][0] + pos.getX();
+                    int posY = rock->getPoints()[p][1] + pos.getY();
 
-                    // Save the value!
-                    assert(r > -1 && r < 25 && c > -1 && c < 25);
-                    sensors[r][c] = (*it)->getValue();
+                    // Now see where this point is in relation to the ship.
+                    x = (posX - ptShip.getX()) / 20;
+                    y = (posY - ptShip.getY()) / 20;
+
+                    // Check if the x and y are in range of the ship
+                    if (x < 3 && x > -3 && y < 3 && y > -3)
+                    {
+                        // Now convert the x and y to r and c for the array
+                        int r = 2 - y;
+                        int c = 2 + x;
+
+                        // Save the value!
+                        assert(r > -1 && r < 5 && c > -1 && c < 5);
+                        sensors[r][c] = (*it)->getValue();
+                    }
                 }
             }
+
         }
     }
 

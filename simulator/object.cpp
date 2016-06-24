@@ -53,7 +53,7 @@ void Rock::draw()
         }
         else if (getType() == ASTEROID)
         {
-            drawAsteroid(getPoint(), points, POINTS_FOR_ROCK, getAngle());
+            drawAsteroid(getPoint(), points, POINTS_FOR_ASTEROID, getAngle());
         }
 
         rotate(rotationSpeed);
@@ -69,13 +69,12 @@ void Rock::draw()
  ******************************************/
 void Rock::createRock()
 {
-    // Allocate the memory for the points
-    points = new int*[POINTS_FOR_ROCK];
-
     int p = 0;
     if (getType() == ASTEROID)
     {
-        for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_ROCK)
+        points = new int*[POINTS_FOR_ASTEROID];
+
+        for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_ASTEROID)
         {
             points[p] = new int[2];
 
@@ -84,18 +83,24 @@ void Rock::createRock()
 
             ++p;
         }
+
+        value = -10;
     }
     else
     {
-        for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_ROCK)
+        points = new int*[POINTS_FOR_PLANET];
+
+        for (double i = 0; i < 2 * M_PI; i += (2 * M_PI) / POINTS_FOR_PLANET)
         {
             points[p] = new int[2];
 
-            points[p][0] = (getRadius() * cos(i));
-            points[p][1] = (getRadius() * sin(i));
+            points[p][0] = (getRadius() * cos(i)) * 0.9;
+            points[p][1] = (getRadius() * sin(i)) * 0.9;
 
             ++p;
         }
+
+        value = -20;
     }
 
     return;
@@ -118,36 +123,36 @@ void Ship::draw()
         int y = getPoint().getY();
 
         drawBigShip(getPoint(), getAngle());
-        drawRect(Point(x + 0, y + 0), 20, 20, 0);
-        drawRect(Point(x + -20, y + 0), 20, 20, 0);
-        drawRect(Point(x + 0, y + 20), 20, 20, 0);
-        drawRect(Point(x + 0, y + -20), 20, 20, 0);
-        drawRect(Point(x + 20, y + 0), 20, 20, 0);
+        // drawRect(Point(x + 0, y + 0), 20, 20, 0);
+        // drawRect(Point(x + -20, y + 0), 20, 20, 0);
+        // drawRect(Point(x + 0, y + 20), 20, 20, 0);
+        // drawRect(Point(x + 0, y + -20), 20, 20, 0);
+        // drawRect(Point(x + 20, y + 0), 20, 20, 0);
 
-        drawRect(Point(x + -20, y + 20), 20, 20, 0);
-        drawRect(Point(x + 20, y + 20), 20, 20, 0);
-        drawRect(Point(x + 20, y + -20), 20, 20, 0);
-        drawRect(Point(x + -20, y + -20), 20, 20, 0);
+        // drawRect(Point(x + -20, y + 20), 20, 20, 0);
+        // drawRect(Point(x + 20, y + 20), 20, 20, 0);
+        // drawRect(Point(x + 20, y + -20), 20, 20, 0);
+        // drawRect(Point(x + -20, y + -20), 20, 20, 0);
 
-        drawRect(Point(x + -40, y + 0), 20, 20, 0);
-        drawRect(Point(x + 0, y + 40), 20, 20, 0);
-        drawRect(Point(x + 0, y + -40), 20, 20, 0);
-        drawRect(Point(x + 40, y + 0), 20, 20, 0);
+        // drawRect(Point(x + -40, y + 0), 20, 20, 0);
+        // drawRect(Point(x + 0, y + 40), 20, 20, 0);
+        // drawRect(Point(x + 0, y + -40), 20, 20, 0);
+        // drawRect(Point(x + 40, y + 0), 20, 20, 0);
 
-        drawRect(Point(x + -40, y + 40), 20, 20, 0);
-        drawRect(Point(x + 40, y + 40), 20, 20, 0);
-        drawRect(Point(x + 40, y + -40), 20, 20, 0);
-        drawRect(Point(x + -40, y + -40), 20, 20, 0);
+        // drawRect(Point(x + -40, y + 40), 20, 20, 0);
+        // drawRect(Point(x + 40, y + 40), 20, 20, 0);
+        // drawRect(Point(x + 40, y + -40), 20, 20, 0);
+        // drawRect(Point(x + -40, y + -40), 20, 20, 0);
 
-        drawRect(Point(x + -40, y + 20), 20, 20, 0);
-        drawRect(Point(x + -20, y + 40), 20, 20, 0);
-        drawRect(Point(x + 20, y + 40), 20, 20, 0);
-        drawRect(Point(x + 40, y + 20), 20, 20, 0);
+        // drawRect(Point(x + -40, y + 20), 20, 20, 0);
+        // drawRect(Point(x + -20, y + 40), 20, 20, 0);
+        // drawRect(Point(x + 20, y + 40), 20, 20, 0);
+        // drawRect(Point(x + 40, y + 20), 20, 20, 0);
 
-        drawRect(Point(x + -40, y + -20), 20, 20, 0);
-        drawRect(Point(x + -20, y + -40), 20, 20, 0);
-        drawRect(Point(x + 20, y + -40), 20, 20, 0);
-        drawRect(Point(x + 40, y + -20), 20, 20, 0);
+        // drawRect(Point(x + -40, y + -20), 20, 20, 0);
+        // drawRect(Point(x + -20, y + -40), 20, 20, 0);
+        // drawRect(Point(x + 20, y + -40), 20, 20, 0);
+        // drawRect(Point(x + 40, y + -20), 20, 20, 0);
     }
 
     return;

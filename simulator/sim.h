@@ -43,7 +43,7 @@ public:
     void createObjects();
     void restart();
     float computeScore();
-    void getInputs(int sensors[][25]) const;
+    void getInputs(int sensors[][5]) const;
 
     //
     // Getters

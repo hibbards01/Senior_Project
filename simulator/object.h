@@ -94,7 +94,9 @@ public:
     }
     ~Rock()
     {
-        for (int r = 0; r < POINTS_FOR_ROCK; ++r)
+        int size = (getType() == ASTEROID) ? POINTS_FOR_ASTEROID : POINTS_FOR_PLANET;
+
+        for (int r = 0; r < size; ++r)
         {
             delete [] points[r];
         }
@@ -122,7 +124,7 @@ private:
     int rotationSpeed; // This will rotate the Rock.
     int **points;      // This will hold the length of each of the sides.
                        // this allows the asteroids to look jagged.
-    int value; // The value of the rock for the interaction for the ship.
+    int value;         // The value of the rock for the interaction for the ship.
 };
 
 /*********************************
