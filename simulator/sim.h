@@ -12,6 +12,7 @@
 #define SIM_H
 
 #include <list>
+#include <vector>
 #include "object.h"
 #include "graphics.h"
 
@@ -35,7 +36,7 @@ public:
     void move(const Interface * pUI);
     void move() {}
     void draw();
-    int run();
+    void run(std::vector<double> inputs);
     void checkCollision();
     void drawScore();
     void runSim(const Interface * pUI);
@@ -49,6 +50,7 @@ public:
     // Getters
     //
     std::list<Object *> & getObjects()          { return objects; }
+    int getDone()                         const { return done;    }
 
     //
     // Setters

@@ -201,7 +201,7 @@ void readFile(string fileName, bool sim) throw (string)
 int runSimulation(Network & network)
 {
     // Run the simulation until done.
-    while (sim.run() != 0)
+    while (sim.getDone() != 0)
     {
         // Create the array from scratch for the inputs
         int arrayInputs[5][5] = {
@@ -230,9 +230,13 @@ int runSimulation(Network & network)
 
         // Give the inputs to the network.
         vector<double> outputs = network.feedForward(inputs);
+
+        // Give the outputs to the game.
+        sim.run(outputs);
     }
 
-    return 0;
+    // The game is finished. Grab the score for the genome.
+    return sim.computeScore();
 }
 
 /***********************************************************************
@@ -242,6 +246,8 @@ int runSimulation(Network & network)
 ***********************************************************************/
 void runSolutions(Supervisor & supervisor)
 {
+    cout << "Running Solutions\n";
+
     // Loop through all the genomes and see how they do against the game.
     for (int s = 0; s < supervisor.getSpecies().size(); ++s)
     {
@@ -276,6 +282,13 @@ void runGeneticAlgorithm()
     {
         // Run the solutions against the simulator.
         runSolutions(supervisor);
+
+        // Now do the epoch for the population.
+        supervisor.epoch();
+
+        // Output something to show that it is working.
+        cout << "Generation: " << supervisor.getGeneration()
+             << " Overall Average: " << supervisor.getOverallAverage() << endl;
     }
 
     return;

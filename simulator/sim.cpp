@@ -307,6 +307,20 @@ void Simulator::move(const Interface * pUI)
         done = -1;
     }
 
+    // Change the time as well.
+    if (--timer == 0 && done == 0)
+    {
+        if (time > 0)
+        {
+            --time;
+            timer = 30;
+        }
+        else
+        {
+            done = -1;
+        }
+    }
+
     return;
 }
 
@@ -328,20 +342,6 @@ void Simulator::draw()
     // Make sure it is a SHIP
     assert(ship->getType() == SHIP);
 
-
-    if (--timer == 0 && done == 0)
-    {
-        if (time > 0)
-        {
-            --time;
-            timer = 30;
-        }
-        else
-        {
-            done = -1;
-        }
-    }
-
     // Now grab the fuel and the distance of the ship
     graphics.draw(ship->getFuel(), time);
 
@@ -359,7 +359,7 @@ void Simulator::draw()
  *      It will also return if it
  *      is done or not.
  *******************************/
-int Simulator::run()
+void Simulator::run(vector<double> inputs)
 {
     if (done == 0)
     {
@@ -370,7 +370,7 @@ int Simulator::run()
         checkCollision();
     }
 
-    return done;
+    return;
 }
 
 /****************************************************
@@ -529,7 +529,6 @@ void Simulator::getInputs(int sensors[][5]) const
                     }
                 }
             }
-
         }
     }
 
