@@ -15,8 +15,8 @@
 #include <cstdlib>    // for rand()
 
 
-// #define LINUX
-#define MAC_XCODE
+#define LINUX
+// #define MAC_XCODE
 // #define WIN_VISUAL_STUDIO
 
 #ifdef MAC_XCODE

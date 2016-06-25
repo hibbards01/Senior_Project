@@ -81,10 +81,10 @@ void Simulator::createObjects()
     // The collision function will use that assumption.
     // ************ WARNING ************
     // If changed then the logic will break if not changed in other positions
-    // objects.push_back(new Ship(650, -350, SHIPW, 4));
+    objects.push_back(new Ship(650, -350, SHIPW, 4));
 
     // Sun and Jupiter
-    // objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
+    objects.push_back(new Rock(0, 0, 0, 0, SUN, 70, 0, PLANET));
     // objects.push_back(new Rock(200, 0, 0, 3.5, JUPITER, 40, 0, PLANET));
     // objects.push_back(new Rock(300, 0, 0, 2.5, SATURN, 30, 0, PLANET));
     // objects.push_back(new Rock(-375, 0, 0, 2.5, EARTH, 20, 0, PLANET));
@@ -418,21 +418,21 @@ void Simulator::run(vector<double> & inputs)
 ****************************************************/
 void Simulator::runSim(const Interface * pUI)
 {
-    // if (done == 0)
-    // {
-    //     // First move the objects.
-    //     move(pUI);
+    if (done == 0)
+    {
+        // First move the objects.
+        move(pUI);
 
-    //     // Check if a collision has happened
-    //     checkCollision();
-    // }
-    // else
-    // {
-    //     if (pUI->isSpace())
-    //     {
-    //         restart();
-    //     }
-    // }
+        // Check if a collision has happened
+        checkCollision();
+    }
+    else
+    {
+        if (pUI->isSpace())
+        {
+            restart();
+        }
+    }
 
     // Now draw them.
     draw();
@@ -470,7 +470,7 @@ int Simulator::computeScore()
     int timeLeft = 8.34 * time;
 
     // Minus off the fuel and the time left over from the distance.
-    distance -= fuel - timeLeft;
+    distance -= (fuel + timeLeft);
 
     return distance;
 }
