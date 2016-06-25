@@ -15,6 +15,7 @@
 #include <math.h>
 #include <iostream>
 #include <sstream>
+#include <stdlib.h>
 
 // This holds the value types.
 enum {SENSOR, HIDDEN, OUTPUT, BIAS};

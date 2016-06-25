@@ -13,6 +13,7 @@
 
 #include "genome.h"
 #include <cmath>
+#include <algorithm>
 
 /***********************************************************************
 * Species

@@ -221,7 +221,7 @@ namespace
         buildNetwork(); // Build the network.
 
         // Create the inputs and add it to the vector.
-        vector<double> inputs;
+        vector<int> inputs;
         for (int i = 0; i < 5; ++i)
         {
             inputs.push_back(1);
@@ -288,7 +288,7 @@ namespace
         buildNetwork(); // Build the network.
 
         // Create the inputs and add it to the vector.
-        vector<double> inputs;
+        vector<int> inputs;
         for (int i = 0; i < 5; ++i)
         {
             inputs.push_back(1);
@@ -310,17 +310,13 @@ namespace
         recursiveOutputs[1] = node->getOutput();
 
         // Feed forward one more time!
-        for (int i = 0; i < 5; ++i)
-        {
-            inputs[i] = 0.5;
-        }
         results = network.feedForward(inputs);
 
         // Finally check all the outputs again!
         // First the Sensors
         for (int i = 0; i < network.getSensors().size(); ++i)
         {
-            EXPECT_EQ(0.5, network.getSensors()[i]->getOutput());
+            EXPECT_EQ(1, network.getSensors()[i]->getOutput());
         }
 
         // Now for the hidden nodes.
@@ -343,7 +339,7 @@ namespace
             double summation = 0;
             if (i < 4)
             {
-                summation = (0.5 * weights[i]) + (0.5 * weights[i]) + (0.5 * weights[i]) + (0.5 * weights[i]) + (0.5 * weights[i]) + (recursive * 0.15);
+                summation = (1 * weights[i]) + (1 * weights[i]) + (1 * weights[i]) + (1 * weights[i]) + (1 * weights[i]) + (recursive * 0.15);
             }
             else
             {
@@ -449,7 +445,7 @@ namespace
         network.update(nodes, links);
 
         // Create the inputs
-        vector<double> inputs;
+        vector<int> inputs;
         inputs.push_back(1);
         inputs.push_back(1);
 
