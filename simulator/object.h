@@ -51,6 +51,7 @@ public:
     //
     Vector getVector() const { return v;                 }
     float getMass()    const { return mass;              }
+    Point & getPoint()       { return v.getPoint();      }
     Point getPoint()   const { return v.getPoint();      }
     Vector & getVector()     { return v;                 }
     int getAngle()     const { return v.getAngle();      }
@@ -144,7 +145,7 @@ public:
     {
         setAngle(0);
         setType(SHIP);
-        fuel = 200;
+        fuel = 400;
     }
     ~Ship() {}
 

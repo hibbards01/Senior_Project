@@ -46,6 +46,7 @@ public:
    void addY(float dy)      { setY(getY() + dy);     }
    void setCheck(bool f)    { check = f;             }
    const Point & operator = (const Point & rhs);
+
    //I added these function.
    void setWrap(bool w)            { wrap = w;         }
    void setPoint(float x, float y) { setX(x); setY(y); }
@@ -55,7 +56,6 @@ public:
    //wrap around!
    void wrapAround();
    void addXY(float x, float y);
-
 private:
    float x;           // horizontal position
    float y;           // vertical position

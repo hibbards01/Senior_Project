@@ -40,12 +40,16 @@ public:
     void rotate(int rotate) { angle += rotate; }     // Rotate the object
     float operator - (const Vector & rhs);           // Difference operator. This will find
                                                      // the shortest distance between to vectors.
+    void addDx(float x) { dx += x; }
+    void addDy(float y) { dy += y; }
+
     //
     // Getters
     //
     float getDx()    const { return dx;       }
     float getDy()    const { return dy;       }
     int   getAngle() const { return angle;    }
+    Point & getPoint()     { return position; }
     Point getPoint() const { return position; }
 
     //

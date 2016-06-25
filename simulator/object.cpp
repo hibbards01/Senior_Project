@@ -216,5 +216,51 @@ void Ship::move(const Interface * pUI)
 ***********************************************************************/
 void Ship::move(vector<double> & inputs)
 {
+    if (getIsAlive())
+    {
+        if (fuel > 0)
+        {
+            // For now only move the ship if the inputs are not zero.
+            bool usedFuel = false;
+
+            // Up key
+            if (inputs[0] > 0)
+            {
+                getPoint().addX(-5);
+                usedFuel = true;
+            }
+
+            // Right Key
+            if (inputs[1] > 0)
+            {
+                getPoint().addY(5);
+                usedFuel = true;
+            }
+
+            // Down Key
+            if (inputs[2] > 0)
+            {
+                getPoint().addX(5);
+                usedFuel = true;
+            }
+
+            // Left Key
+            if (inputs[3] > 0)
+            {
+                getPoint().addY(-5);
+                usedFuel = true;
+            }
+
+            // See if any fuel was used
+            if (usedFuel)
+            {
+                // Add the thrusts together and take off fuel.
+                --fuel;
+            }
+        }
+
+        // Move the ship
+        getVector().move();
+    }
     return;
 }

@@ -466,7 +466,7 @@ int Simulator::computeScore()
     }
 
     // Finally grab the fuel and time.
-    int fuel     = 2.5 * ship->getFuel();
+    int fuel     = 1.25 * ship->getFuel();
     int timeLeft = 8.34 * time;
 
     // Minus off the fuel and the time left over from the distance.
