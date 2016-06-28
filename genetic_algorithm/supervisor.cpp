@@ -54,7 +54,7 @@ void Supervisor::epoch()
 
     // Sort the species in descending order of the average fitness for the species.
     // This way the offspring will always be created from the best performing species.
-    sort(species.begin(), species.end(), greater<Species>());
+    sort(species.begin(), species.end());
 
     // Now grab the total of offspring that will be produced.
     // Also produce them and save them in the vector.

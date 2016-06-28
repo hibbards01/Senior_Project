@@ -67,7 +67,7 @@ public:
         int survivors = floor(genomes.size() * 0.2) + 1.0;
 
         // Sort the GENOMES by adjustedFitness in descending order
-        sort(genomes.begin(), genomes.end(), std::greater<Genome>());
+        sort(genomes.begin(), genomes.end());
 
         // Finally erase the GENOMES that didn't survive.
         genomes.erase(genomes.begin() + survivors, genomes.end());
