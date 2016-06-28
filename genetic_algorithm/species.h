@@ -84,6 +84,11 @@ public:
         return averageFitness > rhs.averageFitness;
     }
 
+    bool operator < (const Species & rhs) const
+    {
+        return averageFitness > rhs.averageFitness;
+    }
+
     //
     // Getters
     //

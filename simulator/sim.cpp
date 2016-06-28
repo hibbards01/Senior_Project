@@ -443,7 +443,7 @@ void Simulator::runSim(const Interface * pUI)
 * computeScore
 *   This will add to the score at every frame.
 ***********************************************************************/
-int Simulator::computeScore()
+float Simulator::computeScore()
 {
     // Grab the ship.
     Ship * ship = (Ship *) objects.front();

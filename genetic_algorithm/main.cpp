@@ -198,7 +198,7 @@ void readFile(string fileName, bool sim) throw (string)
 * runSimulation
 *   This will run the simulation with the Genome that was given.
 ***********************************************************************/
-int runSimulation(Network & network)
+float runSimulation(Network & network)
 {
     // Run the simulation until done.
     while (sim.getDone() != 0)
@@ -254,7 +254,7 @@ void runSolutions(Supervisor & supervisor)
         for (int g = 0; g < supervisor.getSpecies()[s].getGenomes().size(); ++g)
         {
             // Grab the score it got.
-            int score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
+            float score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
 
             // Save the score for the genome.
             supervisor.getSpecies()[s].getGenomes()[g].setFitness(score);

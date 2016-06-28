@@ -99,6 +99,11 @@ public:
         return adjustedFitness > rhs.adjustedFitness;
     }
 
+    bool operator < (const Genome & rhs) const
+    {
+        return adjustedFitness > rhs.adjustedFitness;
+    }
+
     Genome & operator = (const Genome & rhs);
     friend std::ostream & operator << (std::ostream & out, const Genome & genome);
 

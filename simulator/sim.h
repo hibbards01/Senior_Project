@@ -42,7 +42,7 @@ public:
     void deleteObjects();
     void createObjects();
     void restart();
-    int computeScore();
+    float computeScore();
     void getInputs(int sensors[][5]) const;
 
     //

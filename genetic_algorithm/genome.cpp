@@ -209,7 +209,7 @@ void Genome::mutateAddNeuron()
         int numTries = 20; // This will be used for only when the count is <= 5.
                            // This will make sure not to loop forever in trying
                            // to find a link.
-        while (!found && numTries > 0)
+        while (!found && numTries-- > 0)
         {
             int range = linkGenes.size() - 1;
 
@@ -217,7 +217,6 @@ void Genome::mutateAddNeuron()
             if (count <= 5)
             {
                 range -= sqrt(linkGenes.size());
-                --numTries;
             }
 
             // Now grab a random link.
