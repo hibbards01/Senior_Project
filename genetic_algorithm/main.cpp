@@ -274,6 +274,8 @@ void runSolutions(Supervisor & supervisor)
 ***********************************************************************/
 void runGeneticAlgorithm()
 {
+    cout.precision(2);
+
     Supervisor supervisor(100, 4, 24); // Declare the genetic algorithm.
 
     // Start the whole process, once there is no improvement or we reach
