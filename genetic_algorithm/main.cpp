@@ -201,7 +201,7 @@ void readFile(string fileName, bool sim) throw (string)
 float runSimulation(Network & network)
 {
     // Run the simulation until done.
-    while (sim.getDone() != 0)
+    while (sim.getDone() == 0)
     {
         // Create the array from scratch for the inputs
         int arrayInputs[5][5] = {
