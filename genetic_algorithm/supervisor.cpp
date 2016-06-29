@@ -184,10 +184,10 @@ void Supervisor::update()
         species[s].update();
     }
 
-    if (generation % 5 == 0)
-    {
-        writePopulationToFile();
-    }
+    // if (generation % 5 == 0)
+    // {
+    writePopulationToFile();
+    // }
 
     ++generation;
 

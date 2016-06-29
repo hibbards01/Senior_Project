@@ -10,6 +10,8 @@
 #ifndef GENES_H
 #define GENES_H
 
+#include <iostream>
+
 /***********************************************************************
 * NodeGene
 *   This holds all the nodes that the GENOME will hold currently. This
@@ -42,6 +44,13 @@ struct NodeGene
     int type;
     bool recurrent;
 };
+
+inline std::ostream & operator << (std::ostream & out, const NodeGene & rhs)
+{
+    out << rhs.id << " " << rhs.type << " " << rhs.recurrent;
+
+    return out;
+}
 
 /***********************************************************************
 * LinkGene
@@ -87,5 +96,12 @@ struct LinkGene
     double weight;
     bool enabled;
 };
+
+inline std::ostream & operator << (std::ostream & out, const LinkGene & rhs)
+{
+    out << rhs.id << " " << rhs.input << " " << rhs.output << " " << rhs.weight << " " << rhs.enabled;
+
+    return out;
+}
 
 #endif // GENES_H

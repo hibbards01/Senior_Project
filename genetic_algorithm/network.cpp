@@ -9,6 +9,7 @@
 
 #include "network.h"
 #include "defines.h"
+#include <execinfo.h>
 #include <limits>
 using namespace std;
 
@@ -135,8 +136,29 @@ void Network::update(const vector<NodeGene> & nodeGenes, const vector<LinkGene> 
             Node * from = getNode(linkGenes[i].input);
             Node * to   = getNode(linkGenes[i].output);
 
+            // if (to == NULL || from == NULL)
+            // {
+            //     cerr << "Nodes:\n";
+            //     for (int n = 0; n < nodeGenes.size(); ++n)
+            //     {
+            //         cerr << nodeGenes[n] << endl;
+            //     }
+
+            //     cerr << "Links:\n";
+            //     for (int l = 0; l < linkGenes.size(); ++l)
+            //     {
+            //         cerr << linkGenes[l] << endl;
+            //     }
+
+            //     cerr << "Link: " << linkGenes[i] << endl;
+            //     // cerr << "from: " << from->getId() << endl;
+            //     // cerr << "to: " << to->getId() << endl;
+            // }
+
             // Either of them better not be NULL
-            assert(from != NULL && to != NULL);
+            assert(from != NULL);
+            assert(to != NULL);
+
 
             // Finally link them together with the weight.
             to->addInput(from, linkGenes[i].weight);

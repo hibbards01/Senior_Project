@@ -66,7 +66,10 @@ void Species::writeGenomesToFile(int gen, int speciesId)
         for (int g = 0; g < genomes.size(); ++g)
         {
             // Output the genome.
-            fout << "Genome " << genomes[g].getId() << "\n----------\n"
+            fout << "Genome " << genomes[g].getId()
+                 << " Average: " << genomes[g].getFitness()
+                 << " Adjusted Fitness: " << genomes[g].getAdjustedFitness()
+                 << "\n-------------------\n"
                  << "Nodes:\n" << genomes[g].getNodesString() << endl
                  << "Links:\n" << genomes[g].getLinksString() << endl;
 

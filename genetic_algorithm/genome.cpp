@@ -205,10 +205,11 @@ void Genome::mutateAddNeuron()
         // too small. This could result in a repeating of adding multiple nodes
         // to one link causing a chaining effect. We want it to be random. So
         // we bias it towards the older links when it is too small.
-        LinkGene * link;
+        LinkGene link;
         int numTries = 20; // This will be used for only when the count is <= 5.
                            // This will make sure not to loop forever in trying
                            // to find a link.
+        int index = 0;
         while (!found && numTries-- > 0)
         {
             int range = linkGenes.size() - 1;
@@ -220,14 +221,14 @@ void Genome::mutateAddNeuron()
             }
 
             // Now grab a random link.
-            int index = random(0, range);
+            index = random(0, range);
             assert(index < linkGenes.size() && index > -1);
 
-            link = &linkGenes[index];
+            link = linkGenes[index];
 
             // Now see if its an enabled link. It also cannot be a BIAS link or a recurrent link.
-            if (link->enabled && nodeGenes[link->input].type != BIAS
-                && !nodeGenes[link->input].recurrent)
+            if (link.enabled && nodeGenes[link.input].type != BIAS
+                && !nodeGenes[link.input].recurrent)
             {
                 found = true;
             }
@@ -236,11 +237,11 @@ void Genome::mutateAddNeuron()
         if (found)
         {
             // Disable the link.
-            link->enabled = false;
+            linkGenes[index].enabled = false;
 
             // Now save the links to the VECTOR
-            linkGenes.push_back(LinkGene(db.addNewLink(link->input, node.id), link->input, node.id, 1));
-            linkGenes.push_back(LinkGene(db.addNewLink(node.id, link->output), node.id, link->output, link->weight));
+            linkGenes.push_back(LinkGene(db.addNewLink(link.input, node.id), link.input, node.id, 1));
+            linkGenes.push_back(LinkGene(db.addNewLink(node.id, link.output), node.id, link.output, link.weight));
         }
     }
     else
