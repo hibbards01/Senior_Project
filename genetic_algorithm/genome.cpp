@@ -73,8 +73,8 @@ void Genome::mutateAddLink(int num)
 void Genome::mutateAddLink()
 #endif
 {
-    NodeGene * source;      // As the name applies we need to find two
-    NodeGene destination;   // Neurons to connect each other.
+    int source;             // As the name applies we need to find two
+    int destination;        // Neurons to connect each other.
     bool found = false;     // This will keep track if we have found it yet.
     bool recurrent = false; // Will this be a recurrent link or not?
 
@@ -89,8 +89,8 @@ void Genome::mutateAddLink()
         {
             if (nodeGenes[n].type == HIDDEN && !nodeGenes[n].recurrent)
             {
-                source = &nodeGenes[n];
-                destination = nodeGenes[n];
+                source = n;
+                destination = n;
                 found = true;
                 recurrent = true;
             }
@@ -113,15 +113,17 @@ void Genome::mutateAddLink()
         {
             // Grab two random nodes!
             int randNode = random(0, nodeGenes.size() - 1);
-            source = &nodeGenes[randNode];
-            randNode = random(0, nodeGenes.size() - 1);
-            destination = nodeGenes[randNode];
+            NodeGene sr = nodeGenes[randNode];
+            int randNode2 = random(0, nodeGenes.size() - 1);
+            NodeGene dest = nodeGenes[randNode2];
 
             // Now see if everything is correct
-            if (source->type != OUTPUT && destination.type != BIAS
-                && source->id != destination.id)
+            if (sr.type != OUTPUT && dest.type != BIAS
+                && sr.id != dest.id)
             {
                 found = true;
+                source = randNode;
+                destination = randNode2;
             }
         }
     }
@@ -129,17 +131,20 @@ void Genome::mutateAddLink()
     // Did we find one?
     if (found)
     {
+        int srId = nodeGenes[source].id;
+        int destId = nodeGenes[destination].id;
+
         // Let's add the new mutation!
         double weight = random(0.0, 1.0);
 
         // Now add the link to the new database and grab the id for it.
         GeneHistory & db = GeneHistory::getInstance();
-        int id = db.addNewLink(source->id, destination.id);
+        int id = db.addNewLink(srId, destId);
 
         if (!recurrent) // This will see if the two nodes are recurrent or not
         {
-            int path1 = network.getShortestPath(source->id);
-            int path2 = network.getShortestPath(destination.id);
+            int path1 = network.getShortestPath(srId);
+            int path2 = network.getShortestPath(destId);
 
             if (path1 >= path2)
             {
@@ -148,10 +153,10 @@ void Genome::mutateAddLink()
         }
 
         // Set the source to the recurrent variable
-        source->recurrent = recurrent;
+        nodeGenes[source].recurrent = recurrent;
 
         // Finally add it to the history
-        linkGenes.push_back(LinkGene(id, source->id, destination.id, weight));
+        linkGenes.push_back(LinkGene(id, srId, destId, weight));
     }
 
     return;
