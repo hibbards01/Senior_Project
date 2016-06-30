@@ -221,7 +221,7 @@ float runSimulation(Network & network)
         {
             for (int c = 0; c < 5; ++c)
             {
-                if (r != 2 && c != 2)
+                if (r != 2 || c != 2)
                 {
                     inputs.push_back(arrayInputs[r][c]);
                 }
@@ -274,13 +274,16 @@ void runSolutions(Supervisor & supervisor)
 ***********************************************************************/
 void runGeneticAlgorithm()
 {
+    cout.setf(ios::fixed);
+    cout.setf(ios::showpoint);
     cout.precision(2);
 
     Supervisor supervisor(100, 4, 24); // Declare the genetic algorithm.
+    supervisor.update();               // Update everything for the first time.
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
-    while (supervisor.getNoImprovement() <= 10 && supervisor.getGeneration() < 9)
+    while (supervisor.getNoImprovement() <= 10 && supervisor.getGeneration() < 2000)
     {
         // Output something to show that it is working.
         cout << "Generation: " << supervisor.getGeneration()
@@ -290,6 +293,7 @@ void runGeneticAlgorithm()
         runSolutions(supervisor);
 
         // Now do the epoch for the population.
+        cout << "Running epoch\n";
         supervisor.epoch();
     }
 

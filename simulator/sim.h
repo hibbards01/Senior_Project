@@ -50,6 +50,7 @@ public:
     //
     std::list<Object *> & getObjects()          { return objects; }
     int getDone()                         const { return done;    }
+    int getTime() const {return time; }
 
     //
     // Setters

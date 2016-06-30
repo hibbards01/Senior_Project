@@ -40,7 +40,7 @@ public:
     //
     // Getters
     //
-    int getOverallAverage()       const { return overallAverage; }
+    float getOverallAverage()     const { return overallAverage; }
     int getGeneration()           const { return generation;     }
     int getNoImprovement()        const { return noImprovement;  }
     int getPopulation()           const { return population;     }

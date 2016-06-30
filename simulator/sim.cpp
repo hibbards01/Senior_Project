@@ -471,6 +471,11 @@ float Simulator::computeScore()
     // Minus off the fuel and the time left over from the distance.
     distance -= (fuel + timeLeft);
 
+    if (isnan(distance))
+    {
+        distance = 1800;
+    }
+
     return distance;
 }
 

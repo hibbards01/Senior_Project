@@ -13,6 +13,7 @@
 #include <math.h>       // sqrtf
 #include <limits>       // numeric_limits
 #include <algorithm>    // max
+#include <cassert>
 using namespace std;
 
 /*********************************
@@ -85,9 +86,10 @@ Vector & Vector::operator += (const Vector & rhs)
 float findMax(float a, float b, float c, float d)
 {
     // Loop through each of the values
-    float maxDist = abs((long)max(a, b));
-    maxDist = abs((long)max(maxDist, c));
-    maxDist = abs((long)max(maxDist, d));
+    float maxDist = (float)abs((long)a);
+    maxDist = max(maxDist, (float)abs((long)b));
+    maxDist = max(maxDist, (float)abs((long)c));
+    maxDist = max(maxDist, (float)abs((long)d));
 
     return maxDist;
 }
@@ -105,6 +107,11 @@ float Vector::operator - (const Vector & rhs)
     float slice = 1.0 / max;
 
     float minDist = numeric_limits<float>::max();
+
+    if (slice < 0)
+    {
+        return minDist;
+    }
 
     for (float percent = 0.0; percent <= 1.0; percent += slice)
     {

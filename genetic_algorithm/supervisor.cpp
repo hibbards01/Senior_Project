@@ -150,7 +150,7 @@ void Supervisor::epoch()
 ***********************************************************************/
 void Supervisor::setOverallAverage()
 {
-    int average = 0; // This will grab all the averages from everyone!
+    float average = 0; // This will grab all the averages from everyone!
 
     // Now loop through the species and grab their averages
     for (int s = 0; s < species.size(); ++s)
@@ -184,10 +184,10 @@ void Supervisor::update()
         species[s].update();
     }
 
-    // if (generation % 5 == 0)
-    // {
-    writePopulationToFile();
-    // }
+    if (generation % 5 == 0)
+    {
+        writePopulationToFile();
+    }
 
     ++generation;
 
