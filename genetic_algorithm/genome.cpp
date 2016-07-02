@@ -260,7 +260,7 @@ void Genome::mutateAddNeuron()
         while (!found && numTries-- > 0)
         {
             // Grab the min and max.
-            int min = outputs + inputs;
+            int min = (outputs + inputs) - 1;
             int max = nodeGenes.size() - 1;
 
             // If there are only inputs and outputs then we will grab a random output.
@@ -576,6 +576,7 @@ float Genome::computeDistance(const Genome & rhs) const
 
     GeneHistory & db = GeneHistory::getInstance();
 
+    assert(size > 0);
     // Finally compute the distance between the GENOMES.
     float distance = ((db.getC1() * excess) / size) + ((db.getC2() * disjoints) / size) + (db.getC3() * (weightDifference / matched));
 

@@ -31,6 +31,7 @@ float Species::getAverageFitness(bool secondCall)
         }
 
         // Now compute the average
+        assert(genomes.size() > 0);
         average /= genomes.size();
 
         // Check to see if there was an improvement for the overall species.

@@ -161,6 +161,7 @@ void Supervisor::setOverallAverage()
         average += species[s].getAverageFitness();
     }
 
+    assert(species.size() > 0);
     average /= species.size();
 
     if (average < overallAverage)
