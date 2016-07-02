@@ -62,6 +62,7 @@ public:
                         // Whatever uses this class must delete the node.
                         // pointers so as to not cause a memory leak.
     }
+
     void addInput(Node * node, float weight)  // This adds a new input for the NODE.
     {
         Link link(node, weight);

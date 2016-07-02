@@ -21,6 +21,7 @@ float Point::yMin = -400.0;
 float Point::yMax = 400.0;
 
 static Simulator sim;
+static Genome computer;
 
 /***********************************************************************
 * displayHelp
@@ -301,13 +302,78 @@ void runGeneticAlgorithm()
 }
 
 /***********************************************************************
+ * callBack
+ *   This will run the simulator and allow the player to control it.
+ **********************************************************************/
+void callBack(const Interface *pUI, void *p)
+{
+    // Grab the simulator
+    Simulator *sim = (Simulator *) p;
+
+    // Run the simulation based off of who.
+    if (pUI->getIsComputer())
+    {
+        if (sim->getDone() == 0)
+        {
+            // Create the array from scratch for the inputs
+            int arrayInputs[5][5] = {
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
+            };
+
+            // Now grab the inputs for the ship.
+            sim->getInputs(arrayInputs);
+
+            // Convert the inputs to an array
+            vector<int> inputs;
+            for (int r = 0; r < 5; ++r)
+            {
+                for (int c = 0; c < 5; ++c)
+                {
+                    if (r != 2 || c != 2)
+                    {
+                        inputs.push_back(arrayInputs[r][c]);
+                    }
+                }
+            }
+
+            // Give the inputs to the network.
+            vector<double> outputs = computer.getNetwork().feedForward(inputs);
+
+            sim->run(outputs);
+        }
+
+        sim->draw();
+    }
+    else
+    {
+        sim->runSim(pUI);
+    }
+}
+
+/***********************************************************************
 * runGame
 *   This will run the game instead. This will allow the player to play
 *       unless the file was specified. If that is the case then it will
 *       run the Genome on the game instead.
 ***********************************************************************/
-void runGame()
+void runGame(bool player, int argc, char *argv[])
 {
+    // Start the interface
+    Interface ui(argc, argv, "Gravity");
+
+    if (!player)
+    {
+        computer.update();
+        ui.setIsComputer(true);
+    }
+
+    // Now do the callback function
+    ui.run(callBack, &sim);
+
     return;
 }
 
@@ -338,10 +404,15 @@ int main(int argc, char *argv[])
             // Run what was requested.
             if (sim)
             {
-                runGame();
+                // See if the player is playing or the computer.
+                bool player = (fileName.empty()) ? true : false;
+
+                // Run the game.
+                runGame(player, argc, argv);
             }
             else
             {
+                // Run the genetic algorithm.
                 runGeneticAlgorithm();
             }
         }

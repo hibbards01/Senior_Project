@@ -14,6 +14,8 @@
 #ifndef UI_INTERFACE_H
 #define UI_INTERFACE_H
 
+#include "../genetic_algorithm/genome.h"
+
 /********************************************
  * INTERFACE
  * All the data necessary to keep our graphics
@@ -24,7 +26,7 @@ class Interface
 public:
    // Default constructor useful for setting up the random variables
    // or for opening the file for output
-   Interface() { initialize(0, 0x0000, "Window"); };
+   Interface() : isComputer(false) { initialize(0, 0x0000, "Window"); };
 
    // Constructor if you want to set up the window with anything but
    // the default parameters
@@ -32,7 +34,7 @@ public:
    {
       initialize(argc, argv, title);
    }
-   
+
    // Destructor, incase any housecleaning needs to occr
    ~Interface();
 
@@ -50,7 +52,7 @@ public:
 
    // How many frames per second are we configured for?
    void setFramesPerSecond(double value);
-   
+
    // Key event indicating a key has been pressed or not.  The callbacks
    // should be the only onces to call this
    void keyEvent(int key, bool fDown);
@@ -58,19 +60,22 @@ public:
 
    // Current frame rate
    double frameRate() const { return timePeriod;   };
-   
+
    // Get various key events
    int  isDown()      const { return isDownPress;  };
    int  isUp()        const { return isUpPress;    };
    int  isLeft()      const { return isLeftPress;  };
    int  isRight()     const { return isRightPress; };
    bool isSpace()     const { return isSpacePress; };
-   
+
    static void *p;                   // for client
    static void (*callBack)(const Interface *, void *);
-    
+
    friend void sleep(unsigned long msSleep);
 
+   // Added things for the computer controlling the game.
+   void setIsComputer(bool com)      { isComputer = com;  }
+   bool getIsComputer()        const { return isComputer; }
 private:
    void initialize(int argc, char ** argv, const char * title);
 
@@ -83,6 +88,8 @@ private:
    static int  isLeftPress;          //    "   left       "
    static int  isRightPress;         //    "   right      "
    static bool isSpacePress;         //    "   space      "
+
+   bool isComputer; // Computer or player playing the game?
 };
 
 /************************************************************************
