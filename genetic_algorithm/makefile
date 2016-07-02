@@ -13,5 +13,8 @@ mac:
 ub:
 	make -f makefile.ub
 
+debug:
+	make -f makefile.debug
+
 clean:
 	rm *.o

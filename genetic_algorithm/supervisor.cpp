@@ -30,7 +30,7 @@ using namespace std;
 *       species and 100 GENOMES.
 ***********************************************************************/
 Supervisor::Supervisor(int population, int outputs, int inputs) : noImprovement(0),
-overallAverage(0), generation(0), population(population)
+overallAverage(2000), generation(0), population(population)
 {
     species.push_back(Species(population, outputs, inputs));
 }
@@ -65,9 +65,9 @@ void Supervisor::epoch()
     // did not perform for 10 generations then we will kill of that species.
     GeneHistory & db = GeneHistory::getInstance();
     int killRate = db.getKillRate();
-    for (vector<Species>::iterator s = species.begin(); s != species.end(); ++s)
+    for (vector<Species>::iterator s = species.begin(); s != species.end();)
     {
-        if (s->getNoImprovement() > killRate)
+        if (s->getNoImprovement() > killRate && species.size() > 1)
         {
             // Kill off the species since it did not perform as well.
             s = species.erase(s);
@@ -76,7 +76,7 @@ void Supervisor::epoch()
         {
             // Still performing well, so now we need to produce some offspring.
             // This will be computed by how well the species is performing divided by it's size.
-            int babies = (overallAverage > 0) ? ceil(s->getAverageFitness() / overallAverage) : 0;
+            int babies = (overallAverage > 0) ? ceil(s->getAverageFitness(true) / overallAverage) : 0;
 
             // Now kill all the genomes that did not perform that well. Also grab how many
             // survived from those species.
@@ -95,6 +95,8 @@ void Supervisor::epoch()
                 // Finally save it to the vector.
                 offspring.insert(offspring.end(), children.begin(), children.end());
             }
+
+            ++s; // Increment the iterator.
         }
     }
 
@@ -153,6 +155,7 @@ void Supervisor::setOverallAverage()
     float average = 0; // This will grab all the averages from everyone!
 
     // Now loop through the species and grab their averages
+    int total = 0;
     for (int s = 0; s < species.size(); ++s)
     {
         average += species[s].getAverageFitness();
@@ -160,9 +163,10 @@ void Supervisor::setOverallAverage()
 
     average /= species.size();
 
-    if (overallAverage < average)
+    if (average < overallAverage)
     {
         overallAverage = average;
+        noImprovement = 0;
     }
     else
     {

@@ -26,24 +26,25 @@ public:
     //
     // Constructors
     //
-    Species(int population, int outputs, int inputs) : noImprovement(0), age(0), averageFitness(0)
+    Species(int population, int outputs, int inputs) : noImprovement(0), age(0), averageFitness(2000)
     {
         for (int p = 0; p < population; ++p)
         {
             genomes.push_back(Genome(outputs, inputs));
         }
     }
-    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(0) { genomes.push_back(genome); }
+    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(2000) { genomes.push_back(genome); }
+    Species(const Species & s) { *this = s; }
     ~Species() { genomes.clear(); }
 
     //
     // Methods
     //
-    float getAverageFitness();                          // This will grab the average fitness.
+    float getAverageFitness(bool secondCall = false);   // This will grab the average fitness.
     void writeGenomesToFile(int gen, int id);           // This will save the GENOMES to a file.
-    std::vector<Genome> produceOffspring(int children); // Produce offspring within the species.
     void update();                                      // This will update the age for the species
                                                         // and for all it's GENOMES.
+    std::vector<Genome> produceOffspring(int children) const; // Produce offspring within the species.
 
     // This will update all the fitnesses so that younger genomes have a
     // better chance for surviving.
@@ -79,6 +80,9 @@ public:
     // class.
     Genome & getLeader()                   { return genomes[0];    }
 
+    //
+    // Operator methods
+    //
     bool operator > (const Species & rhs) const
     {
         return averageFitness > rhs.averageFitness;
@@ -88,6 +92,8 @@ public:
     {
         return averageFitness > rhs.averageFitness;
     }
+
+    Species & operator = (const Species & rhs);
 
     //
     // Getters

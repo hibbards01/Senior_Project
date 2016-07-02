@@ -18,29 +18,32 @@ using namespace std;
 * getAverageFitness
 *   This will grab all the GENOME fitnesses and compute the average.
 ***********************************************************************/
-float Species::getAverageFitness()
+float Species::getAverageFitness(bool secondCall)
 {
-    float average = 0;
-
-    // Grab all the fitnesses.
-    for (int g = 0; g < genomes.size(); ++g)
+    if (!secondCall)
     {
-        average += genomes[g].getFitness();
-    }
+        float average = 0;
 
-    // Now compute the average
-    average /= genomes.size();
+        // Grab all the fitnesses.
+        for (int g = 0; g < genomes.size(); ++g)
+        {
+            average += genomes[g].getFitness();
+        }
 
-    // Check to see if there was an improvement for the overall species.
-    // If not then increment the variable NOIMPROVEMENT
-    if (averageFitness < average)
-    {
-        averageFitness = average;
-        noImprovement = 0;
-    }
-    else
-    {
-        ++noImprovement;
+        // Now compute the average
+        average /= genomes.size();
+
+        // Check to see if there was an improvement for the overall species.
+        // If not then increment the variable NOIMPROVEMENT
+        if (average < averageFitness)
+        {
+            averageFitness = average;
+            noImprovement = 0;
+        }
+        else
+        {
+            ++noImprovement;
+        }
     }
 
     return averageFitness;
@@ -89,7 +92,7 @@ void Species::writeGenomesToFile(int gen, int speciesId)
 *       It will then return that offspring and the SUPERVISOR will put
 *       them in the correct species.
 ***********************************************************************/
-vector<Genome> Species::produceOffspring(int children)
+vector<Genome> Species::produceOffspring(int children) const
 {
     GeneHistory & db = GeneHistory::getInstance();
     float crossoverRate = db.getCrossoverRate();
@@ -165,4 +168,19 @@ void Species::update()
     ++age;
 
     return;
+}
+
+/***********************************************************************
+* operator =
+*   This is the assignment operator.
+***********************************************************************/
+Species & Species::operator =(const Species & rhs)
+{
+    genomes = rhs.genomes;
+    noImprovement = rhs.noImprovement;
+    age = rhs.age;
+    averageFitness = rhs.averageFitness;
+    bestGenome = rhs.bestGenome;
+
+    return *this;
 }

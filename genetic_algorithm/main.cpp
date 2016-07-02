@@ -276,7 +276,7 @@ void runGeneticAlgorithm()
 {
     cout.setf(ios::fixed);
     cout.setf(ios::showpoint);
-    cout.precision(2);
+    cout.precision(10);
 
     Supervisor supervisor(100, 4, 24); // Declare the genetic algorithm.
     supervisor.update();               // Update everything for the first time.
