@@ -283,7 +283,7 @@ void runGeneticAlgorithm()
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
-    while (supervisor.getNoImprovement() <= 10 && supervisor.getGeneration() < 2000)
+    while (supervisor.getNoImprovement() <= 50 && supervisor.getGeneration() < 2000)
     {
         // Output something to show that it is working.
         cout << "Generation: " << supervisor.getGeneration()
