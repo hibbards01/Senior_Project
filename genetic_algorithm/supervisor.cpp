@@ -133,6 +133,11 @@ void Supervisor::epoch()
     assert(total == population);
     assert(offspring.size() < population);
 
+    if (generation == 109)
+    {
+        cout << "HERE!\n";
+    }
+
     // Mutate the children. See if any mutation occurs.
     mutateOffspring(offspring);
 
