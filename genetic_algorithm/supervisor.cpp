@@ -133,11 +133,6 @@ void Supervisor::epoch()
     assert(total == population);
     assert(offspring.size() < population);
 
-    if (generation == 109)
-    {
-        cout << "HERE!\n";
-    }
-
     // Mutate the children. See if any mutation occurs.
     mutateOffspring(offspring);
 
@@ -289,6 +284,11 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
         // See if we should add another neuron.
         if (random(0.01, 1.0) < nodeRate)
         {
+            if (generation == 109)
+            {
+                cout << "HERE!\n";
+            }
+
 #ifdef DEBUG
             genomes[g].mutateAddNeuron(random(0, 1));
 #else
