@@ -109,7 +109,7 @@ void Genome::mutateAddLink()
     {
         num = 10; // Not sure what to set this to?
 
-        while (!found && num--)
+        while (!found && num-- > 0)
         {
             // Grab two random nodes!
             int randNode = random(0, nodeGenes.size() - 1);
@@ -131,6 +131,11 @@ void Genome::mutateAddLink()
     // Did we find one?
     if (found)
     {
+        assert(source >= 0);
+        assert(source < nodeGenes.size());
+        assert(destination >= 0);
+        assert(destination < nodeGenes.size());
+
         int srId = nodeGenes[source].id;
         int destId = nodeGenes[destination].id;
 
@@ -264,7 +269,7 @@ void Genome::mutateAddNeuron()
             int max = nodeGenes.size() - 1;
 
             // If there are only inputs and outputs then we will grab a random output.
-            if (min == nodeGenes.size())
+            if (min == max)
             {
                 min = 0;
                 max = outputs - 1;

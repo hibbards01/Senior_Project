@@ -107,7 +107,7 @@ void Supervisor::epoch()
     if (remainigBabies > 0)
     {
         assert(species.size() > 0);
-        int babies = ceil(remainigBabies / species.size());
+        int babies = ceil(remainigBabies / species.size()) + 1;
         while (total < population)
         {
             for (int s = 0; s < species.size() && total < population; ++s)

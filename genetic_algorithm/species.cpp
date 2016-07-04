@@ -67,6 +67,9 @@ void Species::writeGenomesToFile(int gen, int speciesId)
     }
     else
     {
+        fout << "Species " << speciesId << " AverageFitness: " << averageFitness << " Age: " << age << endl
+             << "Total Genomes: " << genomes.size() << endl << endl;
+
         for (int g = 0; g < genomes.size(); ++g)
         {
             // Output the genome.

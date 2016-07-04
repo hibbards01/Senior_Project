@@ -136,6 +136,11 @@ void Network::update(const vector<NodeGene> & nodeGenes, const vector<LinkGene> 
             Node * from = getNode(linkGenes[i].input);
             Node * to   = getNode(linkGenes[i].output);
 
+            if (from == NULL || to == NULL)
+            {
+                cout << "HERE!\n";
+            }
+
             // Either of them better not be NULL
             assert(from != NULL);
             assert(to != NULL);
