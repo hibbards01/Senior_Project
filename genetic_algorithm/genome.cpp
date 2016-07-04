@@ -185,7 +185,8 @@ void Genome::mutateAddNeuron()
 {
     // Create a brand new neuron. Do a random choice for whether it is a
     // BIAS node or a HIDDEN node. It is more biased towards HIDDEN nodes.
-    NodeGene node(nodeGenes.size(), -1);
+    int newId = nodeGenes[nodeGenes.size() - 1].id + 1;
+    NodeGene node(newId, -1);
     bool found = false;
 
     // Grab the database and add node to it.
@@ -494,7 +495,7 @@ Genome Genome::produceChild(const Genome & rhs) const
     vector<NodeGene> childNodeGenes = nodeGenes;
     vector<NodeGene> otherNodeGenes = rhs.nodeGenes;
 
-    if (rhs.nodeGenes.size() > nodeGenes.size())
+    if (otherNodeGenes.size() > childNodeGenes.size())
     {
         childNodeGenes = rhs.nodeGenes;
         otherNodeGenes = nodeGenes;
