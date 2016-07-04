@@ -491,23 +491,39 @@ Genome Genome::produceChild(const Genome & rhs) const
     }
 
     // Now grab the NEURONS for the child.
-    // Grab the biggest vector
-    vector<NodeGene> childNodeGenes = nodeGenes;
-    vector<NodeGene> otherNodeGenes = rhs.nodeGenes;
+    vector<NodeGene> childNodeGenes;
+    vector<NodeGene> :: const_iterator iterLhs = nodeGenes.begin();
+    vector<NodeGene> :: const_iterator iterRhs = rhs.nodeGenes.begin();
 
-    if (otherNodeGenes.size() > childNodeGenes.size())
+    while (iterLhs != nodeGenes.end() || iterRhs != rhs.nodeGenes.end())
     {
-        childNodeGenes = rhs.nodeGenes;
-        otherNodeGenes = nodeGenes;
-    }
+        NodeGene node;
 
-    // Now loop through the OTHERNODEGENES to grab all the recurrent links
-    for (int i = 0; i < otherNodeGenes.size(); ++i)
-    {
-        if (otherNodeGenes[i].recurrent)
+        if ((iterRhs == rhs.nodeGenes.end() || iterLhs->id < iterRhs->id)
+            && iterLhs != nodeGenes.end())
         {
-            childNodeGenes[i].recurrent = true;
+            node = *iterLhs;
+            ++iterLhs;
         }
+        else if (iterLhs == nodeGenes.end() || iterRhs->id < iterLhs->id)
+        {
+            node = *iterRhs;
+            ++iterRhs;
+        }
+        else
+        {
+            node = *iterLhs;
+
+            if (iterRhs->recurrent || iterLhs->recurrent)
+            {
+                node.recurrent = true;
+            }
+
+            ++iterLhs;
+            ++iterRhs;
+        }
+
+        childNodeGenes.push_back(node);
     }
 
     return Genome(childNodeGenes, childLinkGenes, inputs, outputs);
