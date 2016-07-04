@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 // This holds the value types.
-enum {SENSOR, HIDDEN, OUTPUT, BIAS};
+enum {SENSOR, HIDDEN, OUTPUT, BIAS, MUTATE_NEURON, MUTATE_LINK};
 
 /******************************************************************
  * RANDOM

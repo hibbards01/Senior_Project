@@ -70,6 +70,7 @@ struct LinkGene
         output = -1;
         weight = -1;
         enabled = false;
+        mutate = -1;
     }
 
     LinkGene(int i, int in, int out, double w)
@@ -79,6 +80,7 @@ struct LinkGene
         output = out;
         weight = w;
         enabled = true;
+        mutate = -1;
     }
 
     LinkGene(int i, int in, int out, double w, bool e)
@@ -88,6 +90,17 @@ struct LinkGene
         output = out;
         weight = w;
         enabled = e;
+        mutate = -1;
+    }
+
+    LinkGene(int i, int in, int out, double w, bool e, int m)
+    {
+        id = i;
+        input = in;
+        output = out;
+        weight = w;
+        enabled = e;
+        mutate = m;
     }
 
     int id;        // Innovation id.
@@ -95,6 +108,7 @@ struct LinkGene
     int output;
     double weight;
     bool enabled;
+    int mutate;
 };
 
 inline std::ostream & operator << (std::ostream & out, const LinkGene & rhs)

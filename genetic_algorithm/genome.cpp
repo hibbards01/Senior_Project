@@ -161,7 +161,7 @@ void Genome::mutateAddLink()
         nodeGenes[source].recurrent = recurrent;
 
         // Finally add it to the history
-        linkGenes.push_back(LinkGene(id, srId, destId, weight));
+        linkGenes.push_back(LinkGene(id, srId, destId, weight, true, MUTATE_LINK));
     }
 
     return;
@@ -250,8 +250,8 @@ void Genome::mutateAddNeuron()
             linkGenes[index].enabled = false;
 
             // Now save the links to the VECTOR
-            linkGenes.push_back(LinkGene(db.addNewLink(link.input, node.id), link.input, node.id, 1));
-            linkGenes.push_back(LinkGene(db.addNewLink(node.id, link.output), node.id, link.output, link.weight));
+            linkGenes.push_back(LinkGene(db.addNewLink(link.input, node.id), link.input, node.id, 1, true, MUTATE_NEURON));
+            linkGenes.push_back(LinkGene(db.addNewLink(node.id, link.output), node.id, link.output, link.weight, true, MUTATE_NEURON));
         }
     }
     else
@@ -301,7 +301,7 @@ void Genome::mutateAddNeuron()
 
         if (found)
         {
-            linkGenes.push_back(LinkGene(db.addNewLink(node.id, toNode.id), node.id, toNode.id, random(0.0, 1.0)));
+            linkGenes.push_back(LinkGene(db.addNewLink(node.id, toNode.id), node.id, toNode.id, random(0.0, 1.0), true, MUTATE_NEURON));
         }
     }
 
