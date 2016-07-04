@@ -382,11 +382,6 @@ void Genome::mutateRemoveLink()
         if ((nodeGenes[n].id == removeNode || nodeGenes[n].id == removeNode2) &&
             (nodeGenes[n].type == HIDDEN || nodeGenes[n].type == BIAS))
         {
-            if (generation == 109)
-            {
-                cout << "HERE!\n";
-            }
-
             nodeGenes.erase(nodeGenes.begin() + n);
         }
     }
@@ -592,6 +587,19 @@ float Genome::computeDistance(const Genome & rhs) const
     float distance = ((db.getC1() * excess) / size) + ((db.getC2() * disjoints) / size) + (db.getC3() * (weightDifference / matched));
 
     return distance;
+}
+
+/***********************************************************************
+* update
+*   This will update the genome. It will also make sure that there are
+*       no dead links that should not be there.
+***********************************************************************/
+void Genome::update()
+{
+    network.update(nodeGenes, linkGenes);
+    ++age;
+
+    return;
 }
 
 /***********************************************************************

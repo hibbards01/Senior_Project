@@ -86,13 +86,7 @@ public:
     }
 
     // Update the genome. This will update the age and the NETWORK of the GENOME.
-    void update()
-    {
-        network.update(nodeGenes, linkGenes);
-        ++age;
-
-        return;
-    }
+    void update();
 
     bool operator > (const Genome & rhs) const
     {
