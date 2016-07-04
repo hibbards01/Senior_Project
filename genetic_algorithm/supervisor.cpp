@@ -268,11 +268,6 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
                 num = random(1, 2);
                 if (num == 1)
                 {
-                    if (generation == 109)
-                    {
-                        cout << "HERE!\n";
-                    }
-
                     genomes[g].mutateRemoveLink();
                 }
                 else
@@ -289,11 +284,6 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
         // See if we should add another neuron.
         if (random(0.01, 1.0) < nodeRate)
         {
-            if (generation == 109)
-            {
-                cout << "HERE!\n";
-            }
-
 #ifdef DEBUG
             genomes[g].mutateAddNeuron(random(0, 1));
 #else

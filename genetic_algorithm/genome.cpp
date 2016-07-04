@@ -382,6 +382,11 @@ void Genome::mutateRemoveLink()
         if ((nodeGenes[n].id == removeNode || nodeGenes[n].id == removeNode2) &&
             (nodeGenes[n].type == HIDDEN || nodeGenes[n].type == BIAS))
         {
+            if (generation == 109)
+            {
+                cout << "HERE!\n";
+            }
+
             nodeGenes.erase(nodeGenes.begin() + n);
         }
     }
