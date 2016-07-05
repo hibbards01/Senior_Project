@@ -36,12 +36,11 @@ overallAverage(2000), generation(0), population(population)
 }
 
 /***********************************************************************
-* epoch
-*   This will determine how many babies that are needed to be made for
-*       the next generation. It will also give the children to the correct
-*       species and update everything.
+* setAverageBeforeEpoch
+*   This will set the overall average, adjusted average, and write to the
+*       file every 5 generations.
 ***********************************************************************/
-void Supervisor::epoch()
+void Supervisor::setAverageBeforeEpoch()
 {
     // First we need to adjust all the species fitnesses'.
     for (int s = 0; s < species.size(); ++s)
@@ -52,6 +51,24 @@ void Supervisor::epoch()
     // Now set the overall average of the species.
     setOverallAverage();
 
+    // Write what happened every 5 generations.
+    if (generation % 5 == 0)
+    {
+        writePopulationToFile();
+    }
+
+    return;
+}
+
+/***********************************************************************
+* epoch
+*   This will determine how many babies that are needed to be made for
+*       the next generation. It will also give the children to the correct
+*       species and update everything.
+***********************************************************************/
+void Supervisor::epoch()
+{
+    // Run the epoch.
     // Sort the species in descending order of the average fitness for the species.
     // This way the offspring will always be created from the best performing species.
     sort(species.begin(), species.end());
@@ -187,11 +204,6 @@ void Supervisor::update()
     for (int s = 0; s < species.size(); ++s)
     {
         species[s].update();
-    }
-
-    if (generation % 5 == 0)
-    {
-        writePopulationToFile();
     }
 
     ++generation;

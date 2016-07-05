@@ -286,12 +286,15 @@ void runGeneticAlgorithm()
     // the limit for the generation then it is done.
     while (supervisor.getGeneration() < 2000)
     {
+        // Run the solutions against the simulator.
+        runSolutions(supervisor);
+
+        // Set the overallAverage and adjusted average.
+        supervisor.setAverageBeforeEpoch();
+
         // Output something to show that it is working.
         cout << "Generation: " << supervisor.getGeneration()
              << " Overall Average: " << supervisor.getOverallAverage() << endl;
-
-        // Run the solutions against the simulator.
-        runSolutions(supervisor);
 
         // Now do the epoch for the population.
         cout << "Running epoch\n";

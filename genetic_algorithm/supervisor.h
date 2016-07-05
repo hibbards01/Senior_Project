@@ -36,6 +36,8 @@ public:
     void setOverallAverage();      // Grab the overall average of the population.
     void update();                 // Update everything!
     void writePopulationToFile();  // Write the population to a file.
+    void setAverageBeforeEpoch();  // This will set the average and adjusted average
+                                   // before the epoch.
 
     //
     // Getters
