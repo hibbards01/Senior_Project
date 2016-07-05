@@ -160,19 +160,10 @@ vector<Genome> Species::produceOffspring(int children) const
 ***********************************************************************/
 void Species::update()
 {
-    Genome genome;
     for (int g = 0; g < genomes.size(); ++g)
     {
         genomes[g].update();
-
-        if (genomes[g].getFitness() < genome.getFitness())
-        {
-            genome = genomes[g];
-        }
     }
-
-    // Save the best performer
-    bestGenome = genome;
 
     ++age;
 
@@ -189,7 +180,6 @@ Species & Species::operator =(const Species & rhs)
     noImprovement = rhs.noImprovement;
     age = rhs.age;
     averageFitness = rhs.averageFitness;
-    bestGenome = rhs.bestGenome;
 
     return *this;
 }
