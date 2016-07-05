@@ -268,10 +268,6 @@ void Supervisor::mutateOffspring(std::vector<Genome> & genomes)
                 num = random(1, 2);
                 if (num == 1)
                 {
-                    if (generation == 109)
-                    {
-                        cout << "HERE!\n";
-                    }
                     genomes[g].mutateRemoveLink();
                 }
                 else

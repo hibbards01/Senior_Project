@@ -12,6 +12,7 @@
 #include "geneHistory.h"
 #include "../simulator/sim.h"
 #include <fstream>
+#include <ctime>
 using namespace std;
 
 // Define the window size!
@@ -383,6 +384,7 @@ void runGame(bool player, int argc, char *argv[])
 ***********************************************************************/
 int main(int argc, char *argv[])
 {
+    srand(time(0));
     string fileName;  // The file given from the user.
     bool sim = false; // These will determine what should be run.
 

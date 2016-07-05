@@ -140,7 +140,6 @@ void Network::update(const vector<NodeGene> & nodeGenes, const vector<LinkGene> 
             assert(from != NULL);
             assert(to != NULL);
 
-
             // Finally link them together with the weight.
             to->addInput(from, linkGenes[i].weight);
         }
