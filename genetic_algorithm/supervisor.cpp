@@ -359,7 +359,7 @@ void Supervisor::writePopulationToFile()
                 species[s].writeGenomesToFile(generation, s);
 
                 // See which one is the best performer.
-                if (species[s].getBestGenome().getFitness() > bestGenome.getFitness())
+                if (species[s].getBestGenome().getFitness() < bestGenome.getFitness())
                 {
                     bestGenome = species[s].getBestGenome();
                 }

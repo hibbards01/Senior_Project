@@ -160,7 +160,7 @@ void Species::update()
     {
         genomes[g].update();
 
-        if (genomes[g].getFitness() > genome.getFitness())
+        if (genomes[g].getFitness() < genome.getFitness())
         {
             genome = genomes[g];
         }
