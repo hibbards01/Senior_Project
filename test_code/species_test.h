@@ -123,6 +123,7 @@ namespace {
         }
 
         EXPECT_EQ(21, species.killGenomes());
+        EXPECT_EQ(true, species.getGenomes()[0] < species.getGenomes()[1]);
     }
 }
 
