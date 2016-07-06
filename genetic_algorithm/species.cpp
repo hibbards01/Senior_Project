@@ -12,6 +12,7 @@
 #include "geneHistory.h"
 #include <fstream>
 #include <cassert>
+#include <cmath>
 using namespace std;
 
 /***********************************************************************
@@ -108,8 +109,12 @@ vector<Genome> Species::produceOffspring(int children) const
     {
         Genome child; // Set the child to be empty for now.
 
+        // Get a range. Make this function be more favored towards the GENOMES
+        // that are doing better then the rest.
+        int range = sqrt(genomes.size());
+
         // Grab a random parent.
-        int num = (genomes.size() > 1) ? random(0, genomes.size() - 1) : 0;
+        int num = (genomes.size() > 1) ? random(0, range) : 0;
         assert(num >= 0 && num < genomes.size());
 
         // See if it will pass the crossover rate. If not then it will
@@ -121,7 +126,7 @@ vector<Genome> Species::produceOffspring(int children) const
             int count = 5;
             do
             {
-                randNum = random(0, genomes.size() - 1);
+                randNum = random(0, range);
             }
             while (randNum == num && count-- > 0);
 
@@ -155,19 +160,10 @@ vector<Genome> Species::produceOffspring(int children) const
 ***********************************************************************/
 void Species::update()
 {
-    Genome genome;
     for (int g = 0; g < genomes.size(); ++g)
     {
         genomes[g].update();
-
-        if (genomes[g].getFitness() < genome.getFitness())
-        {
-            genome = genomes[g];
-        }
     }
-
-    // Save the best performer
-    bestGenome = genome;
 
     ++age;
 
@@ -184,7 +180,6 @@ Species & Species::operator =(const Species & rhs)
     noImprovement = rhs.noImprovement;
     age = rhs.age;
     averageFitness = rhs.averageFitness;
-    bestGenome = rhs.bestGenome;
 
     return *this;
 }
