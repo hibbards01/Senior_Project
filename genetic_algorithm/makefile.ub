@@ -8,12 +8,13 @@
 ###########################################################################
 
 LFLAGS = -lglut -lGLU -lGL
+OPENMP = -fopenmp
 
 ###########################################################################
 # Finally put it all together!
 ###########################################################################
 sim: node.o network.o genome.o geneHistory.o species.o supervisor.o main.cpp object.o point.o sim.o vector.o graphics.o uiDraw.o uiInteract.o geneHistory.h
-	g++ -o sim node.o network.o genome.o geneHistory.o species.o supervisor.o main.cpp object.o point.o sim.o vector.o graphics.o uiDraw.o uiInteract.o $(LFLAGS)
+	g++ -o sim node.o network.o genome.o geneHistory.o species.o supervisor.o main.cpp object.o point.o sim.o vector.o graphics.o uiDraw.o uiInteract.o $(LFLAGS) $(OPENMP)
 
 ###########################################################################
 # All the Genetic Algorithm compilations.
