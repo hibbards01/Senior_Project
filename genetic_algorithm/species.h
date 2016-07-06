@@ -48,6 +48,7 @@ public:
     Genome getBestGenome()                                  // Grab the best genome.
     {
         Genome genome;
+        genome.setFitness(5000);
         for (int g = 0; g < genomes.size(); ++g)
         {
             if (genomes[g].getFitness() < genome.getFitness())

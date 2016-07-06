@@ -351,6 +351,7 @@ void Supervisor::writePopulationToFile()
                  << "Number of Species: " << species.size() << endl << endl;
 
             Genome bestGenome;  // Grab the best performer.
+            bestGenome.setFitness(5000);
             for (int s = 0; s < species.size(); ++s)
             {
                 fout << "Species " << s << ": " << species[s].getGenomes().size()
