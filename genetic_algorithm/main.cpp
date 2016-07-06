@@ -13,6 +13,7 @@
 #include "../simulator/sim.h"
 #include <fstream>
 #include <ctime>
+#include <pthread.h>
 using namespace std;
 
 // Define the window size!

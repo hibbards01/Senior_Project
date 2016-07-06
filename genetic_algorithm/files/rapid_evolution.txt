@@ -1,0 +1,8 @@
+c1 1.0
+c2 1.0
+c3 0.4
+crossoverRate 7
+speciesCompatibility 0.20
+linkRate 0.1
+nodeRate 0.5
+weightRate 0.8
