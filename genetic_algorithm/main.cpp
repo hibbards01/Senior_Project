@@ -13,6 +13,7 @@
 #include "../simulator/sim.h"
 #include <fstream>
 #include <ctime>
+#include <cassert>
 using namespace std;
 
 // Define the window size!
@@ -21,7 +22,10 @@ float Point::xMax = 700.0;
 float Point::yMin = -400.0;
 float Point::yMax = 400.0;
 
-#define threadCt 4
+#define THREADS 8
+#define SIZE 100
+#define INPUTS 24
+#define OUTPUTS 4
 
 static Simulator sim;
 static Genome computer;
@@ -235,6 +239,8 @@ float runSimulation(Network & network)
             }
         }
 
+        assert(inputs.size() == INPUTS);
+
         // Give the inputs to the network.
         vector<double> outputs = network.feedForward(inputs);
 
@@ -255,16 +261,16 @@ void runSolutions(Supervisor & supervisor)
 {
     cout << "Running Solutions\n";
 
-    int threads = threadCt;
-
     // Loop through all the genomes and see how they do against the game.
-    #pragma omp parellel for collapse(2) num_threads(threads) shared(supervisor) private(s, g, score, simulator)
+    int g;
+    float score;
     for (int s = 0; s < supervisor.getSpecies().size(); ++s)
     {
-        for (int g = 0; g < supervisor.getSpecies()[s].getGenomes().size(); ++g)
+        #pragma omp parallel for num_threads(THREADS) shared(supervisor, s) private(g, score)
+        for (g = 0; g < supervisor.getSpecies()[s].getGenomes().size(); ++g)
         {
             // Grab the score it got.
-            float score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
+            score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
 
             // Save the score for the genome.
             supervisor.getSpecies()[s].getGenomes()[g].setFitness(score);
@@ -285,8 +291,8 @@ void runGeneticAlgorithm()
     cout.setf(ios::showpoint);
     cout.precision(10);
 
-    Supervisor supervisor(100, 4, 24); // Declare the genetic algorithm.
-    supervisor.update();               // Update everything for the first time.
+    Supervisor supervisor(SIZE, OUTPUTS, INPUTS); // Declare the genetic algorithm.
+    supervisor.update();                          // Update everything for the first time.
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
