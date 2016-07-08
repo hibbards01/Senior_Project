@@ -396,23 +396,23 @@ void Genome::mutateRemoveLink()
 ***********************************************************************/
 string Genome::getLinksString() const
 {
-    string ids;     //
-    string inputs;  //
-    string outputs; // All these strings save an aspect of the GENOME.
-    string weights; //
-    string enables; //
+    string ids = "Id: ";          //
+    string inputs = "Input: ";    //
+    string outputs = "Output: ";  // All these strings save an aspect of the GENOME.
+    string weights = "Weight: ";  //
+    string enables = "Enabled: "; //
 
     // Grab all the links and save them in the strings.
     for (int l = 0; l < linkGenes.size(); ++l)
     {
-        ids += "Id: " + toString<int>(linkGenes[l].id) + " | ";
-        inputs += "Input: " + toString<int>(linkGenes[l].input) + " | ";
-        outputs += "Output: " + toString<int>(linkGenes[l].output) + " | ";
-        weights += "Weight: " + toString<double>(linkGenes[l].weight) + " | ";
+        ids += toString<int>(linkGenes[l].id) + ",";
+        inputs += toString<int>(linkGenes[l].input) + ",";
+        outputs += toString<int>(linkGenes[l].output) + ",";
+        weights += toString<double>(linkGenes[l].weight) + ",";
 
         string boolean = (linkGenes[l].enabled) ? "True" : "False";
 
-        enables += "Enabled: " + boolean + " | ";
+        enables += boolean + ",";
     }
 
     return ids + "\n" + inputs + "\n" + outputs + "\n" + weights + "\n" + enables + "\n";
@@ -425,19 +425,19 @@ string Genome::getLinksString() const
 ***********************************************************************/
 string Genome::getNodesString() const
 {
-    string ids;        //
-    string types;      // All these strings save an aspect of the GENOME.
-    string recurrents; //
+    string ids = "Id: ";               //
+    string types = "Type: ";           // All these strings save an aspect of the GENOME.
+    string recurrents = "Recurrent: "; //
     string arrayType[4] = {"Sensor", "Hidden", "Output", "Bias"};
 
     for (int n = 0; n < nodeGenes.size(); ++n)
     {
-        ids += "Id: " + toString<int>(nodeGenes[n].id) + " | ";
-        types += "Type: " + arrayType[nodeGenes[n].type] + " | ";
+        ids += toString<int>(nodeGenes[n].id) + ",";
+        types += arrayType[nodeGenes[n].type] + ",";
 
         string boolean = (nodeGenes[n].recurrent) ? "True" : "False";
 
-        recurrents += "Recurrent: " + boolean + " | ";
+        recurrents += boolean + ",";
     }
 
     return ids + "\n" + types + "\n" + recurrents + "\n";

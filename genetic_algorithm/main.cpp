@@ -27,7 +27,6 @@ float Point::yMax = 400.0;
 #define INPUTS 24
 #define OUTPUTS 4
 
-static Simulator sim;
 static Genome computer;
 
 /***********************************************************************
@@ -187,6 +186,7 @@ void readFile(string fileName, bool sim) throw (string)
             else
             {
                 // Grab the genome provided and grab all the data it has.
+
             }
         }
     }
@@ -379,6 +379,7 @@ void runGame(bool player, int argc, char *argv[])
 {
     // Start the interface
     Interface ui(argc, argv, "Gravity");
+    Simulator sim;
 
     if (!player)
     {
