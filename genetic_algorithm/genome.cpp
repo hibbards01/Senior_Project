@@ -613,7 +613,18 @@ void Genome::mutateWeight()
 {
     for (int l = 0; l < linkGenes.size(); ++l)
     {
-        linkGenes[l].weight *= random(0.5, 1.5);
+        float newWeight = linkGenes[l].weight * random(0.5, 1.5);
+
+        if (newWeight > 8.0)
+        {
+            newWeight = 8.0;
+        }
+        else if (newWeight < -8.0)
+        {
+            newWeight = -8.0;
+        }
+
+        linkGenes[l].weight = newWeight;
     }
 
     return;

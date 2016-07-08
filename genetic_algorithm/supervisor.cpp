@@ -52,7 +52,7 @@ void Supervisor::setAverageBeforeEpoch()
     setOverallAverage();
 
     // Write what happened every 5 generations.
-    if (generation % 5 == 0)
+    if (generation % 25 == 0)
     {
         writePopulationToFile();
     }
