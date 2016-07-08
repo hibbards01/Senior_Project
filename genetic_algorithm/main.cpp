@@ -13,7 +13,7 @@
 #include "../simulator/sim.h"
 #include <fstream>
 #include <ctime>
-#include <pthread.h>
+#include <cassert>
 using namespace std;
 
 // Define the window size!
@@ -21,6 +21,11 @@ float Point::xMin = -700.0;
 float Point::xMax = 700.0;
 float Point::yMin = -400.0;
 float Point::yMax = 400.0;
+
+#define THREADS 8
+#define SIZE 100
+#define INPUTS 24
+#define OUTPUTS 4
 
 static Simulator sim;
 static Genome computer;
@@ -203,8 +208,11 @@ void readFile(string fileName, bool sim) throw (string)
 ***********************************************************************/
 float runSimulation(Network & network)
 {
+    // Create a new simulator
+    Simulator simulator;
+
     // Run the simulation until done.
-    while (sim.getDone() == 0)
+    while (simulator.getDone() == 0)
     {
         // Create the array from scratch for the inputs
         int arrayInputs[5][5] = {
@@ -216,7 +224,7 @@ float runSimulation(Network & network)
         };
 
         // Now grab the inputs for the ship.
-        sim.getInputs(arrayInputs);
+        simulator.getInputs(arrayInputs);
 
         // Convert the inputs to an array
         vector<int> inputs;
@@ -231,15 +239,17 @@ float runSimulation(Network & network)
             }
         }
 
+        assert(inputs.size() == INPUTS);
+
         // Give the inputs to the network.
         vector<double> outputs = network.feedForward(inputs);
 
         // Give the outputs to the game.
-        sim.run(outputs);
+        simulator.run(outputs);
     }
 
     // The game is finished. Grab the score for the genome.
-    return sim.computeScore();
+    return simulator.computeScore();
 }
 
 /***********************************************************************
@@ -252,18 +262,18 @@ void runSolutions(Supervisor & supervisor)
     cout << "Running Solutions\n";
 
     // Loop through all the genomes and see how they do against the game.
+    int g;
+    float score;
     for (int s = 0; s < supervisor.getSpecies().size(); ++s)
     {
-        for (int g = 0; g < supervisor.getSpecies()[s].getGenomes().size(); ++g)
+        #pragma omp parallel for num_threads(THREADS) shared(supervisor, s) private(g, score)
+        for (g = 0; g < supervisor.getSpecies()[s].getGenomes().size(); ++g)
         {
             // Grab the score it got.
-            float score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
+            score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
 
             // Save the score for the genome.
             supervisor.getSpecies()[s].getGenomes()[g].setFitness(score);
-
-            // Restart the game.
-            sim.restart();
         }
     }
 
@@ -281,12 +291,12 @@ void runGeneticAlgorithm()
     cout.setf(ios::showpoint);
     cout.precision(10);
 
-    Supervisor supervisor(100, 4, 24); // Declare the genetic algorithm.
-    supervisor.update();               // Update everything for the first time.
+    Supervisor supervisor(SIZE, OUTPUTS, INPUTS); // Declare the genetic algorithm.
+    supervisor.update();                          // Update everything for the first time.
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
-    while (supervisor.getGeneration() < 2000)
+    while (supervisor.getGeneration() < 10)
     {
         // Run the solutions against the simulator.
         runSolutions(supervisor);
