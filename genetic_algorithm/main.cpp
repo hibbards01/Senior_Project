@@ -296,7 +296,7 @@ void runGeneticAlgorithm()
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
-    while (supervisor.getGeneration() < 4000)
+    while (supervisor.getGeneration() < 2000)
     {
         // Run the solutions against the simulator.
         runSolutions(supervisor);
