@@ -98,7 +98,7 @@ void Rock::createRock()
             ++p;
         }
 
-        value = -10;
+        value = -0.5;
     }
     else
     {
@@ -114,7 +114,7 @@ void Rock::createRock()
             ++p;
         }
 
-        value = -20;
+        value = -0.75;
     }
 
     return;

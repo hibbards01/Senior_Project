@@ -76,14 +76,7 @@ public:
     float computeDistance(const Genome & rhs) const; // This will compute the distance
                                                      // between two genomes.
     void mutateRemoveLink(); // Remove a random link.
-
-    // Mutate a weight.
-    void mutateWeight()
-    {
-        linkGenes[random(0, linkGenes.size() - 1)].weight *= 5;
-
-        return;
-    }
+    void mutateWeight();     // Mutate a weight.
 
     // Update the genome. This will update the age and the NETWORK of the GENOME.
     void update();
