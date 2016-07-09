@@ -14,6 +14,7 @@
 #include <fstream>
 #include <ctime>
 #include <cassert>
+#include <map>
 using namespace std;
 
 // Define the window size!
@@ -28,6 +29,7 @@ float Point::yMax = 400.0;
 #define OUTPUTS 4
 
 static Genome computer;
+static bool player;
 
 /***********************************************************************
 * displayHelp
@@ -153,6 +155,134 @@ void setStaticVariables(string variable, float value) throw (string)
 }
 
 /***********************************************************************
+* split
+*   This will split the string by a delimiter into a vector.
+***********************************************************************/
+vector<string> split(string line, char delimiter)
+{
+    vector<string> result; // This will hold the broken up string.
+    stringstream ss(line); // This will do the actual splitting.
+    string piece;          // This will save the individual piece.
+
+    // Loop until there is none left.
+    while (getline(ss, piece, delimiter))
+    {
+        result.push_back(piece);
+    }
+
+    return result;
+}
+
+/***********************************************************************
+* saveNodes
+*   This will save the nodes for the genome.
+***********************************************************************/
+void saveNodes(vector<NodeGene> & nodes, string line)
+{
+    if (!line.empty())
+    {
+        vector<string> pieces = split(line, ' ');
+
+        if (pieces[0] == "Id:")
+        {
+            vector<string> ids = split(pieces[1], ',');
+            for (int i = 0; i < ids.size(); ++i)
+            {
+                NodeGene node;
+                node.id = stoi(ids[i]);
+                nodes.push_back(node);
+            }
+        }
+        else if (pieces[0] == "Type:")
+        {
+            vector<string> types = split(pieces[1], ',');
+            map<string, int> values;
+            values["Sensor"] = 0;
+            values["Hidden"] = 1;
+            values["Output"] = 2;
+            values["Bias"] = 3;
+            for (int t = 0; t < types.size(); ++t)
+            {
+                nodes[t].type = values[types[t]];
+            }
+        }
+        else if (pieces[0] == "Recurrent:")
+        {
+            vector<string> recurrents = split(pieces[1], ',');
+            map<string, bool> values;
+            values["True"] = true;
+            values["False"] = false;
+            for (int r = 0; r < recurrents.size(); ++r)
+            {
+                nodes[r].recurrent = values[recurrents[r]];
+            }
+        }
+    }
+
+    return;
+}
+
+/***********************************************************************
+* saveLinks
+*   This will save the links for the genome.
+***********************************************************************/
+void saveLinks(vector<LinkGene> & links, string line)
+{
+    if (!line.empty())
+    {
+        vector<string> pieces = split(line, ' ');
+
+        if (pieces[0] == "Id:")
+        {
+            vector<string> ids = split(pieces[1], ',');
+            for (int i = 0; i < ids.size(); ++i)
+            {
+                LinkGene link;
+                link.id = stoi(ids[i]);
+                links.push_back(link);
+            }
+        }
+        else if (pieces[0] == "Input:")
+        {
+            vector<string> inputs = split(pieces[1], ',');
+            for (int i = 0; i < inputs.size(); ++i)
+            {
+                links[i].input = stoi(inputs[i]);
+            }
+        }
+        else if (pieces[0] == "Output:")
+        {
+            vector<string> outputs = split(pieces[1], ',');
+            for (int i = 0; i < outputs.size(); ++i)
+            {
+                links[i].output = stoi(outputs[i]);
+            }
+        }
+        else if (pieces[0] == "Weight:")
+        {
+            vector<string> weights = split(pieces[1], ',');
+            for (int i = 0; i < weights.size(); ++i)
+            {
+                links[i].weight = stof(weights[i]);
+            }
+        }
+        else if (pieces[0] == "Enabled:")
+        {
+            vector<string> enableds = split(pieces[1], ',');
+            map<string, bool> values;
+            values["True"] = true;
+            values["False"] = false;
+            for (int r = 0; r < enableds.size(); ++r)
+            {
+                links[r].enabled = values[enableds[r]];
+            }
+        }
+    }
+
+    return;
+}
+
+/***********************************************************************
 * readFile
 *   This will read the file from what was given.
 ***********************************************************************/
@@ -168,6 +298,9 @@ void readFile(string fileName, bool sim) throw (string)
     else
     {
         string line;
+        bool node = true;
+        vector<NodeGene> nodes;
+        vector<LinkGene> links;
 
         // Now see what we should read from the file.
         while (getline(fin, line))
@@ -186,8 +319,26 @@ void readFile(string fileName, bool sim) throw (string)
             else
             {
                 // Grab the genome provided and grab all the data it has.
+                if (line == "Links:")
+                {
+                    node = false;
+                }
 
+                if (node)
+                {
+                    saveNodes(nodes, line);
+                }
+                else
+                {
+                    saveLinks(links, line);
+                }
             }
+        }
+
+        if (sim)
+        {
+            computer.setNodeGenes(nodes);
+            computer.setLinkGenes(links);
         }
     }
 
@@ -326,7 +477,7 @@ void callBack(const Interface *pUI, void *p)
     Simulator *sim = (Simulator *) p;
 
     // Run the simulation based off of who.
-    if (pUI->getIsComputer())
+    if (!player)
     {
         if (sim->getDone() == 0)
         {
@@ -375,7 +526,7 @@ void callBack(const Interface *pUI, void *p)
 *       unless the file was specified. If that is the case then it will
 *       run the Genome on the game instead.
 ***********************************************************************/
-void runGame(bool player, int argc, char *argv[])
+void runGame(int argc, char *argv[])
 {
     // Start the interface
     Interface ui(argc, argv, "Gravity");
@@ -384,7 +535,6 @@ void runGame(bool player, int argc, char *argv[])
     if (!player)
     {
         computer.update();
-        ui.setIsComputer(true);
     }
 
     // Now do the callback function
@@ -422,10 +572,10 @@ int main(int argc, char *argv[])
             if (sim)
             {
                 // See if the player is playing or the computer.
-                bool player = (fileName.empty()) ? true : false;
+                player = (fileName.empty()) ? true : false;
 
                 // Run the game.
-                runGame(player, argc, argv);
+                runGame(argc, argv);
             }
             else
             {

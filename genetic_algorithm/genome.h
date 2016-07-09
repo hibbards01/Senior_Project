@@ -110,8 +110,10 @@ public:
     //
     // Setters
     //
-    void setFitness(float f)         { fitness = f;         }
-    void setAdjustedFitness(float f) { adjustedFitness = f; }
+    void setFitness(float f)                         { fitness = f;         }
+    void setAdjustedFitness(float f)                 { adjustedFitness = f; }
+    void setNodeGenes(std::vector<NodeGene> & nodes) { nodeGenes = nodes;   }
+    void setLinkGenes(std::vector<LinkGene> & links) { linkGenes = links;   }
 private:
     std::vector<NodeGene> nodeGenes; // This will hold all it's nodes
     std::vector<LinkGene> linkGenes; // This will hold all it's links to and from nodes.
