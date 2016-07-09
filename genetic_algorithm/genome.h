@@ -76,14 +76,7 @@ public:
     float computeDistance(const Genome & rhs) const; // This will compute the distance
                                                      // between two genomes.
     void mutateRemoveLink(); // Remove a random link.
-
-    // Mutate a weight.
-    void mutateWeight()
-    {
-        linkGenes[random(0, linkGenes.size() - 1)].weight *= 5;
-
-        return;
-    }
+    void mutateWeight();     // Mutate a weight.
 
     // Update the genome. This will update the age and the NETWORK of the GENOME.
     void update();
@@ -117,8 +110,10 @@ public:
     //
     // Setters
     //
-    void setFitness(float f)         { fitness = f;         }
-    void setAdjustedFitness(float f) { adjustedFitness = f; }
+    void setFitness(float f)                         { fitness = f;         }
+    void setAdjustedFitness(float f)                 { adjustedFitness = f; }
+    void setNodeGenes(std::vector<NodeGene> & nodes) { nodeGenes = nodes;   }
+    void setLinkGenes(std::vector<LinkGene> & links) { linkGenes = links;   }
 private:
     std::vector<NodeGene> nodeGenes; // This will hold all it's nodes
     std::vector<LinkGene> linkGenes; // This will hold all it's links to and from nodes.

@@ -49,7 +49,7 @@ Genome::Genome(int outputs, int inputs) : fitness(0), adjustedFitness(0), age(0)
 
             // Finally save the link
             // Give it a random weight.
-            linkGenes.push_back(LinkGene(linkId, source, destination, random(0.0, 1.0)));
+            linkGenes.push_back(LinkGene(linkId, source, destination, random(-1.0, 1.0)));
         }
     }
 
@@ -603,6 +603,31 @@ float Genome::computeDistance(const Genome & rhs) const
     float distance = ((db.getC1() * excess) / size) + ((db.getC2() * disjoints) / size) + (db.getC3() * (weightDifference / matched));
 
     return distance;
+}
+
+/***********************************************************************
+* mutateWeight
+*   This will mutate the weights.
+***********************************************************************/
+void Genome::mutateWeight()
+{
+    for (int l = 0; l < linkGenes.size(); ++l)
+    {
+        float newWeight = linkGenes[l].weight * random(0.5, 1.5);
+
+        if (newWeight > 8.0)
+        {
+            newWeight = 8.0;
+        }
+        else if (newWeight < -8.0)
+        {
+            newWeight = -8.0;
+        }
+
+        linkGenes[l].weight = newWeight;
+    }
+
+    return;
 }
 
 /***********************************************************************

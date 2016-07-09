@@ -41,7 +41,7 @@ public:
     virtual void move(const Interface * pUI);        // Virtual function.
     virtual void move(std::vector<double> & inputs); // Virtual function.
     virtual void draw() = 0;                         // Pure virtual function.
-    virtual int getValue() const { return 0; }       // Virtual function.
+    virtual float getValue() const { return 0; }     // Virtual function.
     void addVectors(Vector & v);                     // Add two vectors together.
     void kill()            { alive = false;        } // Kill the object!
     void rotate(int speed) { v.rotate(speed); } // Rotate the object.
@@ -111,7 +111,7 @@ public:
     // Methods
     //
     void draw();
-    int getValue() const { return value; }
+    float getValue() const { return value; }
 
     //
     // Setters
@@ -127,7 +127,7 @@ private:
     int rotationSpeed; // This will rotate the Rock.
     int **points;      // This will hold the length of each of the sides.
                        // this allows the asteroids to look jagged.
-    int value;         // The value of the rock for the interaction for the ship.
+    float value;       // The value of the rock for the interaction for the ship.
 };
 
 /*********************************
