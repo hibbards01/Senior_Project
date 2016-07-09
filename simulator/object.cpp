@@ -220,41 +220,22 @@ void Ship::move(vector<double> & inputs)
     {
         if (fuel > 0)
         {
-            // For now only move the ship if the inputs are not zero.
-            bool usedFuel = false;
+            // Grab the angle of the ship and change it
+            int angle = getAngle();
+            setAngle(angle + (inputs[1] * 3) + (inputs[2] * -3));
 
-            // Up key
+            // Thrust forward the ship if the user pressed the up key.
             if (inputs[0] > 0)
             {
-                getPoint().addX(-5);
-                usedFuel = true;
-            }
+                // Create the thrust
+                Vector thrust;
+                thrust.setDx(cos(deg2rad(180 - angle)) * .2);
+                thrust.setDy(-sin(deg2rad(180 - angle)) * .2);
 
-            // Right Key
-            if (inputs[1] > 0)
-            {
-                getPoint().addY(5);
-                usedFuel = true;
-            }
+                // Add the thrusts together.
+                getVector() += thrust;
 
-            // Down Key
-            if (inputs[2] > 0)
-            {
-                getPoint().addX(5);
-                usedFuel = true;
-            }
-
-            // Left Key
-            if (inputs[3] > 0)
-            {
-                getPoint().addY(-5);
-                usedFuel = true;
-            }
-
-            // See if any fuel was used
-            if (usedFuel)
-            {
-                // Add the thrusts together and take off fuel.
+                // Minus off some fuel
                 --fuel;
             }
         }
@@ -262,5 +243,51 @@ void Ship::move(vector<double> & inputs)
         // Move the ship
         getVector().move();
     }
+    // if (getIsAlive())
+    // {
+    //     if (fuel > 0)
+    //     {
+    //         // For now only move the ship if the inputs are not zero.
+    //         bool usedFuel = false;
+
+    //         // Up key
+    //         if (inputs[0] > 0)
+    //         {
+    //             getPoint().addX(-5);
+    //             usedFuel = true;
+    //         }
+
+    //         // Right Key
+    //         if (inputs[1] > 0)
+    //         {
+    //             getPoint().addY(5);
+    //             usedFuel = true;
+    //         }
+
+    //         // Down Key
+    //         if (inputs[2] > 0)
+    //         {
+    //             getPoint().addX(5);
+    //             usedFuel = true;
+    //         }
+
+    //         // Left Key
+    //         if (inputs[3] > 0)
+    //         {
+    //             getPoint().addY(-5);
+    //             usedFuel = true;
+    //         }
+
+    //         // See if any fuel was used
+    //         if (usedFuel)
+    //         {
+    //             // Add the thrusts together and take off fuel.
+    //             --fuel;
+    //         }
+    //     }
+
+    //     // Move the ship
+    //     getVector().move();
+    // }
     return;
 }

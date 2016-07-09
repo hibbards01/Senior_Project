@@ -43,7 +43,7 @@ public:
     void createObjects();
     void restart();
     float computeScore();
-    void getInputs(int sensors[][5]) const;
+    void getInputs(int sensors[][5], int & fuel, int & angle, float & dx, float & dy) const;
 
     //
     // Getters

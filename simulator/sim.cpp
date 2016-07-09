@@ -503,13 +503,17 @@ void Simulator::drawScore()
 * getInputs
 *   This will grab the sensors for the Genetic Algorithm.
 ***********************************************************************/
-void Simulator::getInputs(int sensors[][5]) const
+void Simulator::getInputs(int sensors[][5], int & fuel, int & angle, float & dx, float & dy) const
 {
     // Grab the ship and the objects. Move the iterator over one
     // to skip the ship.
     Ship * ship = (Ship *) objects.front();
     list<Object *> :: const_iterator it = objects.begin();
     ++it;
+
+    // Grab the fuel, angle, dx, and dy.
+    fuel = ship->getFuel();
+    angle = ship->getAngle();
 
     for (; it != objects.end(); ++it)
     {

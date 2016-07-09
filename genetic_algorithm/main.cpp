@@ -24,7 +24,7 @@ float Point::yMax = 400.0;
 
 #define THREADS 8
 #define SIZE 100
-#define INPUTS 24
+#define INPUTS 28
 #define OUTPUTS 4
 
 static Genome computer;
@@ -210,6 +210,9 @@ float runSimulation(Network & network)
 {
     // Create a new simulator
     Simulator simulator;
+    int fuel;
+    int angle;
+    float dx, dy;
 
     // Run the simulation until done.
     while (simulator.getDone() == 0)
@@ -224,10 +227,14 @@ float runSimulation(Network & network)
         };
 
         // Now grab the inputs for the ship.
-        simulator.getInputs(arrayInputs);
+        simulator.getInputs(arrayInputs, fuel, angle, dx, dy);
 
         // Convert the inputs to an array
         vector<int> inputs;
+        inputs.push_back(fuel);
+        inputs.push_back(angle);
+        inputs.push_back(dx);
+        inputs.push_back(dy);
         for (int r = 0; r < 5; ++r)
         {
             for (int c = 0; c < 5; ++c)
@@ -296,7 +303,7 @@ void runGeneticAlgorithm()
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
-    while (supervisor.getGeneration() < 4000)
+    while (supervisor.getGeneration() < 2000)
     {
         // Run the solutions against the simulator.
         runSolutions(supervisor);
@@ -325,6 +332,10 @@ void callBack(const Interface *pUI, void *p)
     // Grab the simulator
     Simulator *sim = (Simulator *) p;
 
+    int fuel;
+    int angle;
+    float dx, dy;
+
     // Run the simulation based off of who.
     if (pUI->getIsComputer())
     {
@@ -340,7 +351,7 @@ void callBack(const Interface *pUI, void *p)
             };
 
             // Now grab the inputs for the ship.
-            sim->getInputs(arrayInputs);
+            sim->getInputs(arrayInputs, fuel, angle, dx, dy);
 
             // Convert the inputs to an array
             vector<int> inputs;
