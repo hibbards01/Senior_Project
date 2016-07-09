@@ -32,8 +32,10 @@ public:
         {
             genomes.push_back(Genome(outputs, inputs));
         }
+
+        leader = genomes[0];
     }
-    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(2000) { genomes.push_back(genome); }
+    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(2000) { genomes.push_back(genome); leader = genome; }
     Species(const Species & s) { *this = s; }
     ~Species() { genomes.clear(); }
 
@@ -92,7 +94,7 @@ public:
 
     // This will grab the leader of the group. This will be used by the SUPERVISOR
     // class.
-    Genome & getLeader()                   { return genomes[0];    }
+    Genome & getLeader()                   { return leader;    }
 
     //
     // Operator methods
@@ -120,6 +122,7 @@ private:
     int noImprovement;           // This will keep track how long it has not improved.
     int age;                     // How old this species is.
     float averageFitness;        // The average fitness of the species.
+    Genome leader;               // This will be the leader of the group that started the species.
 };
 
 #endif // SPECIES_H

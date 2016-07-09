@@ -180,6 +180,7 @@ Species & Species::operator =(const Species & rhs)
     noImprovement = rhs.noImprovement;
     age = rhs.age;
     averageFitness = rhs.averageFitness;
+    leader = rhs.leader;
 
     return *this;
 }
