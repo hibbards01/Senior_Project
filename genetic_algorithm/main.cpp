@@ -432,7 +432,7 @@ void runSolutions(Supervisor & supervisor)
 
             if (score > 2000)
             {
-                score = 3000;
+                score = 2000;
             }
 
             // Save the score for the genome.
