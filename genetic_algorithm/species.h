@@ -26,16 +26,14 @@ public:
     //
     // Constructors
     //
-    Species(int population, int outputs, int inputs) : noImprovement(0), age(0), averageFitness(2000)
+    Species(int population, int outputs, int inputs) : noImprovement(0), age(0), averageFitness(2000), leader(outputs, inputs)
     {
         for (int p = 0; p < population; ++p)
         {
             genomes.push_back(Genome(outputs, inputs));
         }
-
-        leader = genomes[0];
     }
-    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(2000) { genomes.push_back(genome); leader = genome; }
+    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(2000), leader(genome) { genomes.push_back(genome); }
     Species(const Species & s) { *this = s; }
     ~Species() { genomes.clear(); }
 
@@ -94,7 +92,7 @@ public:
 
     // This will grab the leader of the group. This will be used by the SUPERVISOR
     // class.
-    Genome & getLeader()                   { return leader;    }
+    const Genome & getLeader()                   { return leader;    }
 
     //
     // Operator methods

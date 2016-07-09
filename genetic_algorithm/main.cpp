@@ -26,7 +26,7 @@ float Point::yMax = 400.0;
 #define THREADS 8
 #define SIZE 100
 #define INPUTS 28
-#define OUTPUTS 4
+#define OUTPUTS 3
 
 static Genome computer;
 static bool player;

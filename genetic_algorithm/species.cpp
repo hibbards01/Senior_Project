@@ -174,7 +174,7 @@ void Species::update()
 * operator =
 *   This is the assignment operator.
 ***********************************************************************/
-Species & Species::operator =(const Species & rhs)
+Species & Species::operator = (const Species & rhs)
 {
     genomes = rhs.genomes;
     noImprovement = rhs.noImprovement;
