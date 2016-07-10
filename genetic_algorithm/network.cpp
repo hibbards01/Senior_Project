@@ -41,8 +41,8 @@ vector<double> Network::feedForward(const vector<int> & inputs)
     for (int i = 0; i < outputNodes.size(); ++i)
     {
         outputNodes[i]->update(); // First do the update.
-
-        outputs.push_back(outputNodes[i]->getOutput()); // Now grab the output.
+        double output = outputNodes[i]->getOutput();
+        outputs.push_back(output); // Now grab the output.
     }
 
     return outputs;
