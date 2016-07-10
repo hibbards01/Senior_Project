@@ -24,7 +24,7 @@ float Point::yMin = -400.0;
 float Point::yMax = 400.0;
 
 #define THREADS 8
-#define SIZE 100
+#define SIZE 200
 #define INPUTS 28
 #define OUTPUTS 3
 
@@ -400,7 +400,8 @@ float runSimulation(Network & network)
         assert(inputs.size() == INPUTS);
 
         // Give the inputs to the network.
-        vector<double> outputs = network.feedForward(inputs);
+        vector<double> outputs;
+        outputs = network.feedForward(inputs);
 
         // Give the outputs to the game.
         simulator.run(outputs);
@@ -511,6 +512,10 @@ void callBack(const Interface *pUI, void *p)
 
             // Convert the inputs to an array
             vector<int> inputs;
+            inputs.push_back(fuel);
+            inputs.push_back(angle);
+            inputs.push_back(dx);
+            inputs.push_back(dy);
             for (int r = 0; r < 5; ++r)
             {
                 for (int c = 0; c < 5; ++c)
@@ -522,8 +527,9 @@ void callBack(const Interface *pUI, void *p)
                 }
             }
 
-            // Give the inputs to the network.
-            vector<double> outputs = computer.getNetwork().feedForward(inputs);
+            // Give the inputs to the network!
+            vector<double> outputs;
+            outputs = computer.getNetwork().feedForward(inputs);
 
             sim->run(outputs);
         }
