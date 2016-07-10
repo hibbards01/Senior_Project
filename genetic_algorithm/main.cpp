@@ -24,7 +24,7 @@ float Point::yMin = -400.0;
 float Point::yMax = 400.0;
 
 #define THREADS 8
-#define SIZE 100
+#define SIZE 200
 #define INPUTS 28
 #define OUTPUTS 3
 
@@ -459,7 +459,7 @@ void runGeneticAlgorithm()
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
-    while (supervisor.getGeneration() < 2000)
+    while (supervisor.getGeneration() < 2001)
     {
         // Run the solutions against the simulator.
         runSolutions(supervisor);
