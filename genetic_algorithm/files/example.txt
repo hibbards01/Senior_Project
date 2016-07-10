@@ -6,4 +6,4 @@ speciesCompatibility 0.26
 linkRate 0.07
 nodeRate 0.03
 weightRate 0.2
-killRate 10
+killRate 50
