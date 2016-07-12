@@ -3,7 +3,7 @@ c2 1.0
 c3 0.4
 crossoverRate 7
 speciesCompatibility 0.26
-linkRate 0.07
-nodeRate 0.03
-weightRate 0.2
+linkRate 0.175
+nodeRate 0.075
+weightRate 0.5
 killRate 50
