@@ -30,7 +30,7 @@ using namespace std;
 *       species and 100 GENOMES.
 ***********************************************************************/
 Supervisor::Supervisor(int population, int outputs, int inputs) : noImprovement(0),
-overallAverage(2000), generation(0), population(population)
+overallAverage(100000), generation(0), population(population)
 {
     species.push_back(Species(population, outputs, inputs));
 }
@@ -153,10 +153,6 @@ void Supervisor::epoch()
         }
     }
 
-    if (total != population)
-    {
-        cerr << "total = " << total << endl;
-    }
     assert(total == population);
     assert(offspring.size() < population);
 
