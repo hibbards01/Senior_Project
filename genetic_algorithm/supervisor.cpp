@@ -99,6 +99,12 @@ void Supervisor::epoch()
             // survived from those species.
             total += s->killGenomes();
 
+            if (total + babies > population)
+            {
+                // Make up for the rest of the population.
+                babies = population - total;
+            }
+
             // Now produce the babies that were calculated. Make sure it does not go over
             // POPULATION. This could happen due to the CEIL function call on link 94.
             if (total + babies <= population)
@@ -121,7 +127,7 @@ void Supervisor::epoch()
     // then the population then we need to produce some more offspring.
     int remainigBabies = population - total;
 
-    if (remainigBabies > 0)
+    if (remainigBabies > 0 && total < population)
     {
         assert(species.size() > 0);
         int babies = ceil(remainigBabies / species.size()) + 1;
@@ -147,6 +153,10 @@ void Supervisor::epoch()
         }
     }
 
+    if (total != population)
+    {
+        cerr << "total = " << total << endl;
+    }
     assert(total == population);
     assert(offspring.size() < population);
 

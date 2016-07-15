@@ -108,7 +108,7 @@ float Vector::operator - (const Vector & rhs)
 
     float minDist = numeric_limits<float>::max();
 
-    if (slice < 0)
+    if (slice < 0 || slice < 0.001)
     {
         return minDist;
     }

@@ -431,10 +431,10 @@ void runSolutions(Supervisor & supervisor)
             // Grab the score it got.
             score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
 
-            if (score > 2000)
-            {
-                score = 2000;
-            }
+            // if (score > 2000)
+            // {
+            //     score = 2000;
+            // }
 
             // Save the score for the genome.
             supervisor.getSpecies()[s].getGenomes()[g].setFitness(score);
