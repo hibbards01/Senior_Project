@@ -124,6 +124,9 @@ namespace {
 
         EXPECT_EQ(21, species.killGenomes());
         EXPECT_EQ(true, species.getGenomes()[0] < species.getGenomes()[1]);
+        EXPECT_EQ(true, species.getGenomes()[1] < species.getGenomes()[2]);
+        EXPECT_EQ(true, species.getGenomes()[2] < species.getGenomes()[3]);
+        EXPECT_EQ(false, species.getGenomes()[2] > species.getGenomes()[3]);
     }
 }
 
