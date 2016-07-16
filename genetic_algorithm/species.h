@@ -26,14 +26,14 @@ public:
     //
     // Constructors
     //
-    Species(int population, int outputs, int inputs) : noImprovement(0), age(0), averageFitness(2000), leader(outputs, inputs)
+    Species(int population, int outputs, int inputs) : noImprovement(0), age(0), averageFitness(100000), leader(outputs, inputs)
     {
         for (int p = 0; p < population; ++p)
         {
             genomes.push_back(Genome(outputs, inputs));
         }
     }
-    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(2000), leader(genome) { genomes.push_back(genome); }
+    Species(Genome & genome) : noImprovement(0), age(0), averageFitness(100000), leader(genome) { genomes.push_back(genome); }
     Species(const Species & s) { *this = s; }
     ~Species() { genomes.clear(); }
 

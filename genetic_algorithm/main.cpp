@@ -431,11 +431,6 @@ void runSolutions(Supervisor & supervisor)
             // Grab the score it got.
             score = runSimulation(supervisor.getSpecies()[s].getGenomes()[g].getNetwork());
 
-            if (score > 2000)
-            {
-                score = 2000;
-            }
-
             // Save the score for the genome.
             supervisor.getSpecies()[s].getGenomes()[g].setFitness(score);
         }
@@ -460,7 +455,7 @@ void runGeneticAlgorithm()
 
     // Start the whole process, once there is no improvement or we reach
     // the limit for the generation then it is done.
-    while (supervisor.getGeneration() < 2000)
+    while (supervisor.getGeneration() < 2001)
     {
         // Run the solutions against the simulator.
         runSolutions(supervisor);
