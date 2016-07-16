@@ -88,7 +88,7 @@ public:
 
     bool operator < (const Genome & rhs) const
     {
-        return adjustedFitness > rhs.adjustedFitness;
+        return adjustedFitness < rhs.adjustedFitness;
     }
 
     Genome & operator = (const Genome & rhs);

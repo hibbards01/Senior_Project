@@ -107,8 +107,22 @@ void Simulator::createObjects()
 
     for (int i = 0; i < 40; ++i)
     {
-        objects.push_back(new Rock(random(-700, 700),
-                                    random(-400, 400),
+        int x = random(-700, 700);
+        int y = random(-400, 400);
+
+        if (x > 100 && y < -100)
+        {
+            if (random(0, 1) == 0)
+            {
+                x = 100;
+            }
+            else
+            {
+                y = -100;
+            }
+        }
+
+        objects.push_back(new Rock(x, y,
                                     random(-3.0, 3.0),
                                     random(-3.0, 3.0), ASTEROIDW, 10, 5, ASTEROID));
     }
