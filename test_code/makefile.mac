@@ -7,6 +7,12 @@
 #   This will compile all the tests and create an execution file.
 ###########################################################################
 
+show: driver_show.o node.o network.o genome.o geneHistory.o species.o supervisor.o
+	g++ -D SHOW -D DEBUG -o show driver_show.o node.o network.o genome.o geneHistory.o species.o supervisor.o -lgtest
+
+driver_show.o: driver.cpp node_test.h network_test.h genome_test.h geneHistory_test.h species_test.h supervisor_test.h
+	g++ -D SHOW -D DEBUG -c driver.cpp -o driver_show.o
+
 test: driver.o node.o network.o genome.o geneHistory.o species.o supervisor.o
 	g++ -D DEBUG -o test driver.o node.o network.o genome.o geneHistory.o species.o supervisor.o -lgtest
 

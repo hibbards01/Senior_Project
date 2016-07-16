@@ -13,3 +13,5 @@ DebugSeniorProject/
 debug_sim
 debug*
 test*/
+test*
+population_summary*

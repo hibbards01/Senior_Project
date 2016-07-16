@@ -9,6 +9,7 @@
 
 #include "object.h"
 #include "uiDraw.h"
+#include <iostream>
 using namespace std;
 
 #define deg2rad(value) ((M_PI / 180) * (value))
