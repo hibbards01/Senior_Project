@@ -104,7 +104,7 @@ public:
 
     bool operator < (const Species & rhs) const
     {
-        return averageFitness > rhs.averageFitness;
+        return averageFitness < rhs.averageFitness;
     }
 
     Species & operator = (const Species & rhs);
