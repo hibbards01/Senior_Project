@@ -1,2 +1,2 @@
 # Senior_Project
-This will be a project on Genetic Algorithms. Working currently on the Design.
+This project uses both a Genetic Algorithm with a Neural Network to help the computer to beat the game.
